@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { Button, TextField, Typography } from "@mui/material";
 import { StyledForm } from "./styles";
+import { login } from "../../util/zilean";
 
 const defaultValues = {
     email: "",
@@ -24,16 +25,8 @@ const Form: React.FC = () => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        const res = await fetch(`http://localhost:3001/login`, {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formValues),
-        });
-        const data = await res.json();
-        if (!data || res.status !== 200) {
+        const data = await login(formValues);
+        if (data.error) {
             setError(true);
         } else {
             // TODO find best location to redirect

@@ -1,6 +1,7 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import Login from "../components/login";
+import { getUserFromSession } from "../util/zilean";
 
 const LoginPage: NextPage = () => {
     return (
@@ -15,16 +16,10 @@ const LoginPage: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = async context => {
     // Pass session cookie in request to backend
-    const res = await fetch(`http://localhost:3001/test-check`, {
-        method: "GET",
-        headers: {
-            cookie: context.req.headers.cookie || "",
-        },
-    });
-    const data = await res.json();
+    const data = await getUserFromSession(context.req.headers.cookie || "");
 
     // If there is an error, continue to login page
-    if (!data || res.status != 200 || data.error) {
+    if (!data || data.error) {
         return {
             props: {},
         };
