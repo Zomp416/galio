@@ -5,10 +5,10 @@ body {
     font-family: 'Overpass', sans-serif;
 }
 
-a {
+/* a {
     color: inherit;
     text-decoration: none;
-}
+} */
 
 * {
     box-sizing: border-box;
