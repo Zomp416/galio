@@ -11,6 +11,7 @@ export const getUserFromSession = async (sessionCookie: string): Promise<ZileanR
         headers: {
             cookie: sessionCookie,
         },
+        credentials: "include",
     });
     const data = await result.json();
     if (!data || result.status !== 200) {
@@ -18,9 +19,32 @@ export const getUserFromSession = async (sessionCookie: string): Promise<ZileanR
             error: "Not Logged In!",
         };
     }
-    return {
-        data,
-    };
+    return data;
+};
+
+export const register = async (user: {
+    email: string;
+    username: string;
+    password: string;
+}): Promise<ZileanResponse> => {
+    const res = await fetch(`${zileanOrigin}/register`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+        credentials: "include",
+    });
+    const data = await res.json();
+    if (!data || res.status !== 200) {
+        return {
+            error: "Error registering user.",
+        };
+    } else {
+        return {
+            data: "Succesfully registered user!",
+        };
+    }
 };
 
 export const login = async (user: { email: string; password: string }): Promise<ZileanResponse> => {
@@ -29,6 +53,7 @@ export const login = async (user: { email: string; password: string }): Promise<
         headers: {
             "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(user),
     });
     const data = await res.json();
@@ -49,6 +74,7 @@ export const logout = async (sessionCookie: string): Promise<ZileanResponse> => 
         headers: {
             cookie: sessionCookie,
         },
+        credentials: "include",
     });
     const data = await result.json();
     if (!data || result.status !== 200) {
@@ -56,7 +82,5 @@ export const logout = async (sessionCookie: string): Promise<ZileanResponse> => 
             error: "Error logging out.",
         };
     }
-    return {
-        data,
-    };
+    return data;
 };
