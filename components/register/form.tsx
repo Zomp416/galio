@@ -7,6 +7,7 @@ import { login } from "../../util/zilean";
 
 const defaultValues = {
     email: "",
+    username: "",
     password: "",
 };
 
@@ -52,6 +53,18 @@ const Form: React.FC = () => {
                 />
                 <TextField
                     required
+                    id="username"
+                    name="username"
+                    label="Username"
+                    type="text"
+                    variant="outlined"
+                    value={formValues.username}
+                    onChange={handleInputChange}
+                    error={error}
+                    fullWidth
+                />
+                <TextField
+                    required
                     id="password"
                     name="password"
                     label="Password"
@@ -68,17 +81,15 @@ const Form: React.FC = () => {
                     color="primary"
                     sx={{ fontSize: "1.25rem", width: "50%" }}
                 >
-                    Sign In
+                    Sign Up
                 </Button>
             </StyledForm>
             <div style={{ marginTop: "20px" }}>
                 {error && (
                     <Typography color="error" variant="h5">
-                        Invalid Login Credentials.
+                        Invalid Form Values.
                     </Typography>
                 )}{" "}
-                {/* TODO CHANGE URL TO FORGOT PASSWORD PAGE */}
-                <Link href="/api/hello">Forgot Your Password?</Link>
             </div>
         </>
     );

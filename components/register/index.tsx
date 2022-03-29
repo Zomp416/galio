@@ -2,15 +2,15 @@ import React from "react";
 import Form from "./form";
 import Image from "next/image";
 import Link from "next/link";
-import { StyledLoginContainer, StyledAnchor } from "./styles";
+import { StyledRegisterContainer, StyledAnchor } from "./styles";
 import Box from "@mui/material/Box";
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
     return (
-        <StyledLoginContainer>
+        <StyledRegisterContainer>
             <div style={{ width: "60%", paddingTop: 100 }}>
                 <Image src="/zompdark.svg" alt="Zomp Icon" width={250} height={75} />
-                <h1>Login to Your Account</h1>
+                <h1>Create a Zomp Account</h1>
                 <Form />
             </div>
             <Box
@@ -25,14 +25,14 @@ const Login: React.FC = () => {
             >
                 <Image src="/zdark.svg" alt="Zomp Icon" width={150} height={150} />
                 <div>
-                    <p>Don&apos;t have an account?</p>
-                    <Link href="/register" passHref>
-                        <StyledAnchor>Sign up here.</StyledAnchor>
+                    <p>Already have an account?</p>
+                    <Link href="/login" passHref>
+                        <StyledAnchor>Login here.</StyledAnchor>
                     </Link>
                 </div>
             </Box>
-        </StyledLoginContainer>
+        </StyledRegisterContainer>
     );
 };
 
-export default Login;
+export default Register;

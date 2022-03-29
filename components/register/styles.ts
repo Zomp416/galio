@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 
 export const StyledForm = styled.form`
     width: 60%;
-    height: 250px;
+    height: 350px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -10,7 +10,7 @@ export const StyledForm = styled.form`
     align-items: center;
 `;
 
-export const StyledLoginContainer = styled.div`
+export const StyledRegisterContainer = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;

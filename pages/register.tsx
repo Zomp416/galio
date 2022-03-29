@@ -1,15 +1,15 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
-import Login from "../components/login";
+import Register from "../components/register";
 // import { getUserFromSession } from "../util/zilean";
 
 const LoginPage: NextPage = () => {
     return (
         <div>
             <Head>
-                <title>Login to Zomp</title>
+                <title>Create a Zomp Account</title>
             </Head>
-            <Login />
+            <Register />
         </div>
     );
 };
@@ -18,7 +18,7 @@ const LoginPage: NextPage = () => {
 //     // Pass session cookie in request to backend
 //     const data = await getUserFromSession(context.req.headers.cookie || "");
 
-//     // If there is an error, continue to login page
+//     // If there is an error, continue to register page
 //     if (!data || data.error) {
 //         return {
 //             props: {},
