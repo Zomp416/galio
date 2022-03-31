@@ -9,7 +9,7 @@ const Register: React.FC = () => {
     return (
         <StyledRegisterContainer>
             <div style={{ width: "60%", paddingTop: 100 }}>
-                <Link href = "/">
+                <Link href="/">
                     <a>
                         <Image src="/zompdark.svg" alt="Zomp Icon" width={250} height={75} />
                     </a>
@@ -27,7 +27,7 @@ const Register: React.FC = () => {
                     fontWeight: "bold",
                 }}
             >
-                <Link href = "/">
+                <Link href="/">
                     <a>
                         <Image src="/zdark.svg" alt="Zomp Icon" width={150} height={150} />
                     </a>
