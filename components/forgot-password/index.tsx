@@ -9,7 +9,11 @@ const ForgotPassword: React.FC = () => {
     return (
         <StyledLoginContainer>
             <div style={{ width: "60%", paddingTop: 100 }}>
-                <Image src="/zompdark.svg" alt="Zomp Icon" width={250} height={75} />
+                <Link href = "/">
+                    <a>
+                        <Image src="/zompdark.svg" alt="Zomp Icon" width={250} height={75} />
+                    </a>
+                </Link>
                 <h1>Forgot Your Password?</h1>
                 <Form />
             </div>
@@ -23,9 +27,13 @@ const ForgotPassword: React.FC = () => {
                     fontWeight: "bold",
                 }}
             >
-                <Image src="/zdark.svg" alt="Zomp Icon" width={150} height={150} />
+                <Link href = "/">
+                    <a>
+                        <Image src="/zdark.svg" alt="Zomp Icon" width={150} height={150} />
+                    </a>
+                </Link>
                 <div>
-                    {/* <p>Don&apos;t have an account?</p> */}
+                    <p>Clicked the wrong button?</p>
                     <Link href="/login" passHref>
                         <StyledAnchor>Login Instead</StyledAnchor>
                     </Link>
