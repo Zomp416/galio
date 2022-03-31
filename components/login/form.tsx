@@ -78,7 +78,7 @@ const Form: React.FC = () => {
                     </Typography>
                 )}{" "}
                 {/* TODO CHANGE URL TO FORGOT PASSWORD PAGE */}
-                <Link href="/api/hello">Forgot Your Password?</Link>
+                <Link href="/forgot-password">Forgot Your Password?</Link>
             </div>
         </>
     );

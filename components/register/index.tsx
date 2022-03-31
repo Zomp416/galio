@@ -9,7 +9,11 @@ const Register: React.FC = () => {
     return (
         <StyledRegisterContainer>
             <div style={{ width: "60%", paddingTop: 100 }}>
-                <Image src="/zompdark.svg" alt="Zomp Icon" width={250} height={75} />
+                <Link href = "/">
+                    <a>
+                        <Image src="/zompdark.svg" alt="Zomp Icon" width={250} height={75} />
+                    </a>
+                </Link>
                 <h1>Create a Zomp Account</h1>
                 <Form />
             </div>
@@ -23,7 +27,11 @@ const Register: React.FC = () => {
                     fontWeight: "bold",
                 }}
             >
-                <Image src="/zdark.svg" alt="Zomp Icon" width={150} height={150} />
+                <Link href = "/">
+                    <a>
+                        <Image src="/zdark.svg" alt="Zomp Icon" width={150} height={150} />
+                    </a>
+                </Link>
                 <div>
                     <p>Already have an account?</p>
                     <Link href="/login" passHref>
