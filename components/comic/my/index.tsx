@@ -1,6 +1,7 @@
 import React from "react";
 import Carousel from "react-material-ui-carousel";
 
+import GridOptions from "./gridoptions";
 import DetailedCard from "../cards/detailed";
 import SimpleCard from "../cards/simple";
 import * as Styled from "./styles";
@@ -22,13 +23,14 @@ const MyComics: React.FC = () => {
                         ))}
                     </Carousel>
                 </Styled.CarouselWrapper>
-                <Styled.MainWrapper className="mainwrapper">
-                    <Styled.ComicGrid className="comicgrid">
+                <Styled.GridWrapper className="mainwrapper">
+                    <GridOptions />
+                    <Styled.Grid className="comicgrid">
                         {others.map((item, i) => (
                             <SimpleCard />
                         ))}
-                    </Styled.ComicGrid>
-                </Styled.MainWrapper>
+                    </Styled.Grid>
+                </Styled.GridWrapper>
             </Styled.MyComicsInner>
         </Styled.MyComicsOuter>
     );
