@@ -6,7 +6,6 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
-
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
@@ -15,7 +14,10 @@ interface NavbarProps {
     props: string;
 }
 
+const loggedIn = false; //TODO: replace once we connect with backend
+
 const Navbar: React.FC<NavbarProps> = props => {
+    //Used to enable the menu on the user icon
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: any) => {
@@ -24,7 +26,7 @@ const Navbar: React.FC<NavbarProps> = props => {
     const handleClose = () => {
         setAnchorEl(null);
     };
-
+    //Used to show the appropiate logo based on the page
     var logo;
     if (props.props == "comics") {
         logo = <Image src="/brushicon.svg" alt="Brush Icon" width={64} height={64} />;
@@ -33,6 +35,50 @@ const Navbar: React.FC<NavbarProps> = props => {
     } else {
         logo = "";
     }
+    //Used to display the appropiate menu (Guest, LoggedInComics, LoggedInStories, PostLogin)
+    //TODO: Decide how we want our menu to look; and if applicable, replace div with Menu
+    var menu = (
+        <div>
+            <Link href="/login" passHref>
+                <MenuItem>Log In</MenuItem>
+            </Link>
+            <Link href="/register" passHref>
+                <MenuItem>Register</MenuItem>
+            </Link>
+        </div>
+    );
+    if (loggedIn) {
+        if (props.props == "comics") {
+            menu = (
+                <div>
+                    <MenuItem>Start New Comic</MenuItem>
+                    <MenuItem>My Comics</MenuItem>
+                    <MenuItem>My Profile</MenuItem>
+                    <MenuItem>Account Settings</MenuItem>
+                    <MenuItem>Log Out</MenuItem>
+                </div>
+            );
+        } else if (props.props == "stories") {
+            menu = (
+                <div>
+                    <MenuItem>Start New Story</MenuItem>
+                    <MenuItem>My Stories</MenuItem>
+                    <MenuItem>My Profile</MenuItem>
+                    <MenuItem>Account Settings</MenuItem>
+                    <MenuItem>Log Out</MenuItem>
+                </div>
+            );
+        } else {
+            menu = (
+                <div>
+                    <MenuItem>My Profile</MenuItem>
+                    <MenuItem>Account Settings</MenuItem>
+                    <MenuItem>Log Out</MenuItem>
+                </div>
+            );
+        }
+    }
+
     return (
         <div style={{ width: "100%", backgroundColor: "#323232" }}>
             <Link href="/">
@@ -41,6 +87,7 @@ const Navbar: React.FC<NavbarProps> = props => {
                     {logo}
                 </a>
             </Link>
+            {/* TODO: Update the UI of the search field */}
             <TextField
                 id="filled-basic"
                 label="Search ... "
@@ -50,6 +97,7 @@ const Navbar: React.FC<NavbarProps> = props => {
                     endAdornment: (
                         <InputAdornment position="end">
                             <Box sx={{ width: "55px", backgroundColor: "#555555" }}>
+                                {/* TODO: Make SearchIcon clickable and perform a search */}
                                 <SearchIcon
                                     sx={{ marginLeft: "4px", fontSize: "48px", color: "#8F8F8F" }}
                                 />
@@ -58,6 +106,7 @@ const Navbar: React.FC<NavbarProps> = props => {
                     ),
                 }}
             />
+            {/* TODO: move icon up */}
             <IconButton onClick={handleClick}>
                 <AccountCircleIcon sx={{ fontSize: "64px", color: "#BCECDC" }} />
             </IconButton>
@@ -95,7 +144,7 @@ const Navbar: React.FC<NavbarProps> = props => {
                 transformOrigin={{ horizontal: "right", vertical: "top" }}
                 anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
-                <MenuItem>Logout</MenuItem>
+                {menu}
             </Menu>
         </div>
     );
