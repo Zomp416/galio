@@ -7,8 +7,13 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
+import SearchIcon from "@mui/icons-material/Search";
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+    props: string;
+}
+
+const Navbar: React.FC<NavbarProps> = props => {
     return (
         <div style={{ width: "100%", backgroundColor: "#3F3F3F" }}>
             <Link href="/">
@@ -16,7 +21,9 @@ const Navbar: React.FC = () => {
                     <Image src="/zomplight.svg" alt="Zomp Icon" width={250} height={75} />
                 </a>
             </Link>
+            {props.props}
             <TextField id="filled-basic" label="Search ... " variant="filled" />
+            <SearchIcon></SearchIcon>
         </div>
     );
 };
