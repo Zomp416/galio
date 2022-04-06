@@ -4,7 +4,7 @@ import * as Styled from "./styles";
 
 const Card: React.FC = () => {
     return (
-        <Styled.Card>
+        <Styled.Card className="detailedcard">
             <Styled.Splash />
         </Styled.Card>
     );

@@ -10,7 +10,7 @@ export const MyComicsOuter = styled.div`
 
 export const MyComicsInner = styled.div`
     width: 100%;
-    max-width: calc(60vh + 200px);
+    max-width: calc(80vh + 200px);
     padding-top: 2vh;
     padding-bottom: 3vh;
     display: flex;
