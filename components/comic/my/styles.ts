@@ -20,6 +20,18 @@ export const MyComicsInner = styled.div`
 export const CarouselWrapper = styled.div`
     width: 100%;
     height: 100%;
-    display: block;
-    border: 2px solid blue;
+`;
+
+export const MainWrapper = styled.div`
+    width: 100%;
+    height: 100%;
+`;
+
+export const ComicGrid = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
 `;
