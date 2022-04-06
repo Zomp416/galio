@@ -22,16 +22,15 @@ export const CarouselWrapper = styled.div`
     height: 100%;
 `;
 
-export const MainWrapper = styled.div`
+export const GridWrapper = styled.div`
     width: 100%;
     height: 100%;
 `;
 
-export const ComicGrid = styled.div`
+export const Grid = styled.div`
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     flex-wrap: wrap;
 `;
