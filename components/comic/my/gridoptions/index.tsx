@@ -21,7 +21,7 @@ const GridOptions: React.FC = () => {
             <Styled.FloatLeft className="floatLeft">
                 <div>
                     <Typography variant="h6" width={"100%"}>
-                        Other:
+                        Other Comics:
                     </Typography>
                 </div>
             </Styled.FloatLeft>
