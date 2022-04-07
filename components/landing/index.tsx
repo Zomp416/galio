@@ -1,38 +1,90 @@
 import React from "react";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
 const LandingPage: React.FC = () => {
     return (
         <>
-            <Grid
-                container
-                spacing={0}
-                direction="column"
-                alignItems="center"
-                justifyContent="center"
-                style={{ minHeight: "500px" }}
+            <Typography
+                align="center"
+                variant="h1"
+                sx={{
+                    marginTop: "150px",
+                    fontWeight: "bold",
+                }}
             >
-                <Grid item xs={3}>
-                    <Typography align="center" variant="h1">
-                        Welcome to Zomp!
-                    </Typography>
-                    <Typography align="center" variant="h3">
-                        A creative platform for everyone
-                    </Typography>
-                    <Typography align="center">
-                        <Button component="a" href="/login" variant="outlined">
-                            Login
-                        </Button>
-                        <Button component="a" href="/register" variant="outlined">
-                            Register
-                        </Button>
-                        {/* TODO: Create dropdown for guest where user can choose comics or stories */}
-                        <Button variant="outlined">Continue as Guest</Button>
-                    </Typography>
-                </Grid>
-            </Grid>
+                Welcome to Zomp!
+            </Typography>
+            <Typography
+                align="center"
+                variant="h3"
+                sx={{
+                    marginBottom: "35px",
+                    fontWeight: "bold",
+                }}
+            >
+                A creative platform for everyone
+            </Typography>
+
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                }}
+            >
+                <Button
+                    component="a"
+                    href="/login"
+                    variant="outlined"
+                    sx={{
+                        marginRight: "25px",
+                        fontSize: "24px",
+                        fontWeight: "bold",
+                        height: "65px",
+                        width: "160px",
+                    }}
+                >
+                    Sign in
+                </Button>
+                <Button
+                    component="a"
+                    href="/register"
+                    variant="outlined"
+                    sx={{
+                        marginLeft: "25px",
+                        fontSize: "24px",
+                        fontWeight: "bold",
+                        height: "65px",
+                        width: "160px",
+                    }}
+                >
+                    Sign up
+                </Button>
+            </Box>
+
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                }}
+            >
+                {/* TODO: Create dropdown for guest where user can choose comics or stories */}
+                <Button
+                    component="a"
+                    href="/"
+                    variant="outlined"
+                    sx={{
+                        marginTop: "25px",
+                        fontSize: "16px",
+                        fontWeight: "bolder",
+                        height: "50px",
+                        width: "200px",
+                    }}
+                >
+                    Continue as Guest
+                </Button>
+            </Box>
         </>
     );
 };

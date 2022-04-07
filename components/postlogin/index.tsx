@@ -1,4 +1,5 @@
 import React from "react";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -9,34 +10,57 @@ const user = "Mason";
 const PostLoginPage: React.FC = () => {
     return (
         <>
-            <Grid
-                container
-                spacing={0}
-                direction="column"
-                alignItems="center"
-                justifyContent="center"
-                style={{ minHeight: "500px" }}
+            <Typography
+                align="center"
+                variant="h2"
+                sx={{
+                    marginTop: "150px",
+                    marginBottom: "35px",
+                    fontWeight: "bolder",
+                }}
             >
-                <Grid item xs={3}>
-                    <Typography align="center" variant="h1">
-                        Hi {user}! What do you want to do today?
-                    </Typography>
-                    <Typography align="center">
-                        <Button  variant="outlined">
-                        Create Comics
-                        </Button>
-                        <Button variant="outlined">
-                        Visit Community Hub
-                        </Button>
-                        <Button  variant="outlined">
-                        Create Stories
-                        </Button>
-                        <Button variant="outlined">
-                        Visit Community Hub
-                        </Button>
-                    </Typography>
-                </Grid>
-            </Grid>
+                Hi {user}! What do you want to do today?
+            </Typography>
+
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                }}
+            >
+                <Box>
+                    <Button
+                        component="a"
+                        href="/"
+                        variant="outlined"
+                        sx={{
+                            marginRight: "75px",
+                            fontSize: "24px",
+                            fontWeight: "bolder",
+                            height: "75px",
+                            width: "275px",
+                        }}
+                    >
+                        Dive Into Comics
+                    </Button>
+                </Box>
+                <Box>
+                    <Button
+                        component="a"
+                        href="/"
+                        variant="outlined"
+                        sx={{
+                            marginRight: "75px",
+                            fontSize: "24px",
+                            fontWeight: "bolder",
+                            height: "75px",
+                            width: "275px",
+                        }}
+                    >
+                        Dive Into Stories
+                    </Button>
+                </Box>
+            </Box>
         </>
     );
 };
