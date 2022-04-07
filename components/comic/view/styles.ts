@@ -10,6 +10,12 @@ export const ViewComicContainer = styled.div`
     text-align: left;
 `;
 
+export const ColumnContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+`;
+
 export const TVContainer = styled.div`
     display: flex;
     flex-direction: row;

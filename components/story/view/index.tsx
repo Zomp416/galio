@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import {
+    Box,
+    Divider,
     TextField,
     Typography,
     Rating,
@@ -10,7 +12,24 @@ import {
     ListItemText,
     Avatar,
 } from "@mui/material";
+import ShareIcon from "@mui/icons-material/Share";
 import * as Styled from "./styles";
+
+const story = {
+    _id: "a2",
+    title: "Crewmate",
+    author: "amogus",
+    description:
+        "Among Us is a 2018 online multiplayer social deduction game developed and published by \
+        American game studio Innersloth. The game was inspired by the party game Mafia and the science \
+        fiction horror film The Thing. The game allows for cross-platform play, first being released on \
+        iOS and Android devices in June 2018 and on Windows later that year in November.",
+    splashURL:
+        "https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/crewmate-indra-tirto.jpg",
+    published: false,
+    rating: 4.3,
+    views: 210,
+};
 
 const ViewStory: React.FC = () => {
     const [comment, setComment] = useState<string>("");
@@ -19,36 +38,78 @@ const ViewStory: React.FC = () => {
     return (
         <>
             <Styled.ViewStoryContainer>
-                <Typography variant="h4" width={"100%"}>
-                    Story Title
-                </Typography>
-                <Styled.TVContainer>
-                    <Styled.TagsContainer>
-                        <Styled.Tag
-                            variant="contained"
-                            color="secondary"
-                            size="small"
-                            sx={{ textTransform: "none" }}
-                        >
-                            Comedy
-                        </Styled.Tag>
-                        <Styled.Tag
-                            variant="contained"
-                            color="secondary"
-                            size="small"
-                            sx={{ textTransform: "none" }}
-                        >
-                            College
-                        </Styled.Tag>
-                    </Styled.TagsContainer>
+                <Styled.RowContainer>
+                    <Box
+                        component="img"
+                        sx={{
+                            height: 100,
+                            width: 70,
+                            paddingRight: "10px",
+                        }}
+                        alt={story.title}
+                        src={story.splashURL}
+                    />
+                    <Styled.ColumnContainer>
+                        <Typography variant="h4" width={"100%"} sx={{ paddingTop: "10px" }}>
+                            Story Title
+                        </Typography>
+                        <Styled.TVContainer>
+                            <Styled.TagsContainer>
+                                <Styled.Tag
+                                    variant="contained"
+                                    color="secondary"
+                                    size="small"
+                                    sx={{ textTransform: "none" }}
+                                >
+                                    Comedy
+                                </Styled.Tag>
+                                <Styled.Tag
+                                    variant="contained"
+                                    color="secondary"
+                                    size="small"
+                                    sx={{ textTransform: "none" }}
+                                >
+                                    College
+                                </Styled.Tag>
+                            </Styled.TagsContainer>
+                        </Styled.TVContainer>
+                    </Styled.ColumnContainer>
                     <Styled.ViewContainer>
-                        <Typography variant="h6">1.7K Views</Typography>
+                        <Styled.ASSContainer>
+                            <Styled.AuthorContainer>
+                                <Styled.Avatar></Styled.Avatar>
+                                <Styled.ColumnContainer>
+                                    <div>
+                                        <Typography variant="h5" component="a" color="black">
+                                            <Link href="/" passHref>
+                                                {story.author}
+                                            </Link>
+                                        </Typography>
+                                    </div>
+                                    1.4k Subscribers
+                                </Styled.ColumnContainer>
+                            </Styled.AuthorContainer>
+
+                            <Styled.SSContainer>
+                                <Styled.SSButton variant="contained" color="primary">
+                                    Share
+                                    <ShareIcon />
+                                </Styled.SSButton>
+                                <Styled.SSButton variant="contained" color="primary">
+                                    Subscribe
+                                </Styled.SSButton>
+                            </Styled.SSContainer>
+                        </Styled.ASSContainer>
                     </Styled.ViewContainer>
-                </Styled.TVContainer>
+                </Styled.RowContainer>
                 <Styled.Story>
                     {/* Add Toolbar */}
                     {/* Add Title Chapter Chapter 2 */}
-                    <Typography>
+                    <Typography
+                        sx={{
+                            marginBottom: "15px",
+                        }}
+                    >
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
                         tempor incididunt ut labore et dolore magna aliqua. Amet consectetur
                         adipiscing elit ut aliquam purus sit. Ipsum dolor sit amet consectetur
@@ -59,7 +120,11 @@ const ViewStory: React.FC = () => {
                         iaculis eu non diam phasellus vestibulum lorem. Purus non enim praesent
                         elementum facilisis leo vel fringilla est.
                     </Typography>
-                    <Typography>
+                    <Typography
+                        sx={{
+                            marginBottom: "15px",
+                        }}
+                    >
                         Praesent semper feugiat nibh sed. Id consectetur purus ut faucibus. Neque
                         viverra justo nec ultrices dui sapien. Pulvinar elementum integer enim neque
                         volutpat. Quam elementum pulvinar etiam non quam lacus suspendisse faucibus
@@ -68,35 +133,18 @@ const ViewStory: React.FC = () => {
                         Dui id ornare arcu odio. Varius duis at consectetur lorem donec massa.
                         Imperdiet dui accumsan sit amet nulla facilisi morbi tempus iaculis
                     </Typography>
-                    <Typography>
+                    <Typography
+                        sx={{
+                            marginBottom: "15px",
+                        }}
+                    >
                         Gravida in fermentum et sollicitudin ac orci. Rhoncus est pellentesque elit
                         ullamcorper dignissim. Amet consectetur adipiscing elit ut aliquam purus
                         sit. Ipsum dolor sit amet consectetur adipiscing. Vulputate enim nulla
                         aliquet porttitor lacus luctus. Risus nullam eget felis .
                     </Typography>
+                    <Divider />
                 </Styled.Story>
-                <Styled.ASSContainer>
-                    <Styled.AuthorContainer>
-                        <Styled.Avatar></Styled.Avatar>
-                        <div>
-                            <Link href="/" passHref>
-                                <Typography variant="h4" component="a" color="black">
-                                    Mason37
-                                </Typography>
-                            </Link>
-                            <Typography variant="h6">1.4k Subscribers</Typography>
-                        </div>
-                    </Styled.AuthorContainer>
-
-                    <Styled.SSContainer>
-                        <Styled.SSButton variant="contained" color="primary" size="large">
-                            Share
-                        </Styled.SSButton>
-                        <Styled.SSButton variant="contained" color="primary" size="large">
-                            Subscribe
-                        </Styled.SSButton>
-                    </Styled.SSContainer>
-                </Styled.ASSContainer>
                 <Styled.ASSContainer>
                     <Typography variant="h4">Ratings</Typography>
                     <Styled.RatingsContainer>
@@ -138,6 +186,9 @@ const ViewStory: React.FC = () => {
                         </Styled.Rating>
                     </Styled.RatingsContainer>
                 </Styled.ASSContainer>
+                <Styled.ColumnContainer>
+                    <Divider />
+                </Styled.ColumnContainer>
                 <Styled.ASSContainer>
                     <Typography variant="h4">Comments (1)</Typography>
                     <Styled.SSButton

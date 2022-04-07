@@ -10,6 +10,18 @@ export const ViewStoryContainer = styled.div`
     text-align: left;
 `;
 
+export const RowContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+`;
+
+export const ColumnContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+`;
+
 export const TVContainer = styled.div`
     display: flex;
     flex-direction: row;
@@ -38,14 +50,14 @@ export const Tag = styled(MUI_Button)`
 
 export const Story = styled.div`
     width: 100%;
-    margin: 50px;
+    margin: 25px;
 `;
 
 // Author + Share and Subscribe lol
 export const ASSContainer = styled.div`
     margin-top: 20px;
     margin-bottom: 20px;
-    width: 100%;
+    width: 90%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
