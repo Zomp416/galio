@@ -1,12 +1,12 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
-import MyComics from "../../components/comic/my";
+import Hub from "../../components/comic/hub";
 
-const MyComicsPage: NextPage = () => {
+const HubPage: NextPage = () => {
     return (
         <div>
             <Head>
-                <title>Comic Title</title>
+                <title>Community Hub</title>
             </Head>
             <div
                 style={{
@@ -18,7 +18,7 @@ const MyComicsPage: NextPage = () => {
             >
                 Temp Navbar
             </div>
-            <MyComics />
+            <Hub />
         </div>
     );
 };
@@ -47,4 +47,4 @@ export const getServerSideProps: GetServerSideProps = async context => {
     };
 };
 
-export default MyComicsPage;
+export default HubPage;

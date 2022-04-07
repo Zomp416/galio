@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Select as MUI_Select } from "@mui/material";
 
-export const GridOptions = styled.div`
+export const SortFilter = styled.div`
     position: relative;
     width: 100%;
     height: 50px;
