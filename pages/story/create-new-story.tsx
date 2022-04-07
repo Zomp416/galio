@@ -1,6 +1,7 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import CreateNewStory from "../../components/story/create-new-story";
+import Navbar from "../../components/navbar";
 
 const SearchPage: NextPage = () => {
     return (
@@ -16,7 +17,7 @@ const SearchPage: NextPage = () => {
                     color: "white",
                 }}
             >
-                Temp Navbar
+            <Navbar domain="stories" />
             </div>
             <CreateNewStory />
         </div>
