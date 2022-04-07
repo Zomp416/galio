@@ -45,7 +45,6 @@ const ViewStory: React.FC = () => {
                         <Typography variant="h6">1.7K Views</Typography>
                     </Styled.ViewContainer>
                 </Styled.TVContainer>
-
                 <Styled.Story>
                     {/* Add Toolbar */}
                     {/* Add Title Chapter Chapter 2 */}
@@ -76,7 +75,6 @@ const ViewStory: React.FC = () => {
                         aliquet porttitor lacus luctus. Risus nullam eget felis .
                     </Typography>
                 </Styled.Story>
-
                 <Styled.ASSContainer>
                     <Styled.AuthorContainer>
                         <Styled.Avatar></Styled.Avatar>
@@ -99,7 +97,6 @@ const ViewStory: React.FC = () => {
                         </Styled.SSButton>
                     </Styled.SSContainer>
                 </Styled.ASSContainer>
-
                 <Styled.ASSContainer>
                     <Typography variant="h4">Ratings</Typography>
                     <Styled.RatingsContainer>
