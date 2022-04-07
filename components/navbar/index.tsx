@@ -8,9 +8,9 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import TextField from "@mui/material/TextField";
+import InputBase from "@mui/material/InputBase";
 import Toolbar from "@mui/material/Toolbar";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import Avatar from "@mui/material/Avatar";
 import SearchIcon from "@mui/icons-material/Search";
 
 interface NavbarProps {
@@ -55,9 +55,9 @@ const Navbar: React.FC<NavbarProps> = props => {
     //Used to show the appropiate logo based on the page
     var logo =
         props.domain == "comics" ? (
-            <Image src="/brushicon.svg" alt="Brush Icon" width={64} height={64} />
+            <Image src="/brushicon.svg" alt="Brush Icon" width={40} height={40} />
         ) : props.domain == "stories" ? (
-            <Image src="/penicon.svg" alt="Brush Icon" width={64} height={64} />
+            <Image src="/penicon.svg" alt="Brush Icon" width={40} height={40} />
         ) : (
             ""
         );
@@ -72,50 +72,43 @@ const Navbar: React.FC<NavbarProps> = props => {
 
     return (
         //TODO: space out the components in the AppBar as to fit the Figma design
-        <AppBar position="static" color="secondary">
-            <Container maxWidth="xl">
-                <Toolbar disableGutters>
-                    <Link href="/">
-                        <a>
-                            <Image src="/zomplight.svg" alt="Zomp Icon" width={213} height={64} />
-                            {logo}
-                        </a>
-                    </Link>
-                    {/* TODO: Set the label's color to #8F8F8F similar to the text color */}
-                    <TextField
-                        id="filled-basic"
-                        label="Search ... "
-                        variant="filled"
-                        sx={{ input: { color: "#8F8F8F" } }}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <Box
-                                        component="a"
-                                        href="/search"
-                                        sx={{
-                                            width: "55px",
-                                            backgroundColor: "#555555",
-                                            marginRight: "-12px",
-                                        }}
-                                    >
-                                        {/* TODO: Make SearchIcon clickable and perform a search */}
-                                        <SearchIcon
-                                            sx={{
-                                                paddingTop: "5px",
-                                                paddingLeft: "9px",
-                                                fontSize: "48px",
-                                                color: "#8F8F8F",
-                                            }}
-                                        />
-                                    </Box>
-                                </InputAdornment>
-                            ),
-                        }}
+        <AppBar position="static" color="secondary" sx={{ height: "50px", padding: "0" }}>
+            <Toolbar
+                disableGutters
+                style={{
+                    minHeight: "50px",
+                }}
+                sx={{
+                    height: "50px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    padding: "0 15px",
+                }}
+            >
+                <IconButton href="/" component="a" sx={{ padding: "0" }}>
+                    <Image src="/zomplight.svg" alt="Zomp Icon" width={100} height={40} />
+                    {logo}
+                </IconButton>
+                <Box
+                    sx={{
+                        display: "flex",
+                        width: "25%",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                    }}
+                >
+                    <InputBase
+                        placeholder="Search"
+                        inputProps={{ "aria-label": "search" }}
+                        sx={{ color: "white" }}
                     />
-                    <Box sx={{ flexGrow: 0 }}>
+                    <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
+                        <SearchIcon color="primary" />
+                    </IconButton>
+                    <Box>
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                            <AccountCircleIcon sx={{ fontSize: "64px", color: "#BCECDC" }} />
+                            <Avatar />
                         </IconButton>
                         <Menu
                             sx={{ mt: "45px" }}
@@ -145,8 +138,9 @@ const Navbar: React.FC<NavbarProps> = props => {
                             ))}
                         </Menu>
                     </Box>
-                </Toolbar>
-            </Container>
+                </Box>
+                {/* TODO: Set the label's color to #8F8F8F similar to the text color */}
+            </Toolbar>
         </AppBar>
     );
 };
