@@ -61,7 +61,6 @@ const Navbar: React.FC<NavbarProps> = props => {
         : loggedOutSettings;
 
     return (
-        //TODO: space out the components in the AppBar as to fit the Figma design
         <AppBar position="static" color="secondary" sx={{ height: "50px", padding: "0" }}>
             <Toolbar
                 disableGutters
@@ -129,7 +128,6 @@ const Navbar: React.FC<NavbarProps> = props => {
                         </Menu>
                     </Box>
                 </Box>
-                {/* TODO: Set the label's color to #8F8F8F similar to the text color */}
             </Toolbar>
         </AppBar>
     );

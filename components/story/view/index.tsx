@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import {
+    AppBar,
     Box,
     Button,
     Divider,
     TextField,
+    Toolbar,
     Typography,
     Rating,
     List,
@@ -16,6 +18,10 @@ import {
 import ShareIcon from "@mui/icons-material/Share";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import TextIncreaseIcon from "@mui/icons-material/TextIncrease";
+import TextDecreaseIcon from "@mui/icons-material/TextDecrease";
+import FontDownloadIcon from "@mui/icons-material/FontDownload";
+import SettingsIcon from "@mui/icons-material/Settings";
 import * as Styled from "./styles";
 
 const story = {
@@ -92,7 +98,6 @@ const ViewStory: React.FC = () => {
                                     1.4k Subscribers
                                 </Styled.ColumnContainer>
                             </Styled.AuthorContainer>
-
                             <Styled.SSContainer>
                                 <Styled.SSButton variant="contained" color="primary">
                                     Share
@@ -107,6 +112,34 @@ const ViewStory: React.FC = () => {
                 </Styled.RowContainer>
                 <Styled.Story>
                     {/* Add Toolbar */}
+                    <AppBar position="static" color="primary" sx={{ height: "50px" }}>
+                        <Toolbar
+                            disableGutters
+                            style={{
+                                minHeight: "50px",
+                            }}
+                            sx={{
+                                display: "flex",
+                                justifyContent: "space-evenly",
+                                alignItems: "center",
+                            }}
+                        >
+                            <Box>
+                                <TextIncreaseIcon
+                                    sx={{
+                                        marginRight: "10px",
+                                    }}
+                                />
+                                <TextDecreaseIcon
+                                    sx={{
+                                        marginLeft: "10px",
+                                    }}
+                                />
+                            </Box>
+                            <FontDownloadIcon />
+                            <SettingsIcon />
+                        </Toolbar>
+                    </AppBar>
                     <Styled.ButtonsContainer>
                         <Button variant="contained" color="primary">
                             <ChevronLeftIcon />
