@@ -1,16 +1,16 @@
 import React from "react";
 import Carousel from "react-material-ui-carousel";
-import { Typography } from "@mui/material";
 
-import GridOptions from "./gridoptions";
-import DetailedCard from "../cards/detailed";
-import SimpleCard from "../cards/simple";
+import SortFilter from "./sortfilter";
+import BigCard from "./bigcard";
+import SmallCard from "./smallcard";
 import * as Styled from "./styles";
 
 // TODO: remove later
 const comic1 = {
     _id: "a1",
     title: "Taquitos",
+    author: "Cesare Lucido",
     description:
         "A taquito, tacos dorados, rolled taco, or flauta is a Mexican food dish that typically \
         consists of a small rolled-up tortilla that contains filling, including beef, cheese or chicken.",
@@ -22,6 +22,7 @@ const comic1 = {
 const comic2 = {
     _id: "a2",
     title: "Crewmate",
+    author: "amogus",
     description:
         "Among Us is a 2018 online multiplayer social deduction game developed and published by \
         American game studio Innersloth. The game was inspired by the party game Mafia and the science \
@@ -32,16 +33,14 @@ const comic2 = {
     rating: 4.3,
     views: 210,
 };
+
 const featured = [comic1, comic2, comic1, comic2];
 const others = Array(15).fill(comic1);
 
-const MyComics: React.FC = () => {
+const Hub: React.FC = () => {
     return (
         <Styled.MyComicsOuter className="outer">
             <Styled.MyComicsInner className="inner">
-                <Typography variant="h5" width={"100%"}>
-                    My Comics
-                </Typography>
                 <Styled.CarouselWrapper className="carouselwrapper">
                     <Carousel
                         indicatorContainerProps={{
@@ -50,14 +49,14 @@ const MyComics: React.FC = () => {
                         height={400}
                     >
                         {featured.map((comic, i) => (
-                            <DetailedCard key={i} comic={comic} />
+                            <BigCard key={i} {...comic} />
                         ))}
                     </Carousel>
                 </Styled.CarouselWrapper>
-                <GridOptions />
+                <SortFilter />
                 <Styled.Grid className="comicgrid">
-                    {others.map((_, i) => (
-                        <SimpleCard key={i} />
+                    {others.map((comic, i) => (
+                        <SmallCard key={i} {...comic} />
                     ))}
                 </Styled.Grid>
             </Styled.MyComicsInner>
@@ -65,4 +64,4 @@ const MyComics: React.FC = () => {
     );
 };
 
-export default MyComics;
+export default Hub;

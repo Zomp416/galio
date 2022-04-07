@@ -13,7 +13,6 @@ export const Splash = styled.div`
     flex-shrink: 0;
     width: 400px;
     max-width: 50%;
-    background-color: gray;
 `;
 
 export const Details = styled.div`
@@ -24,19 +23,19 @@ export const Details = styled.div`
 `;
 
 export const DetailsTop = styled.div`
-    height: 50%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 20px;
 `;
 
-export const Title = styled.div`
+export const TopLeft = styled.div`
     display: flex;
-    width: 70%;
+    flex-direction: column;
 `;
 
-export const PublishIcons = styled.div`
+export const TopRight = styled.div`
     display: flex;
     flex-direction: column;
 `;
