@@ -7,25 +7,15 @@ export const GridOptions = styled.div`
     height: 50px;
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     align-items: center;
 `;
 
 export const FloatRight = styled.div`
-    position: absolute;
-    right: 0px;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: right;
+    margin-right: 14px;
 `;
 
 export const FloatLeft = styled.div`
-    position: absolute;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    align-items: bottom;
     margin-left: 14px;
 `;
 

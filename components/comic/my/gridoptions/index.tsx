@@ -19,11 +19,9 @@ const GridOptions: React.FC = () => {
     return (
         <Styled.GridOptions className="gridoptions">
             <Styled.FloatLeft className="floatLeft">
-                <div>
-                    <Typography variant="h6" width={"100%"}>
-                        Other Comics:
-                    </Typography>
-                </div>
+                <Typography variant="h6" width={"100%"}>
+                    Other Comics:
+                </Typography>
             </Styled.FloatLeft>
             <Styled.FloatRight className="floatRight">
                 <Styled.Select
