@@ -9,6 +9,7 @@ const SearchPage: NextPage = () => {
             <Head>
                 <title>Zomp Search</title>
             </Head>
+            {/* TODO: dynamically set navbar */}
             <Navbar domain="comics" />
             <Search />
         </div>

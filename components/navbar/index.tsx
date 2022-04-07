@@ -10,8 +10,6 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
-import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -93,12 +91,17 @@ const Navbar: React.FC<NavbarProps> = props => {
                                     <Box
                                         component="a"
                                         href="/search"
-                                        sx={{ width: "55px", backgroundColor: "#555555" }}
+                                        sx={{
+                                            width: "55px",
+                                            backgroundColor: "#555555",
+                                            marginRight: "-12px",
+                                        }}
                                     >
                                         {/* TODO: Make SearchIcon clickable and perform a search */}
                                         <SearchIcon
                                             sx={{
-                                                marginLeft: "4px",
+                                                paddingTop: "5px",
+                                                paddingLeft: "9px",
                                                 fontSize: "48px",
                                                 color: "#8F8F8F",
                                             }}
@@ -109,11 +112,9 @@ const Navbar: React.FC<NavbarProps> = props => {
                         }}
                     />
                     <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <AccountCircleIcon sx={{ fontSize: "64px", color: "#BCECDC" }} />
-                            </IconButton>
-                        </Tooltip>
+                        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                            <AccountCircleIcon sx={{ fontSize: "64px", color: "#BCECDC" }} />
+                        </IconButton>
                         <Menu
                             sx={{ mt: "45px" }}
                             id="menu-appbar"
@@ -137,7 +138,7 @@ const Navbar: React.FC<NavbarProps> = props => {
                                     href={setting.url}
                                     onClick={handleCloseUserMenu}
                                 >
-                                    <Typography textAlign="center">{setting.display}</Typography>
+                                    {setting.display}
                                 </MenuItem>
                             ))}
                         </Menu>
