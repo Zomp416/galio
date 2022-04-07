@@ -1,14 +1,7 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import Navbar from "../navbar";
+import React from "react";
 
-const PostLoginPage: NextPage = () => {
-    return (
-        <div>
-            <Navbar props="comics" />
-            postlogin
-        </div>
-    );
+const PostLoginPage: React.FC = () => {
+    return <>postlogin</>;
 };
 
 export default PostLoginPage;

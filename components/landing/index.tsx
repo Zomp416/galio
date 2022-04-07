@@ -1,13 +1,7 @@
-import type { NextPage } from "next";
-import Navbar from "../navbar";
+import React from "react";
 
-const LandingPage: NextPage = () => {
-    return (
-        <div>
-            <Navbar props="comics" />
-            landing!!
-        </div>
-    );
+const LandingPage: React.FC = () => {
+    return <>landing!!</>;
 };
 
 export default LandingPage;
