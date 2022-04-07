@@ -16,7 +16,7 @@ const HubPage: NextPage = () => {
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
+export const getServerSideProps: GetServerSideProps = async () => {
     const testUser = {
         username: "MasonMa37",
         email: "masonma37@gmail.com",

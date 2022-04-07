@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MenuItem, Typography, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { MenuItem, Typography, ToggleButtonGroup } from "@mui/material";
 
 import * as Styled from "./styles";
 
@@ -11,7 +11,7 @@ const Sortfilter: React.FC = () => {
         setFilter(e.target.value);
     };
 
-    const onSetSort = (_, val: string) => {
+    const onSetSort = (e: any, val: string) => {
         setSort(val);
     };
 
