@@ -1,5 +1,6 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
+import Navbar from "../components/navbar";
 import Search from "../components/search";
 
 const SearchPage: NextPage = () => {
@@ -8,16 +9,7 @@ const SearchPage: NextPage = () => {
             <Head>
                 <title>Zomp Search</title>
             </Head>
-            <div
-                style={{
-                    width: "100%",
-                    height: "50px",
-                    backgroundColor: "#3F3F3F",
-                    color: "white",
-                }}
-            >
-                Temp Navbar
-            </div>
+            <Navbar domain="comics" />
             <Search />
         </div>
     );
