@@ -2,6 +2,8 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Typography, Rating } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import EditIcon from "@mui/icons-material/Edit";
 
 import * as Styled from "./styles";
 
@@ -31,7 +33,7 @@ const Card: React.FC<CardProps> = props => {
                             {!props.comic.published ? (
                                 <Link href={`/comic/edit/${props.comic._id}`}>
                                     <a>
-                                        <Image src="/pencil.svg" width="24" height="24" />
+                                        <EditIcon />
                                     </a>
                                 </Link>
                             ) : (
@@ -53,7 +55,7 @@ const Card: React.FC<CardProps> = props => {
                             />
                             <Styled.Views>
                                 <Styled.ViewEye>
-                                    <Image src="/eye.svg" width="14" height="14" />
+                                    <VisibilityIcon />
                                 </Styled.ViewEye>
                                 <Styled.ViewNum>
                                     <Typography variant="body2" width={"100%"}>

@@ -15,6 +15,7 @@ export const MyComicsInner = styled.div`
     padding-bottom: 3vh;
     display: flex;
     flex-direction: column;
+    align-items: center;
 `;
 
 export const CarouselWrapper = styled.div`
@@ -22,15 +23,10 @@ export const CarouselWrapper = styled.div`
     height: 100%;
 `;
 
-export const GridWrapper = styled.div`
-    width: 100%;
-    height: 100%;
-`;
-
 export const Grid = styled.div`
     width: 100%;
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 120px);
+    grid-gap: 1rem;
     justify-content: space-between;
-    flex-wrap: wrap;
 `;
