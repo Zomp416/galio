@@ -9,8 +9,8 @@ const LoginPage: NextPage = () => {
             <Head>
                 <title>Story Title</title>
             </Head>
-            {/* TODO: dynamically set navbar; maybe not because this is view comics */}
-            <Navbar domain="comics" />
+            {/* TODO: dynamically set navbar; maybe not because this is view stories */}
+            <Navbar domain="stories" />
             <ViewStory />
         </div>
     );
