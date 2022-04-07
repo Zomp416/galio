@@ -18,3 +18,11 @@ export const CardHover = styled.div`
     justify-content: center;
     text-align: center;
 `;
+
+export const Image = styled.img`
+    position: absolute;
+    flex-shrink: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+`;

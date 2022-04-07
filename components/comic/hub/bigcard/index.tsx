@@ -23,7 +23,7 @@ const BigCard: React.FC<Props> = props => {
                 <Link href={`/comic/view/${props._id}`}>
                     <a>
                         <>
-                            <Image src={props.splashURL} layout="fill" />
+                            <Styled.Image src={props.splashURL} />
                         </>
                     </a>
                 </Link>
