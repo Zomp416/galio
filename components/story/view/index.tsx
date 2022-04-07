@@ -14,7 +14,7 @@ import * as Styled from "./styles";
 
 const ViewStory: React.FC = () => {
     const [comment, setComment] = useState<string>("");
-    const [rating, setRating] = useState<number | null>(4.5);
+    const [rating, setRating] = useState<number | null>(3.5);
 
     return (
         <>
@@ -108,7 +108,7 @@ const ViewStory: React.FC = () => {
                             <div style={{ display: "flex", justifyContent: "right" }}>
                                 <Rating
                                     name="average-rating"
-                                    value={2.4}
+                                    value={2.8}
                                     precision={0.1}
                                     readOnly
                                     sx={{
@@ -117,7 +117,7 @@ const ViewStory: React.FC = () => {
                                         },
                                     }}
                                 />
-                                <Typography variant="h6">(2.4)</Typography>
+                                <Typography variant="h6">(2.8)</Typography>
                             </div>
                         </Styled.Rating>
                         <Styled.Rating>
