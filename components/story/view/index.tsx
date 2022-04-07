@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import {
     Box,
+    Button,
     Divider,
     TextField,
     Typography,
@@ -13,6 +14,8 @@ import {
     Avatar,
 } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import * as Styled from "./styles";
 
 const story = {
@@ -104,7 +107,19 @@ const ViewStory: React.FC = () => {
                 </Styled.RowContainer>
                 <Styled.Story>
                     {/* Add Toolbar */}
-                    {/* Add Title Chapter Chapter 2 */}
+                    <Styled.ButtonsContainer>
+                        <Button variant="contained" color="primary">
+                            <ChevronLeftIcon />
+                            Title
+                        </Button>
+                        <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+                            Chapter 1
+                        </Typography>
+                        <Button variant="contained" color="primary">
+                            Chapter 2
+                            <ChevronRightIcon />
+                        </Button>
+                    </Styled.ButtonsContainer>
                     <Typography
                         sx={{
                             marginBottom: "15px",

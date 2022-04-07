@@ -10,6 +10,14 @@ export const ViewStoryContainer = styled.div`
     text-align: left;
 `;
 
+export const ButtonsContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 25px;
+`;
+
 export const RowContainer = styled.div`
     width: 100%;
     display: flex;
