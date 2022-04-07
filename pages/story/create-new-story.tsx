@@ -17,7 +17,7 @@ const SearchPage: NextPage = () => {
                     color: "white",
                 }}
             >
-            <Navbar domain="stories" />
+                <Navbar domain="stories" />
             </div>
             <CreateNewStory />
         </div>
