@@ -1,6 +1,7 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import Hub from "../../components/comic/hub";
+import Navbar from "../../components/navbar";
 
 const HubPage: NextPage = () => {
     return (
@@ -8,16 +9,8 @@ const HubPage: NextPage = () => {
             <Head>
                 <title>Community Hub</title>
             </Head>
-            <div
-                style={{
-                    width: "100%",
-                    height: "50px",
-                    backgroundColor: "#3F3F3F",
-                    color: "white",
-                }}
-            >
-                Temp Navbar
-            </div>
+            {/* TODO: dynamically set navbar; maybe not because this is view comics */}
+            <Navbar domain="comics" />
             <Hub />
         </div>
     );

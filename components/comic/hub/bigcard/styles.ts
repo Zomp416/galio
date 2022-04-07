@@ -42,6 +42,7 @@ export const TopRight = styled.div`
 
 export const Views = styled.div`
     height: 15px;
+    margin-top: 10px;
     display: flex;
     flex-direction: row;
     justify-content: right;
@@ -59,4 +60,11 @@ export const ViewNum = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+`;
+
+export const Image = styled.img`
+    flex-shrink: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
 `;

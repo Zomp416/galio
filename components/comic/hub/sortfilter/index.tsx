@@ -1,51 +1,51 @@
 import React, { useState } from "react";
-import { MenuItem, Typography } from "@mui/material";
+import { MenuItem, Typography, ToggleButton, ToggleButtonGroup } from "@mui/material";
 
 import * as Styled from "./styles";
 
 const Sortfilter: React.FC = () => {
-    const [filter, setFilter] = useState("Day");
-    const [sort, setSort] = useState("Popular");
+    const [filter, setFilter] = useState("day");
+    const [sort, setSort] = useState("trending");
 
     const onSetFilter = (e: any) => {
         setFilter(e.target.value);
     };
 
-    const onSetSort = (e: any) => {
-        setSort(e.target.value);
+    const onSetSort = (_, val: string) => {
+        setSort(val);
     };
 
     return (
         <Styled.SortFilter className="gridoptions">
-            <Styled.FloatLeft className="floatLeft">
-                <Typography variant="h6" width={"100%"}>
-                    More Comics:
-                </Typography>
-            </Styled.FloatLeft>
-            <Styled.FloatRight className="floatRight">
-                <Styled.Select
-                    variant="standard"
-                    disableUnderline
-                    value={filter}
-                    onChange={onSetFilter}
-                >
-                    <MenuItem value="Day">Day</MenuItem>
-                    <MenuItem value="Week">Week</MenuItem>
-                    <MenuItem value="Month">Month</MenuItem>
-                    <MenuItem value="Year">Year</MenuItem>
-                    <MenuItem value="All Time">All Time</MenuItem>
-                </Styled.Select>
-                <Styled.Select
-                    variant={"standard"}
-                    disableUnderline
-                    value={sort}
-                    onChange={onSetSort}
-                >
-                    <MenuItem value="Popular">Popular</MenuItem>
-                    <MenuItem value="Recent">Rating</MenuItem>
-                    <MenuItem value="Recent">New</MenuItem>
-                </Styled.Select>
-            </Styled.FloatRight>
+            <ToggleButtonGroup color="primary" value={sort} exclusive onChange={onSetSort}>
+                <Styled.ToggleButton value="trending">Trending</Styled.ToggleButton>
+                <Styled.ToggleButton value="new">New</Styled.ToggleButton>
+                <Styled.ToggleButton value="views">Most viewed</Styled.ToggleButton>
+                <Styled.ToggleButton value="rating">Highest Rated</Styled.ToggleButton>
+            </ToggleButtonGroup>
+            {sort === "views" || sort === "rating" ? (
+                <Styled.Filter>
+                    <div>
+                        <Typography style={{ fontSize: 14 }} color="rgba(0, 0, 0, 0.7)">
+                            FROM
+                        </Typography>
+                    </div>
+                    <Styled.Select
+                        variant="standard"
+                        disableUnderline
+                        value={filter}
+                        onChange={onSetFilter}
+                    >
+                        <MenuItem value="day">today</MenuItem>
+                        <MenuItem value="week">this week</MenuItem>
+                        <MenuItem value="month">this month</MenuItem>
+                        <MenuItem value="year">this year</MenuItem>
+                        <MenuItem value="all">all time</MenuItem>
+                    </Styled.Select>
+                </Styled.Filter>
+            ) : (
+                <></>
+            )}
         </Styled.SortFilter>
     );
 };
