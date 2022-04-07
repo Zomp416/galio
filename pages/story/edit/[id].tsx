@@ -1,6 +1,6 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
-import ViewStory from "../../../components/story/view";
+import EditStory from "../../../components/story/edit";
 import Navbar from "../../../components/navbar";
 
 const LoginPage: NextPage = () => {
@@ -11,7 +11,7 @@ const LoginPage: NextPage = () => {
             </Head>
             {/* TODO: dynamically set navbar; maybe not because this is view comics */}
             <Navbar domain="comics" />
-            <ViewStory />
+            <EditStory />
         </div>
     );
 };

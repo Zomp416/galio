@@ -111,7 +111,6 @@ const ViewStory: React.FC = () => {
                     </Styled.ViewContainer>
                 </Styled.RowContainer>
                 <Styled.Story>
-                    {/* Add Toolbar */}
                     <AppBar position="static" color="primary" sx={{ height: "50px" }}>
                         <Toolbar
                             disableGutters
@@ -124,6 +123,7 @@ const ViewStory: React.FC = () => {
                                 alignItems: "center",
                             }}
                         >
+                            {/* TODO: IMPLEMENT BUTTON OVER THE ICONS */}
                             <Box>
                                 <TextIncreaseIcon
                                     sx={{
