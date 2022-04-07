@@ -12,6 +12,7 @@ const Home: NextPage = () => {
             <Head>
                 <title>Zomp</title>
             </Head>
+            {/* TODO: dynamically set navbar */}
             <Navbar domain="comics" />
             {loggedIn ? <PostLoginPage /> : <LandingPage />}
         </div>
