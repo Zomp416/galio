@@ -3,7 +3,7 @@ import Head from "next/head";
 import CreateNewStory from "../../components/story/create-new-story";
 import Navbar from "../../components/navbar";
 
-const SearchPage: NextPage = () => {
+const CreateNewStoryPage: NextPage = () => {
     return (
         <div>
             <Head>
@@ -35,4 +35,4 @@ export const getServerSideProps: GetServerSideProps = async context => {
     };
 };
 
-export default SearchPage;
+export default CreateNewStoryPage;
