@@ -28,7 +28,7 @@ const PostLoginPage: React.FC = () => {
                 <Box>
                     <Button
                         component="a"
-                        href="/"
+                        href="/comic/hub"
                         variant="outlined"
                         sx={{
                             marginRight: "75px",
@@ -45,7 +45,7 @@ const PostLoginPage: React.FC = () => {
                 <Box>
                     <Button
                         component="a"
-                        href="/"
+                        href="/story/hub"
                         variant="outlined"
                         sx={{
                             marginRight: "75px",
