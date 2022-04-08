@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import {
+    Divider,
     TextField,
     Typography,
     Rating,
@@ -10,6 +11,7 @@ import {
     ListItemText,
     Avatar,
 } from "@mui/material";
+import ShareIcon from "@mui/icons-material/Share";
 import * as Styled from "./styles";
 
 const ViewComic: React.FC = () => {
@@ -61,12 +63,16 @@ const ViewComic: React.FC = () => {
                     <Styled.SSContainer>
                         <Styled.SSButton variant="contained" color="primary" size="large">
                             Share
+                            <ShareIcon />
                         </Styled.SSButton>
                         <Styled.SSButton variant="contained" color="primary" size="large">
                             Subscribe
                         </Styled.SSButton>
                     </Styled.SSContainer>
                 </Styled.ASSContainer>
+                <Styled.ColumnContainer>
+                    <Divider />
+                </Styled.ColumnContainer>
                 <Styled.ASSContainer>
                     <Typography variant="h4">Ratings</Typography>
                     <Styled.RatingsContainer>
@@ -108,6 +114,9 @@ const ViewComic: React.FC = () => {
                         </Styled.Rating>
                     </Styled.RatingsContainer>
                 </Styled.ASSContainer>
+                <Styled.ColumnContainer>
+                    <Divider />
+                </Styled.ColumnContainer>
                 <Styled.ASSContainer>
                     <Typography variant="h4">Comments (1)</Typography>
                     <Styled.SSButton

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-// import Link from "next/link";
 import * as Styled from "./styles";
 import Form from "./form";
-import { Input } from "@mui/material";
 
 const CreateNewStory: React.FC = () => {
     return (
