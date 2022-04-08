@@ -1,8 +1,5 @@
 import React from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import { Box, Button, Typography } from "@mui/material";
 
 //TODO: replace once we connect to backend
 const user = "Mason";
@@ -41,6 +38,7 @@ const PostLoginPage: React.FC = () => {
                             width: "275px",
                         }}
                     >
+                        {/* TODO: CONNECT TO COMICS */}
                         Dive Into Comics
                     </Button>
                 </Box>
@@ -57,6 +55,7 @@ const PostLoginPage: React.FC = () => {
                             width: "275px",
                         }}
                     >
+                        {/* TODO: CONNECT TO STORIES */}
                         Dive Into Stories
                     </Button>
                 </Box>

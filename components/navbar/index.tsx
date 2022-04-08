@@ -1,16 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import InputBase from "@mui/material/InputBase";
-import Toolbar from "@mui/material/Toolbar";
-import Avatar from "@mui/material/Avatar";
+import { AppBar, Avatar, Box, IconButton, Menu, MenuItem, InputBase, Toolbar } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 interface NavbarProps {
@@ -71,7 +61,6 @@ const Navbar: React.FC<NavbarProps> = props => {
         : loggedOutSettings;
 
     return (
-        //TODO: space out the components in the AppBar as to fit the Figma design
         <AppBar position="static" color="secondary" sx={{ height: "50px", padding: "0" }}>
             <Toolbar
                 disableGutters
@@ -139,7 +128,6 @@ const Navbar: React.FC<NavbarProps> = props => {
                         </Menu>
                     </Box>
                 </Box>
-                {/* TODO: Set the label's color to #8F8F8F similar to the text color */}
             </Toolbar>
         </AppBar>
     );

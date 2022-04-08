@@ -1,13 +1,28 @@
 import styled from "@emotion/styled";
 import { Avatar as MUI_Avatar, Button as MUI_Button } from "@mui/material";
 
-export const ViewComicContainer = styled.div`
+export const ViewStoryContainer = styled.div`
     width: 100%;
-    padding: 30px 27.5%;
+    padding: 30px 25%;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: left;
+`;
+
+export const ButtonsContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 25px;
+    margin-bottom: 25px;
+`;
+
+export const RowContainer = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row;
 `;
 
 export const ColumnContainer = styled.div`
@@ -39,20 +54,39 @@ export const ViewContainer = styled.div`
 `;
 
 export const Tag = styled(MUI_Button)`
-    margin-right: 5px;
+    background-color: white;
+    border: 2px solid #39a78e;
+    border-radius: 15px;
+    height: 30px;
+    padding: 3px 10px;
+    margin-right: 10px;
 `;
 
-export const ComicImage = styled.div`
+export const ManageTag = styled(Tag)`
+    color: black;
+    background-color: #39a78e;
+    border: 2px dashed black;
+    font-weight: bold;
+
+    :hover {
+        background-color: #2e8c76;
+        border: 2px dashed black;
+        cursor: pointer;
+    }
+`;
+
+export const Story = styled.div`
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    height: 620px;
-    background-color: grey;
+    margin: 25px;
 `;
 
 // Author + Share and Subscribe lol
 export const ASSContainer = styled.div`
     margin-top: 20px;
     margin-bottom: 20px;
-    width: 100%;
+    width: 90%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
