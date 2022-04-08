@@ -7,18 +7,19 @@ interface NavbarProps {
     domain: string;
 }
 
-const loggedIn = false; //TODO: replace once we connect with backend
+const loggedIn = true; //TODO: replace once we connect with backend
 
+//TODO: set all the proper links
 const loggedInComicsSettings = [
     { display: "Start New Comic", url: "/" },
-    { display: "My Comics", url: "/" },
+    { display: "My Comics", url: "/comic/my" },
     { display: "My Profile", url: "/" },
     { display: "Account Settings", url: "/" },
     { display: "Log Out", url: "/" },
 ];
 const loggedInStoriesSettings = [
     { display: "Start New Story", url: "/" },
-    { display: "My Stories", url: "/" },
+    { display: "My Stories", url: "/story/my" },
     { display: "My Profile", url: "/" },
     { display: "Account Settings", url: "/" },
     { display: "Log Out", url: "/" },
