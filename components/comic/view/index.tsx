@@ -52,7 +52,7 @@ const ViewComic: React.FC = () => {
                     <Styled.AuthorContainer>
                         <Styled.Avatar></Styled.Avatar>
                         <div>
-                            <Link href="/" passHref>
+                            <Link href="/user/Mason37" passHref>
                                 <Typography variant="h4" component="a" color="black">
                                     Mason37
                                 </Typography>
@@ -146,7 +146,7 @@ const ViewComic: React.FC = () => {
                         </ListItemAvatar>
                         <ListItemText
                             primary={
-                                <Link href="/" passHref>
+                                <Link href="/user/Joe Schmo" passHref>
                                     <Typography variant="body1" component="a" color="black">
                                         Joe Schmo
                                     </Typography>
