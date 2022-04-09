@@ -1,16 +1,16 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
-import Navbar from "../components/navbar";
-import Profile from "../components/profile page";
+import Navbar from "../../components/navbar";
+import Profile from "../../components/profile page";
 
 const ProfilePage: NextPage = () => {
     return (
         <div>
             <Head>
-                <title>Zomp Search</title>
+                <title>User Profile</title>
             </Head>
             {/* TODO: dynamically set navbar */}
-            <Navbar domain="comics" />
+            <Navbar domain="user" />
             <Profile />
         </div>
     );
