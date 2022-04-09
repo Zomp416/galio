@@ -8,25 +8,27 @@ interface NavbarProps {
 }
 
 const loggedIn = true; //TODO: replace once we connect with backend
+const username = "Joe Schmo"; //TODO: replace once we connect with backend
+const newId = 123; //TODO: replace once we connect with backend
 
 //TODO: set all the proper links
 const loggedInComicsSettings = [
-    { display: "Start New Comic", url: "/" },
+    { display: "Start New Comic", url: "/comic/edit/" + newId },
     { display: "My Comics", url: "/comic/my" },
-    { display: "My Profile", url: "/" },
-    { display: "Account Settings", url: "/" },
+    { display: "My Profile", url: "/user/" + username },
+    { display: "Account Settings", url: "/edit-account" },
     { display: "Log Out", url: "/" },
 ];
 const loggedInStoriesSettings = [
-    { display: "Start New Story", url: "/" },
+    { display: "Start New Story", url: "/story/create-new-story" },
     { display: "My Stories", url: "/story/my" },
-    { display: "My Profile", url: "/" },
-    { display: "Account Settings", url: "/" },
+    { display: "My Profile", url: "/user/" + username },
+    { display: "Account Settings", url: "/edit-account" },
     { display: "Log Out", url: "/" },
 ];
 const loggedInDefaultSettings = [
-    { display: "My Profile", url: "/" },
-    { display: "Account Settings", url: "/" },
+    { display: "My Profile", url: "/user/" + username },
+    { display: "Account Settings", url: "/edit-account" },
     { display: "Log Out", url: "/" },
 ];
 const loggedOutSettings = [

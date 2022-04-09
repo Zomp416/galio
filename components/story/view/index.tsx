@@ -90,7 +90,7 @@ const ViewStory: React.FC = () => {
                                 <Styled.ColumnContainer>
                                     <div>
                                         <Typography variant="h5" component="a" color="black">
-                                            <Link href="/" passHref>
+                                            <Link href={"/user/" + story.author} passHref>
                                                 {story.author}
                                             </Link>
                                         </Typography>
@@ -266,7 +266,7 @@ const ViewStory: React.FC = () => {
                         </ListItemAvatar>
                         <ListItemText
                             primary={
-                                <Link href="/" passHref>
+                                <Link href="/user/Joe Schmo" passHref>
                                     <Typography variant="body1" component="a" color="black">
                                         Joe Schmo
                                     </Typography>
