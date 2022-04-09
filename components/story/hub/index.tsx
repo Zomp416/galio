@@ -7,7 +7,7 @@ import SmallCard from "./smallcard";
 import * as Styled from "./styles";
 
 // TODO: remove later
-const comics = [
+const stories = [
     {
         _id: "a1",
         title: "Taquitos",
@@ -51,15 +51,15 @@ const comics = [
     },
 ];
 
-let featured = [comics[1]];
-let others = [comics[1]];
-for (let i = 0; i < 4; i++) featured.push(comics[i % 3]);
-for (let i = 0; i < 11; i++) others.push(comics[i % 3]);
+let featured = [stories[1]];
+let others = [stories[1]];
+for (let i = 0; i < 4; i++) featured.push(stories[i % 3]);
+for (let i = 0; i < 11; i++) others.push(stories[i % 3]);
 
 const Hub: React.FC = () => {
     return (
-        <Styled.MyComicsOuter className="outer">
-            <Styled.MyComicsInner className="inner">
+        <Styled.MyStoriesOuter className="outer">
+            <Styled.MyStoriesInner className="inner">
                 <Styled.CarouselWrapper className="carouselwrapper">
                     <Carousel
                         indicatorContainerProps={{
@@ -67,19 +67,19 @@ const Hub: React.FC = () => {
                         }}
                         height={400}
                     >
-                        {featured.map((comic, i) => (
-                            <BigCard key={i} {...comic} />
+                        {featured.map((story, i) => (
+                            <BigCard key={i} {...story} />
                         ))}
                     </Carousel>
                 </Styled.CarouselWrapper>
                 <SortFilter />
-                <Styled.Grid className="comicgrid">
-                    {others.map((comic, i) => (
-                        <SmallCard key={i} {...comic} />
+                <Styled.Grid className="storygrid">
+                    {others.map((story, i) => (
+                        <SmallCard key={i} {...story} />
                     ))}
                 </Styled.Grid>
-            </Styled.MyComicsInner>
-        </Styled.MyComicsOuter>
+            </Styled.MyStoriesInner>
+        </Styled.MyStoriesOuter>
     );
 };
 

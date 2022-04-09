@@ -7,7 +7,7 @@ import PublishTable from "./publishtable";
 
 // TODO: remove later
 const now = new Date();
-const comics = [
+const stories = [
     {
         _id: "a1",
         title: "Taquitos",
@@ -47,7 +47,7 @@ interface ISelectionContext {
 
 const SelectionContext = createContext<ISelectionContext>({ selection: -1 });
 
-const MyComics: React.FC = () => {
+const MyStories: React.FC = () => {
     const [filter, setFilter] = useState("edit");
     const [selection, setSelection] = useState(-1);
 
@@ -58,10 +58,10 @@ const MyComics: React.FC = () => {
 
     return (
         <SelectionContext.Provider value={{ selection, setSelection }}>
-            <Styled.MyComicsOuter className="outer">
-                <Styled.MyComicsInner className="inner">
-                    <Styled.MyComicsHeader>
-                        <Typography variant="h4">My Comics</Typography>
+            <Styled.MyStoriesOuter className="outer">
+                <Styled.MyStoriesInner className="inner">
+                    <Styled.MyStoriesHeader>
+                        <Typography variant="h4">My Stories</Typography>
                         <Styled.ToggleButtonGroup
                             color="primary"
                             value={filter}
@@ -71,17 +71,17 @@ const MyComics: React.FC = () => {
                             <Styled.ToggleButton value="edit">Editing</Styled.ToggleButton>
                             <Styled.ToggleButton value="publish">Published</Styled.ToggleButton>
                         </Styled.ToggleButtonGroup>
-                    </Styled.MyComicsHeader>
+                    </Styled.MyStoriesHeader>
                     {filter === "edit" ? (
-                        <EditTable comics={comics} />
+                        <EditTable stories={stories} />
                     ) : (
-                        <PublishTable comics={comics} />
+                        <PublishTable stories={stories} />
                     )}
-                </Styled.MyComicsInner>
-            </Styled.MyComicsOuter>
+                </Styled.MyStoriesInner>
+            </Styled.MyStoriesOuter>
         </SelectionContext.Provider>
     );
 };
 
 export const useSelectionContext = () => useContext(SelectionContext);
-export default MyComics;
+export default MyStories;

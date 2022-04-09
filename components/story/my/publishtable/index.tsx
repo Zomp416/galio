@@ -3,7 +3,7 @@ import { Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel } from
 
 import Entry from "./entry";
 
-interface Comic {
+interface Story {
     _id: string;
     title: string;
     splashURL: string;
@@ -29,7 +29,7 @@ const generalComparator = (type: string, order: number) => {
     else return dateComparator(order);
 };
 
-const PublishTable: React.FC<{ comics: Comic[] }> = props => {
+const PublishTable: React.FC<{ stories: Story[] }> = props => {
     const [sortType, setSortType] = useState("title");
     const [sortOrder, setSortOrder] = useState(1);
 
@@ -77,8 +77,8 @@ const PublishTable: React.FC<{ comics: Comic[] }> = props => {
                 </TableRow>
             </TableHead>
             <TableBody>
-                {props.comics.sort(generalComparator(sortType, sortOrder)).map((comic, i) => (
-                    <Entry {...comic} index={i} key={i} />
+                {props.stories.sort(generalComparator(sortType, sortOrder)).map((story, i) => (
+                    <Entry {...story} index={i} key={i} />
                 ))}
             </TableBody>
         </Table>

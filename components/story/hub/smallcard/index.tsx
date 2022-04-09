@@ -25,7 +25,7 @@ const SmallCard: React.FC<Props> = props => {
             onMouseLeave={() => setHovered(false)}
         >
             <Styled.Image src={props.splashURL} />
-            <Link href={`/comic/view/${props._id}`}>
+            <Link href={`/story/view/${props._id}`}>
                 <a style={{ color: "inherit" }}>
                     <Fade in={hovered}>
                         <Styled.CardHover>

@@ -7,3 +7,9 @@ export const Image = styled.img`
     width: 40px;
     object-fit: cover;
 `;
+
+export const Menu = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+`;
