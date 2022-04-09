@@ -49,6 +49,7 @@ const EditTable: React.FC<{ comics: Comic[] }> = props => {
                             Name
                         </TableSortLabel>
                     </TableCell>
+                    <TableCell></TableCell>
                     <TableCell align="left" style={{ width: "1px", whiteSpace: "nowrap" }}>
                         <TableSortLabel
                             active={sortType === "date"}

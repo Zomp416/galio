@@ -1,7 +1,10 @@
 import React from "react";
-// import { useRouter } from "next/router";
-import { TableRow, TableCell, Collapse } from "@mui/material";
+import { useRouter } from "next/router";
+import { TableRow, TableCell, Grow, Button } from "@mui/material";
 import moment from "moment";
+import EditIcon from "@mui/icons-material/Edit";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import { useSelectionContext } from "../..";
 import * as Styled from "./styles";
@@ -16,11 +19,11 @@ interface Comic {
 
 const EditTable: React.FC<Comic> = props => {
     const { selection, setSelection } = useSelectionContext();
-    // const router = useRouter();
+    const router = useRouter();
 
     const onSelect = () => {
-        // router.push(`/comic/view/${props._id}`);
-        setSelection!(props.index);
+        if (props.index == selection) setSelection!(-1);
+        else setSelection!(props.index);
     };
 
     return (
@@ -30,6 +33,21 @@ const EditTable: React.FC<Comic> = props => {
                     <Styled.Image src={props.splashURL} />
                 </TableCell>
                 <TableCell>{props.title}</TableCell>
+                <TableCell style={{ width: "1px", whiteSpace: "nowrap" }}>
+                    <Grow in={selection === props.index}>
+                        <Styled.Menu>
+                            <Button onClick={() => router.push(`/comic/edit/${props._id}`)}>
+                                <EditIcon />
+                            </Button>
+                            <Button>
+                                <CheckCircleIcon />
+                            </Button>
+                            <Button>
+                                <DeleteIcon />
+                            </Button>
+                        </Styled.Menu>
+                    </Grow>
+                </TableCell>
                 <TableCell align="left" style={{ width: "1px", whiteSpace: "nowrap" }}>
                     {moment(props.updatedAt).calendar(null, {
                         sameDay: "[Today] h:mm a",
@@ -39,11 +57,6 @@ const EditTable: React.FC<Comic> = props => {
                     })}
                 </TableCell>
             </TableRow>
-            <Collapse in={selection === props.index}>
-                <TableRow>
-                    <TableCell>menu</TableCell>
-                </TableRow>
-            </Collapse>
         </>
     );
 };

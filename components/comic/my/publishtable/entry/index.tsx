@@ -1,7 +1,10 @@
 import React from "react";
-// import { useRouter } from "next/router";
-import { Rating, TableRow, TableCell, Collapse } from "@mui/material";
+import { useRouter } from "next/router";
+import { Rating, TableRow, TableCell, Grow, Button } from "@mui/material";
 import moment from "moment";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import UnpublishedIcon from "@mui/icons-material/Unpublished";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import { useSelectionContext } from "../..";
 import * as Styled from "./styles";
@@ -17,11 +20,11 @@ interface Props {
 
 const PublishTable: React.FC<Props> = props => {
     const { selection, setSelection } = useSelectionContext();
-    // const router = useRouter();
+    const router = useRouter();
 
     const onSelect = () => {
-        // router.push(`/comic/view/${props._id}`);
-        setSelection!(props.index);
+        if (props.index == selection) setSelection!(-1);
+        else setSelection!(props.index);
     };
 
     return (
@@ -31,6 +34,21 @@ const PublishTable: React.FC<Props> = props => {
                     <Styled.Image src={props.splashURL} />
                 </TableCell>
                 <TableCell>{props.title}</TableCell>
+                <TableCell style={{ width: "1px", whiteSpace: "nowrap" }}>
+                    <Grow in={selection === props.index}>
+                        <Styled.Menu>
+                            <Button onClick={() => router.push(`/comic/view/${props._id}`)}>
+                                <VisibilityIcon />
+                            </Button>
+                            <Button>
+                                <UnpublishedIcon />
+                            </Button>
+                            <Button>
+                                <DeleteIcon />
+                            </Button>
+                        </Styled.Menu>
+                    </Grow>
+                </TableCell>
                 <TableCell style={{ width: "1px" }}>
                     <Rating
                         value={props.rating}
@@ -53,11 +71,6 @@ const PublishTable: React.FC<Props> = props => {
                     })}
                 </TableCell>
             </TableRow>
-            <Collapse in={selection === props.index}>
-                <TableRow>
-                    <TableCell>menu</TableCell>
-                </TableRow>
-            </Collapse>
         </>
     );
 };

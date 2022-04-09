@@ -55,6 +55,7 @@ const PublishTable: React.FC<{ comics: Comic[] }> = props => {
                             Name
                         </TableSortLabel>
                     </TableCell>
+                    <TableCell></TableCell>
                     <TableCell>
                         <TableSortLabel
                             active={sortType === "rating"}
