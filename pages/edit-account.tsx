@@ -1,7 +1,7 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
-import Navbar from "../../components/navbar";
-import EditAccount from "../../components/edit-account";
+import Navbar from "../components/navbar";
+import EditAccount from "../components/edit-account";
 
 const EditAccountPage: NextPage = () => {
     return (

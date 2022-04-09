@@ -1,17 +1,16 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
-import ViewComic from "../../../components/comic/view";
+import EditComic from "../../../components/comic/edit";
 import Navbar from "../../../components/navbar";
 
-const ViewComicPage: NextPage = () => {
+const EditComicPage: NextPage = () => {
     return (
         <div>
             <Head>
                 <title>Comic Title</title>
             </Head>
-            {/* TODO: dynamically set navbar; maybe not because this is view comics */}
             <Navbar domain="comics" />
-            <ViewComic />
+            <EditComic />
         </div>
     );
 };
@@ -61,4 +60,4 @@ export const getServerSideProps: GetServerSideProps = async context => {
     };
 };
 
-export default ViewComicPage;
+export default EditComicPage;

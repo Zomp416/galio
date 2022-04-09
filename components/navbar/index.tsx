@@ -62,7 +62,11 @@ const Navbar: React.FC<NavbarProps> = props => {
         : loggedOutSettings;
 
     return (
-        <AppBar position="static" color="secondary" sx={{ height: "50px", padding: "0" }}>
+        <AppBar
+            position="relative"
+            color="secondary"
+            sx={{ height: "50px", padding: "0", zIndex: theme => theme.zIndex.drawer + 1 }}
+        >
             <Toolbar
                 disableGutters
                 style={{
