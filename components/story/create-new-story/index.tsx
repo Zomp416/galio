@@ -9,7 +9,7 @@ const CreateNewStory: React.FC = () => {
                 <Styled.CancelButton variant="contained" color="primary">
                     Cancel
                 </Styled.CancelButton>
-                <Styled.DoneButton variant="contained" color="primary">
+                <Styled.DoneButton variant="contained" color="primary" href="/story/edit/123">
                     Done
                 </Styled.DoneButton>
             </Styled.ButtonsContainer>

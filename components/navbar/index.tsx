@@ -11,7 +11,7 @@ const loggedIn = true; //TODO: replace once we connect with backend
 const username = "Joe Schmo"; //TODO: replace once we connect with backend
 const newId = 123; //TODO: replace once we connect with backend
 
-//TODO: set all the proper links
+//TODO: add more links -> go to community hub, etc..
 const loggedInComicsSettings = [
     { display: "Start New Comic", url: "/comic/edit/" + newId },
     { display: "My Comics", url: "/comic/my" },
@@ -27,6 +27,8 @@ const loggedInStoriesSettings = [
     { display: "Log Out", url: "/" },
 ];
 const loggedInDefaultSettings = [
+    { display: "Visit Comics Hub", url: "/comic/hub" },
+    { display: "Visit Stories Hub", url: "/story/hub" },
     { display: "My Profile", url: "/user/" + username },
     { display: "Account Settings", url: "/edit-account" },
     { display: "Log Out", url: "/" },
@@ -99,7 +101,8 @@ const Navbar: React.FC<NavbarProps> = props => {
                         inputProps={{ "aria-label": "search" }}
                         sx={{ color: "white" }}
                     />
-                    <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
+                    {/* TODO: Make SearchIcon actually search */}
+                    <IconButton type="submit" sx={{ p: "10px" }} aria-label="search" href="/search">
                         <SearchIcon color="primary" />
                     </IconButton>
                     <Box>
