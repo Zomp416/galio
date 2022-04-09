@@ -10,7 +10,7 @@ const HubPage: NextPage = () => {
                 <title>Community Hub</title>
             </Head>
             {/* TODO: dynamically set navbar; maybe not because this is view comics */}
-            <Navbar domain="story" />
+            <Navbar domain="stories" />
             <Hub />
         </div>
     );
