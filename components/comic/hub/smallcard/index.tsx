@@ -30,8 +30,8 @@ const SmallCard: React.FC<Props> = props => {
                     <Fade in={hovered}>
                         <Styled.CardHover>
                             <Container>
-                                <Typography variant="subtitle1">{props.title}</Typography>
-                                <Typography style={{ fontSize: 12 }}>by {props.author}</Typography>
+                                <Typography variant="h5">{props.title}</Typography>
+                                <Typography style={{ fontSize: 15 }}>by {props.author}</Typography>
                                 <Rating
                                     value={props.rating}
                                     precision={0.1}
@@ -44,8 +44,8 @@ const SmallCard: React.FC<Props> = props => {
                                     }}
                                 />
                                 <Stack direction="row" justifyContent="center">
-                                    <VisibilityIcon style={{ fontSize: 16 }} />
-                                    <Typography style={{ fontSize: 12 }}>{props.views}</Typography>
+                                    <VisibilityIcon style={{ fontSize: 20 }} />
+                                    <Typography style={{ fontSize: 15 }}>{props.views}</Typography>
                                 </Stack>
                             </Container>
                         </Styled.CardHover>

@@ -26,7 +26,7 @@ export const CarouselWrapper = styled.div`
 export const Grid = styled.div`
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    grid-gap: 1vh;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 4vh;
     justify-content: space-between;
 `;

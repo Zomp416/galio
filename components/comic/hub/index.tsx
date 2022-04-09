@@ -54,7 +54,7 @@ const comics = [
 let featured = [comics[1]];
 let others = [comics[1]];
 for (let i = 0; i < 4; i++) featured.push(comics[i % 3]);
-for (let i = 0; i < 15; i++) others.push(comics[i % 3]);
+for (let i = 0; i < 11; i++) others.push(comics[i % 3]);
 
 const Hub: React.FC = () => {
     return (
