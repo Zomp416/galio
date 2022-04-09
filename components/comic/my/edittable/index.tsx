@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { useRouter } from "next/router";
 import { Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel } from "@mui/material";
-import moment from "moment";
 
-import * as Styled from "./styles";
+import Entry from "./entry";
 
 interface Comic {
     _id: string;
@@ -28,7 +26,6 @@ const generalComparator = (type: string, order: number) => {
 const EditTable: React.FC<{ comics: Comic[] }> = props => {
     const [sortType, setSortType] = useState("title");
     const [sortOrder, setSortOrder] = useState(1);
-    const router = useRouter();
 
     const onChangeSort = (param: string) => () => {
         if (sortType === param) setSortOrder(-sortOrder);
@@ -46,9 +43,7 @@ const EditTable: React.FC<{ comics: Comic[] }> = props => {
                     <TableCell>
                         <TableSortLabel
                             active={sortType === "title"}
-                            direction={
-                                sortType === "title" ? (sortOrder === 1 ? "asc" : "desc") : "asc"
-                            }
+                            direction={sortOrder === 1 ? "asc" : "desc"}
                             onClick={onChangeSort("title")}
                         >
                             Name
@@ -57,9 +52,7 @@ const EditTable: React.FC<{ comics: Comic[] }> = props => {
                     <TableCell align="left" style={{ width: "1px", whiteSpace: "nowrap" }}>
                         <TableSortLabel
                             active={sortType === "date"}
-                            direction={
-                                sortType === "date" ? (sortOrder === 1 ? "asc" : "desc") : "asc"
-                            }
+                            direction={sortOrder === 1 ? "asc" : "desc"}
                             onClick={onChangeSort("date")}
                         >
                             Last Modified
@@ -69,25 +62,7 @@ const EditTable: React.FC<{ comics: Comic[] }> = props => {
             </TableHead>
             <TableBody>
                 {props.comics.sort(generalComparator(sortType, sortOrder)).map((comic, i) => (
-                    <TableRow
-                        key={i}
-                        onClick={() => {
-                            router.push(`/comic/edit/${comic._id}`);
-                        }}
-                    >
-                        <TableCell style={{ width: "1px" }}>
-                            <Styled.Image src={comic.splashURL} />
-                        </TableCell>
-                        <TableCell>{comic.title}</TableCell>
-                        <TableCell align="left" style={{ width: "1px", whiteSpace: "nowrap" }}>
-                            {moment(comic.updatedAt).calendar(null, {
-                                sameDay: "[Today] h:mm a",
-                                lastDay: "[Yesterday]",
-                                lastWeek: "[Last] dddd",
-                                sameElse: "DD/MM/YYYY",
-                            })}
-                        </TableCell>
-                    </TableRow>
+                    <Entry {...comic} index={i} key={i} />
                 ))}
             </TableBody>
         </Table>

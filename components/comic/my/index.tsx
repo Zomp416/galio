@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { Typography } from "@mui/material";
 
 import * as Styled from "./styles";
@@ -40,36 +40,48 @@ const comics = [
     },
 ];
 
+interface ISelectionContext {
+    selection: number;
+    setSelection?: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const SelectionContext = createContext<ISelectionContext>({ selection: -1 });
+
 const MyComics: React.FC = () => {
     const [filter, setFilter] = useState("edit");
+    const [selection, setSelection] = useState(-1);
 
     const onSetFilter = (e: any) => {
+        if (filter !== e.target.value) setSelection(-1);
         setFilter(e.target.value);
     };
 
     return (
-        <Styled.MyComicsOuter className="outer">
-            <Styled.MyComicsInner className="inner">
-                <Styled.MyComicsHeader>
-                    <Typography variant="h4">My Comics</Typography>
-                    <Styled.ToggleButtonGroup
-                        color="primary"
-                        value={filter}
-                        exclusive
-                        onChange={onSetFilter}
-                    >
-                        <Styled.ToggleButton value="edit">Editing</Styled.ToggleButton>
-                        <Styled.ToggleButton value="publish">Published</Styled.ToggleButton>
-                    </Styled.ToggleButtonGroup>
-                </Styled.MyComicsHeader>
-                {filter === "edit" ? (
-                    <EditTable comics={comics} />
-                ) : (
-                    <PublishTable comics={comics} />
-                )}
-            </Styled.MyComicsInner>
-        </Styled.MyComicsOuter>
+        <SelectionContext.Provider value={{ selection, setSelection }}>
+            <Styled.MyComicsOuter className="outer">
+                <Styled.MyComicsInner className="inner">
+                    <Styled.MyComicsHeader>
+                        <Typography variant="h4">My Comics</Typography>
+                        <Styled.ToggleButtonGroup
+                            color="primary"
+                            value={filter}
+                            exclusive
+                            onChange={onSetFilter}
+                        >
+                            <Styled.ToggleButton value="edit">Editing</Styled.ToggleButton>
+                            <Styled.ToggleButton value="publish">Published</Styled.ToggleButton>
+                        </Styled.ToggleButtonGroup>
+                    </Styled.MyComicsHeader>
+                    {filter === "edit" ? (
+                        <EditTable comics={comics} />
+                    ) : (
+                        <PublishTable comics={comics} />
+                    )}
+                </Styled.MyComicsInner>
+            </Styled.MyComicsOuter>
+        </SelectionContext.Provider>
     );
 };
 
+export const useSelectionContext = () => useContext(SelectionContext);
 export default MyComics;
