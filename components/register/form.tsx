@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { Button, TextField, Typography } from "@mui/material";
 import { StyledForm } from "./styles";
-import { login } from "../../util/zilean";
+import { register } from "../../util/zilean";
 
 const defaultValues = {
     email: "",
@@ -27,13 +26,12 @@ const Form: React.FC = () => {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         console.log(formValues);
-        // const data = await login(formValues);
-        // if (data.error) {
-        //     setError(true);
-        // } else {
-        //     // TODO find best location to redirect
-        //     router.push("/");
-        // }
+        const data = await register(formValues);
+        if (data.error) {
+            setError(true);
+        } else {
+            router.push("/");
+        }
     };
 
     return (

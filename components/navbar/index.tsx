@@ -2,51 +2,68 @@ import React from "react";
 import Image from "next/image";
 import { AppBar, Avatar, Box, IconButton, Menu, MenuItem, InputBase, Toolbar } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { useRouter } from "next/router";
+import { logout } from "../../util/zilean";
 
 interface NavbarProps {
     domain: string;
+}
+
+interface NavbarLink {
+    display: string;
+    url?: string;
+    onClick?: () => any;
 }
 
 const loggedIn = true; //TODO: replace once we connect with backend
 const username = "Joe Schmo"; //TODO: replace once we connect with backend
 const newId = 123; //TODO: replace once we connect with backend
 
-//TODO: add more links -> go to community hub, etc..
-const loggedInComicsSettings = [
-    { display: "Start New Comic", url: "/comic/edit/" + newId },
-    { display: "My Comics", url: "/comic/my" },
-    { display: "My Profile", url: "/user/" + username },
-    { display: "Account Settings", url: "/edit-account" },
-    { display: "Log Out", url: "/" },
-];
-const loggedInStoriesSettings = [
-    { display: "Start New Story", url: "/story/create-new-story" },
-    { display: "My Stories", url: "/story/my" },
-    { display: "My Profile", url: "/user/" + username },
-    { display: "Account Settings", url: "/edit-account" },
-    { display: "Log Out", url: "/" },
-];
-const loggedInDefaultSettings = [
-    { display: "Visit Comics Hub", url: "/comic/hub" },
-    { display: "Visit Stories Hub", url: "/story/hub" },
-    { display: "My Profile", url: "/user/" + username },
-    { display: "Account Settings", url: "/edit-account" },
-    { display: "Log Out", url: "/" },
-];
-const loggedOutSettings = [
-    { display: "Log In", url: "/login" },
-    { display: "Register", url: "/register" },
-];
-
 const Navbar: React.FC<NavbarProps> = props => {
     //Used to enable the menu on the user icon
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+    const router = useRouter();
+
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
     };
+
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+    const handleLogout = async () => {
+        await logout();
+        router.push("/");
+    };
+
+    //TODO: add more links -> go to community hub, etc..
+    const loggedInComicsSettings: NavbarLink[] = [
+        { display: "Start New Comic", url: "/comic/edit/" + newId },
+        { display: "My Comics", url: "/comic/my" },
+        { display: "My Profile", url: "/user/" + username },
+        { display: "Account Settings", url: "/edit-account" },
+        { display: "Log Out", onClick: handleLogout },
+    ];
+    const loggedInStoriesSettings: NavbarLink[] = [
+        { display: "Start New Story", url: "/story/create-new-story" },
+        { display: "My Stories", url: "/story/my" },
+        { display: "My Profile", url: "/user/" + username },
+        { display: "Account Settings", url: "/edit-account" },
+        { display: "Log Out", onClick: handleLogout },
+    ];
+    const loggedInDefaultSettings: NavbarLink[] = [
+        { display: "Visit Comics Hub", url: "/comic/hub" },
+        { display: "Visit Stories Hub", url: "/story/hub" },
+        { display: "My Profile", url: "/user/" + username },
+        { display: "Account Settings", url: "/edit-account" },
+        { display: "Log Out", onClick: handleLogout },
+    ];
+    const loggedOutSettings: NavbarLink[] = [
+        { display: "Log In", url: "/login" },
+        { display: "Register", url: "/register" },
+    ];
+
     //Used to show the appropiate logo based on the page
     var logo =
         props.domain == "comics" ? (
@@ -56,8 +73,9 @@ const Navbar: React.FC<NavbarProps> = props => {
         ) : (
             ""
         );
+
     //Used to display the appropiate menu (Guest, LoggedInComics, LoggedInStories, PostLogin)
-    var settings = loggedIn
+    var settings: NavbarLink[] = loggedIn
         ? props.domain == "comics"
             ? loggedInComicsSettings
             : props.domain == "stories"
@@ -125,16 +143,30 @@ const Navbar: React.FC<NavbarProps> = props => {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map(setting => (
-                                <MenuItem
-                                    key={setting.display}
-                                    component="a"
-                                    href={setting.url}
-                                    onClick={handleCloseUserMenu}
-                                >
-                                    {setting.display}
-                                </MenuItem>
-                            ))}
+                            {settings.map(setting => {
+                                if (setting.url) {
+                                    return (
+                                        <MenuItem
+                                            key={setting.display}
+                                            component="a"
+                                            href={setting.url}
+                                            onClick={handleCloseUserMenu}
+                                        >
+                                            {setting.display}
+                                        </MenuItem>
+                                    );
+                                } else if (setting.onClick) {
+                                    return (
+                                        <MenuItem
+                                            key={setting.display}
+                                            component="button"
+                                            onClick={setting.onClick}
+                                        >
+                                            {setting.display}
+                                        </MenuItem>
+                                    );
+                                }
+                            })}
                         </Menu>
                     </Box>
                 </Box>
