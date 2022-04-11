@@ -4,6 +4,7 @@ import { AppBar, Avatar, Box, IconButton, Menu, MenuItem, InputBase, Toolbar } f
 import SearchIcon from "@mui/icons-material/Search";
 import { useRouter } from "next/router";
 import { logout } from "../../util/zilean";
+import { useAuthContext } from "../../context/authcontext";
 
 interface NavbarProps {
     domain: string;
@@ -15,11 +16,14 @@ interface NavbarLink {
     onClick?: () => any;
 }
 
-const loggedIn = true; //TODO: replace once we connect with backend
 const username = "Joe Schmo"; //TODO: replace once we connect with backend
 const newId = 123; //TODO: replace once we connect with backend
 
 const Navbar: React.FC<NavbarProps> = props => {
+    //Get user context to determine if the user is logged in
+    const { user } = useAuthContext();
+    var loggedIn = user ? true : false;
+
     //Used to enable the menu on the user icon
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
     const router = useRouter();
@@ -35,12 +39,15 @@ const Navbar: React.FC<NavbarProps> = props => {
     const handleLogout = async () => {
         await logout();
         router.push("/");
+        setAnchorElUser(null);
     };
 
-    //TODO: add more links -> go to community hub, etc..
+    //TODO: add links -> continue as guest for loggedou and fix links
     const loggedInComicsSettings: NavbarLink[] = [
         { display: "Start New Comic", url: "/comic/edit/" + newId },
         { display: "My Comics", url: "/comic/my" },
+        { display: "Visit Comics Hub", url: "/comic/hub" },
+        { display: "Visit Stories Hub", url: "/story/hub" },
         { display: "My Profile", url: "/user/" + username },
         { display: "Account Settings", url: "/edit-account" },
         { display: "Log Out", onClick: handleLogout },
@@ -48,6 +55,8 @@ const Navbar: React.FC<NavbarProps> = props => {
     const loggedInStoriesSettings: NavbarLink[] = [
         { display: "Start New Story", url: "/story/create-new-story" },
         { display: "My Stories", url: "/story/my" },
+        { display: "Visit Comics Hub", url: "/comic/hub" },
+        { display: "Visit Stories Hub", url: "/story/hub" },
         { display: "My Profile", url: "/user/" + username },
         { display: "Account Settings", url: "/edit-account" },
         { display: "Log Out", onClick: handleLogout },
@@ -62,6 +71,7 @@ const Navbar: React.FC<NavbarProps> = props => {
     const loggedOutSettings: NavbarLink[] = [
         { display: "Log In", url: "/login" },
         { display: "Register", url: "/register" },
+        { display: "Continue As Guest", url: "/" },
     ];
 
     //Used to show the appropiate logo based on the page
@@ -159,7 +169,7 @@ const Navbar: React.FC<NavbarProps> = props => {
                                     return (
                                         <MenuItem
                                             key={setting.display}
-                                            component="button"
+                                            component="a"
                                             onClick={setting.onClick}
                                         >
                                             {setting.display}

@@ -67,7 +67,7 @@ const LandingPage: React.FC = () => {
                     justifyContent: "center",
                 }}
             >
-                {/* TODO: Create dropdown for guest where user can choose comics or stories */}
+                {/* TODO: Create dropdown for guest where user can choose comics or stories // login user as guest*/}
                 <Button
                     component="a"
                     href="/"
