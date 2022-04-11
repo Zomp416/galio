@@ -26,13 +26,12 @@ const Form: React.FC = () => {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         console.log(formValues);
-        // const data = await login(formValues);
-        // if (data.error) {
-        //     setError(true);
-        // } else {
-        //     // TODO find best location to redirect
-        //     router.push("/");
-        // }
+        const data = await login(formValues);
+        if (data.error) {
+            setError(true);
+        } else {
+            router.push("/");
+        }
     };
 
     return (

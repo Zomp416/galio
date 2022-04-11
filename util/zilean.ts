@@ -1,25 +1,25 @@
-const zileanOrigin = "http://localhost:3001";
+export const zileanOrigin = "http://localhost:3001";
 
 interface ZileanResponse {
     data?: any;
     error?: string;
 }
 
-export const getUserFromSession = async (sessionCookie: string): Promise<ZileanResponse> => {
-    const result = await fetch(`${zileanOrigin}/get-user`, {
+/* 
+    Pass session cookie in request to backend --
+    when making requests within getServerSideProps,
+    we need to explicity attach the cookie or else it doesn't get sent.
+    No need to do this within a client-side request. 
+*/
+export const getUserFromSession = async (cookie: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/account`, {
         method: "GET",
         headers: {
-            cookie: sessionCookie,
+            Cookie: cookie,
         },
         credentials: "include",
     });
-    const data = await result.json();
-    if (!data || result.status !== 200) {
-        return {
-            error: "Not Logged In!",
-        };
-    }
-    return data;
+    return await result.json();
 };
 
 export const register = async (user: {
@@ -27,7 +27,7 @@ export const register = async (user: {
     username: string;
     password: string;
 }): Promise<ZileanResponse> => {
-    const res = await fetch(`${zileanOrigin}/register`, {
+    const res = await fetch(`${zileanOrigin}/account/register`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -41,14 +41,12 @@ export const register = async (user: {
             error: "Error registering user.",
         };
     } else {
-        return {
-            data: "Succesfully registered user!",
-        };
+        return data;
     }
 };
 
 export const login = async (user: { email: string; password: string }): Promise<ZileanResponse> => {
-    const res = await fetch(`${zileanOrigin}/login`, {
+    const res = await fetch(`${zileanOrigin}/account/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -62,18 +60,13 @@ export const login = async (user: { email: string; password: string }): Promise<
             error: "Error logging out.",
         };
     } else {
-        return {
-            data: "Succesfully logged in user!",
-        };
+        return data;
     }
 };
 
-export const logout = async (sessionCookie: string): Promise<ZileanResponse> => {
-    const result = await fetch(`${zileanOrigin}/logout`, {
+export const logout = async (): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/account/logout`, {
         method: "POST",
-        headers: {
-            cookie: sessionCookie,
-        },
         credentials: "include",
     });
     const data = await result.json();
