@@ -1,10 +1,10 @@
 import React from "react";
 import { Box, Button, Typography } from "@mui/material";
-
-//TODO: replace once we connect to backend
-const user = "Mason";
+import { useAuthContext } from "../../context/authcontext";
 
 const PostLoginPage: React.FC = () => {
+    const { user } = useAuthContext();
+
     return (
         <>
             <Typography
@@ -16,7 +16,7 @@ const PostLoginPage: React.FC = () => {
                     fontWeight: "bolder",
                 }}
             >
-                Hi {user}! What do you want to do today?
+                Hi {user ? user.username : "uh oh"}! What do you want to do today?
             </Typography>
 
             <Box
