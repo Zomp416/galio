@@ -133,6 +133,7 @@ const Profile: React.FC = () => {
                 >
                     <MenuItem value={"Comics"}>Comics</MenuItem>
                     <MenuItem value={"Stories"}>Stories</MenuItem>
+                    {/* TODO add back users under subscribers and only show if it is the owner visiting own Profile */}
                 </Select>
                 <Styled.TagListContainer>
                     <Select

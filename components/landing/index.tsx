@@ -8,7 +8,7 @@ const LandingPage: React.FC = () => {
                 align="center"
                 variant="h1"
                 sx={{
-                    marginTop: "150px",
+                    marginTop: "200px",
                     fontWeight: "bold",
                 }}
             >
