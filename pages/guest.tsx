@@ -1,7 +1,7 @@
 import type { NextPage, GetServerSideProps } from "next";
+import React from "react";
 import Head from "next/head";
 import PostLoginPage from "../components/postlogin";
-import LandingPage from "../components/landing";
 import Navbar from "../components/navbar";
 import { AuthProvider } from "../context/authcontext";
 import { getUserFromSession } from "../util/zilean";
@@ -10,7 +10,7 @@ interface Props {
     user: any;
 }
 
-const Home: NextPage<Props> = props => {
+const GuestPage: NextPage<Props> = props => {
     return (
         <>
             <Head>
@@ -18,7 +18,7 @@ const Home: NextPage<Props> = props => {
             </Head>
             <AuthProvider user={props.user}>
                 <Navbar domain="home" />
-                {props.user ? <PostLoginPage /> : <LandingPage />}
+                <PostLoginPage />
             </AuthProvider>
         </>
     );
@@ -34,4 +34,4 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
     };
 };
 
-export default Home;
+export default GuestPage;

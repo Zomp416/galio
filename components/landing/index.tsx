@@ -67,10 +67,9 @@ const LandingPage: React.FC = () => {
                     justifyContent: "center",
                 }}
             >
-                {/* TODO: login user as guest*/}
                 <Button
                     component="a"
-                    href="/"
+                    href="/guest"
                     variant="outlined"
                     sx={{
                         marginTop: "25px",
