@@ -22,8 +22,10 @@ import TextIncreaseIcon from "@mui/icons-material/TextIncrease";
 import TextDecreaseIcon from "@mui/icons-material/TextDecrease";
 import FontDownloadIcon from "@mui/icons-material/FontDownload";
 import SettingsIcon from "@mui/icons-material/Settings";
+
 import * as Styled from "./styles";
 
+//TODO REMOVE
 const story = {
     _id: "a2",
     title: "Crewmate",
@@ -40,9 +42,24 @@ const story = {
     views: 210,
 };
 
+//TODO make go next and previous chapter work
 const ViewStory: React.FC = () => {
     const [comment, setComment] = useState<string>("");
     const [rating, setRating] = useState<number | null>(3.5);
+
+    //TODO code the functions
+    function handleTextIncrease() {
+        window.location.href = "pagelink";
+    }
+    function handleTextDecrease() {
+        window.location.href = "pagelink";
+    }
+    function handleFonts() {
+        window.location.href = "pagelink";
+    }
+    function handleSettings() {
+        window.location.href = "pagelink";
+    }
 
     return (
         <>
@@ -123,21 +140,62 @@ const ViewStory: React.FC = () => {
                                 alignItems: "center",
                             }}
                         >
-                            {/* TODO: IMPLEMENT BUTTON OVER THE ICONS */}
                             <Box>
                                 <TextIncreaseIcon
-                                    sx={{
-                                        marginRight: "10px",
-                                    }}
+                                    onClick={handleTextIncrease}
+                                    sx={[
+                                        {
+                                            marginRight: "10px",
+                                            borderRadius: "10px",
+                                            "&:hover": {
+                                                color: "#39A78E",
+                                                backgroundColor: "#BCECDC",
+                                                border: "2px solid #3F3F3F",
+                                            },
+                                        },
+                                    ]}
                                 />
                                 <TextDecreaseIcon
-                                    sx={{
-                                        marginLeft: "10px",
-                                    }}
+                                    onClick={handleTextDecrease}
+                                    sx={[
+                                        {
+                                            marginRight: "10px",
+                                            borderRadius: "10px",
+                                            "&:hover": {
+                                                color: "#39A78E",
+                                                backgroundColor: "#BCECDC",
+                                                border: "2px solid #3F3F3F",
+                                            },
+                                        },
+                                    ]}
                                 />
                             </Box>
-                            <FontDownloadIcon />
-                            <SettingsIcon />
+                            <FontDownloadIcon
+                                onClick={handleFonts}
+                                sx={[
+                                    {
+                                        borderRadius: "10px",
+                                        "&:hover": {
+                                            color: "#39A78E",
+                                            backgroundColor: "#BCECDC",
+                                            border: "2px solid #3F3F3F",
+                                        },
+                                    },
+                                ]}
+                            />
+                            <SettingsIcon
+                                onClick={handleSettings}
+                                sx={[
+                                    {
+                                        borderRadius: "10px",
+                                        "&:hover": {
+                                            color: "#39A78E",
+                                            backgroundColor: "#BCECDC",
+                                            border: "2px solid #3F3F3F",
+                                        },
+                                    },
+                                ]}
+                            />
                         </Toolbar>
                     </AppBar>
                     <Styled.ButtonsContainer>

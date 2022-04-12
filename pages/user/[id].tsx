@@ -2,28 +2,34 @@ import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import Navbar from "../../components/navbar";
 import Profile from "../../components/profile page";
+import { AuthProvider } from "../../context/authcontext";
+import { getUserFromSession } from "../../util/zilean";
 
-const ProfilePage: NextPage = () => {
+interface Props {
+    user: any;
+}
+
+const ProfilePage: NextPage<Props> = props => {
     return (
-        <div>
+        <>
             <Head>
                 <title>User Profile</title>
             </Head>
-            {/* TODO: dynamically set navbar */}
-            <Navbar domain="user" />
-            <Profile />
-        </div>
+            <AuthProvider user={props.user}>
+                <Navbar domain="user" />
+                <Profile />
+            </AuthProvider>
+        </>
     );
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-    // Pass session cookie in request to backend
-    // const data = await getUserFromSession(context.req.headers.cookie || "");
-
-    // TODO get query params and pass in request to backend
+    const result = await getUserFromSession(context.req.headers.cookie || "");
 
     return {
-        props: {},
+        props: {
+            user: result.data || null,
+        },
     };
 };
 

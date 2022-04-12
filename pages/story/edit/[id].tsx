@@ -2,41 +2,29 @@ import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import EditStory from "../../../components/story/edit";
 import Navbar from "../../../components/navbar";
+import { AuthProvider } from "../../../context/authcontext";
+import { getUserFromSession } from "../../../util/zilean";
 
-const LoginPage: NextPage = () => {
+interface Props {
+    user: any;
+}
+
+const LoginPage: NextPage<Props> = props => {
     return (
-        <div>
+        <>
             <Head>
                 <title>Story Title</title>
             </Head>
-            {/* TODO: dynamically set navbar; maybe not because this is view stories */}
-            <Navbar domain="stories" />
-            <EditStory />
-        </div>
+            <AuthProvider user={props.user}>
+                <Navbar domain="stories" />
+                <EditStory />
+            </AuthProvider>
+        </>
     );
 };
 
-//TODO: replace with test story
 export const getServerSideProps: GetServerSideProps = async context => {
-    // Pass session cookie in request to backend
-    // const data = await getUserFromSession(context.req.headers.cookie || "");
-
-    const testUser = {
-        username: "MasonMa37",
-        email: "masonma37@gmail.com",
-        password: "12345678",
-        verified: true,
-        comics: [],
-        stories: [],
-        subscriptions: [],
-        subscriberCount: 3,
-        profilePicture: "Types.ObjectId",
-        comicRatings: [],
-        storyRatings: [],
-        createdAt: "new Date()",
-        updatedAt: "new Date()",
-    };
-
+    //TODO REMOVE TEST COMIC
     const testComic = {
         _id: context.params?.id,
         title: "Mason Ma is So Cool!",
@@ -54,10 +42,12 @@ export const getServerSideProps: GetServerSideProps = async context => {
         publishedAt: "new Date()",
     };
 
+    const result = await getUserFromSession(context.req.headers.cookie || "");
+
     return {
         props: {
             comic: testComic,
-            user: testUser,
+            user: result.data || null,
         },
     };
 };

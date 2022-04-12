@@ -2,40 +2,33 @@ import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import MyComics from "../../components/comic/my";
 import Navbar from "../../components/navbar";
+import { AuthProvider } from "../../context/authcontext";
+import { getUserFromSession } from "../../util/zilean";
 
-const MyComicsPage: NextPage = () => {
+interface Props {
+    user: any;
+}
+
+const MyComicsPage: NextPage<Props> = props => {
     return (
-        <div>
+        <>
             <Head>
                 <title>My Comics</title>
             </Head>
-            {/* TODO: dynamically set navbar; maybe not because this is view comics */}
-            <Navbar domain="comics" />
-            <MyComics />
-        </div>
+            <AuthProvider user={props.user}>
+                <Navbar domain="comics" />
+                <MyComics />
+            </AuthProvider>
+        </>
     );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
-    const testUser = {
-        username: "MasonMa37",
-        email: "masonma37@gmail.com",
-        password: "12345678",
-        verified: true,
-        comics: [],
-        stories: [],
-        subscriptions: [],
-        subscriberCount: 3,
-        profilePicture: "Types.ObjectId",
-        comicRatings: [],
-        storyRatings: [],
-        createdAt: "new Date()",
-        updatedAt: "new Date()",
-    };
+export const getServerSideProps: GetServerSideProps = async context => {
+    const result = await getUserFromSession(context.req.headers.cookie || "");
 
     return {
         props: {
-            user: testUser,
+            user: result.data || null,
         },
     };
 };

@@ -6,6 +6,7 @@ const CreateNewStory: React.FC = () => {
     return (
         <Styled.CreateNewStoryContainer>
             <Styled.ButtonsContainer>
+                {/* TODO import router to go back to previous page */}
                 <Styled.CancelButton variant="contained" color="primary">
                     Cancel
                 </Styled.CancelButton>

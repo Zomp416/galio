@@ -5,12 +5,12 @@ import ForgotPassword from "../components/forgot-password";
 
 const ForgotPasswordPage: NextPage = () => {
     return (
-        <div>
+        <>
             <Head>
                 <title>Forgot Your Password?</title>
             </Head>
             <ForgotPassword />
-        </div>
+        </>
     );
 };
 

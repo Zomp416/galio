@@ -16,8 +16,10 @@ interface NavbarLink {
     onClick?: () => any;
 }
 
-const username = "Joe Schmo"; //TODO: replace once we connect with backend
-const newId = 123; //TODO: replace once we connect with backend
+//TODO make navbar sticky
+//TODO make search not show up on all pages
+//TODO make continue as guest work
+const newId = 123; //TODO: replace once we connect with backend; initialize a new id for comic that does not exist yet
 
 const Navbar: React.FC<NavbarProps> = props => {
     //Get user context to determine if the user is logged in
@@ -42,29 +44,25 @@ const Navbar: React.FC<NavbarProps> = props => {
         setAnchorElUser(null);
     };
 
-    //TODO: add links -> continue as guest for loggedou and fix links
+    //TODO: add more links to hubs
     const loggedInComicsSettings: NavbarLink[] = [
         { display: "Start New Comic", url: "/comic/edit/" + newId },
         { display: "My Comics", url: "/comic/my" },
-        { display: "Visit Comics Hub", url: "/comic/hub" },
-        { display: "Visit Stories Hub", url: "/story/hub" },
-        { display: "My Profile", url: "/user/" + username },
+        { display: "My Profile", url: "/user/" + (user ? user?.username : "N/A") },
         { display: "Account Settings", url: "/edit-account" },
         { display: "Log Out", onClick: handleLogout },
     ];
     const loggedInStoriesSettings: NavbarLink[] = [
         { display: "Start New Story", url: "/story/create-new-story" },
         { display: "My Stories", url: "/story/my" },
-        { display: "Visit Comics Hub", url: "/comic/hub" },
-        { display: "Visit Stories Hub", url: "/story/hub" },
-        { display: "My Profile", url: "/user/" + username },
+        { display: "My Profile", url: "/user/" + (user ? user?.username : "N/A") },
         { display: "Account Settings", url: "/edit-account" },
         { display: "Log Out", onClick: handleLogout },
     ];
     const loggedInDefaultSettings: NavbarLink[] = [
         { display: "Visit Comics Hub", url: "/comic/hub" },
         { display: "Visit Stories Hub", url: "/story/hub" },
-        { display: "My Profile", url: "/user/" + username },
+        { display: "My Profile", url: "/user/" + (user ? user?.username : "N/A") },
         { display: "Account Settings", url: "/edit-account" },
         { display: "Log Out", onClick: handleLogout },
     ];

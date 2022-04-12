@@ -12,15 +12,15 @@ interface Props {
 
 const Home: NextPage<Props> = props => {
     return (
-        <div>
+        <>
             <Head>
                 <title>Zomp</title>
             </Head>
             <AuthProvider user={props.user}>
-                <Navbar domain="" />
+                <Navbar domain="home" />
                 {props.user ? <PostLoginPage /> : <LandingPage />}
             </AuthProvider>
-        </div>
+        </>
     );
 };
 
