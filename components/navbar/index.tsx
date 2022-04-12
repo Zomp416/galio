@@ -16,9 +16,9 @@ interface NavbarLink {
     onClick?: () => any;
 }
 
-//TODO make navbar sticky
-//TODO make search not show up on all pages
-//TODO make continue as guest work
+//TODO make navbar sticky!
+//TODO make search not show up on all pages!
+//TODO make search actually search
 const newId = 123; //TODO: replace once we connect with backend; initialize a new id for comic that does not exist yet
 
 const Navbar: React.FC<NavbarProps> = props => {
@@ -44,7 +44,6 @@ const Navbar: React.FC<NavbarProps> = props => {
         setAnchorElUser(null);
     };
 
-    //TODO: add more links to hubs
     const loggedInComicsSettings: NavbarLink[] = [
         { display: "Start New Comic", url: "/comic/edit/" + newId },
         { display: "My Comics", url: "/comic/my" },
@@ -69,7 +68,7 @@ const Navbar: React.FC<NavbarProps> = props => {
     const loggedOutSettings: NavbarLink[] = [
         { display: "Log In", url: "/login" },
         { display: "Register", url: "/register" },
-        { display: "Continue As Guest", url: "/" },
+        { display: "Continue As Guest", url: "/guest" },
     ];
 
     //Used to show the appropiate logo based on the page
@@ -127,7 +126,6 @@ const Navbar: React.FC<NavbarProps> = props => {
                         inputProps={{ "aria-label": "search" }}
                         sx={{ color: "white" }}
                     />
-                    {/* TODO: Make SearchIcon actually search */}
                     <IconButton type="submit" sx={{ p: "10px" }} aria-label="search" href="/search">
                         <SearchIcon color="primary" />
                     </IconButton>

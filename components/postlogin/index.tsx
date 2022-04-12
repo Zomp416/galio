@@ -16,7 +16,8 @@ const PostLoginPage: React.FC = () => {
                     fontWeight: "bolder",
                 }}
             >
-                Hi <u>{user ? user.username : "N/A"}</u>! What do you want to do today?
+                Hi{user ? " " : ""}
+                <u>{user ? user.username : ""}</u>! What do you want to do today?
             </Typography>
 
             <Box
