@@ -18,8 +18,7 @@ interface NavbarLink {
 
 //TODO make navbar sticky!
 //TODO make search not show up on all pages!
-//TODO make serach actually search
-//TODO add related links to hubs
+//TODO make search actually search
 const newId = 123; //TODO: replace once we connect with backend; initialize a new id for comic that does not exist yet
 
 const Navbar: React.FC<NavbarProps> = props => {

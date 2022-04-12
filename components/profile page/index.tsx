@@ -133,7 +133,6 @@ const Profile: React.FC = () => {
                 >
                     <MenuItem value={"Comics"}>Comics</MenuItem>
                     <MenuItem value={"Stories"}>Stories</MenuItem>
-                    <MenuItem value={"Users"}>Users</MenuItem>
                 </Select>
                 <Styled.TagListContainer>
                     <Select
