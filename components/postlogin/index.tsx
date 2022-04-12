@@ -16,7 +16,7 @@ const PostLoginPage: React.FC = () => {
                     fontWeight: "bolder",
                 }}
             >
-                Hi {user ? user.username : "uh oh"}! What do you want to do today?
+                Hi <u>{user ? user.username : "N/A"}</u>! What do you want to do today?
             </Typography>
 
             <Box
@@ -38,7 +38,6 @@ const PostLoginPage: React.FC = () => {
                             width: "275px",
                         }}
                     >
-                        {/* TODO: CONNECT TO COMICS */}
                         Dive Into Comics
                     </Button>
                 </Box>
@@ -55,7 +54,6 @@ const PostLoginPage: React.FC = () => {
                             width: "275px",
                         }}
                     >
-                        {/* TODO: CONNECT TO STORIES */}
                         Dive Into Stories
                     </Button>
                 </Box>

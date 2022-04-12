@@ -8,7 +8,7 @@ interface Props {
 
 const VerifyPage: NextPage<Props> = props => {
     return (
-        <div>
+        <>
             <Head>
                 <title>Verify Zomp Account</title>
             </Head>
@@ -25,7 +25,7 @@ const VerifyPage: NextPage<Props> = props => {
                     buttonText="Send Another Link"
                 />
             )}
-        </div>
+        </>
     );
 };
 

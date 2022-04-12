@@ -2,36 +2,43 @@ import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import Navbar from "../components/navbar";
 import EditAccount from "../components/edit-account";
+import { AuthProvider } from "../context/authcontext";
+import { getUserFromSession } from "../util/zilean";
 
-const EditAccountPage: NextPage = () => {
+interface Props {
+    user: any;
+}
+
+const EditAccountPage: NextPage<Props> = props => {
     return (
-        <div>
+        <>
             <Head>
                 <title>Edit Account</title>
             </Head>
-            <div
-                style={{
-                    width: "100%",
-                    height: "50px",
-                    backgroundColor: "#3F3F3F",
-                    color: "white",
-                }}
-            >
-                <Navbar domain="" />
-                <EditAccount />
-            </div>
-        </div>
+            <AuthProvider user={props.user}>
+                <div
+                    style={{
+                        width: "100%",
+                        height: "50px",
+                        backgroundColor: "#3F3F3F",
+                        color: "white",
+                    }}
+                >
+                    <Navbar domain="user" />
+                    <EditAccount />
+                </div>
+            </AuthProvider>
+        </>
     );
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-    // Pass session cookie in request to backend
-    // const data = await getUserFromSession(context.req.headers.cookie || "");
-
-    // TODO get query params and pass in request to backend
+    const result = await getUserFromSession(context.req.headers.cookie || "");
 
     return {
-        props: {},
+        props: {
+            user: result.data || null,
+        },
     };
 };
 

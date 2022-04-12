@@ -6,6 +6,7 @@ import EditTable from "./edittable";
 import PublishTable from "./publishtable";
 
 // TODO: remove later
+// TODO: TA comment to make icons more intuitive
 const now = new Date();
 const stories = [
     {

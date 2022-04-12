@@ -9,7 +9,7 @@ interface Props {
 
 const VerifyPage: NextPage<Props> = props => {
     return (
-        <div>
+        <>
             <Head>
                 <title>Reset Your Password</title>
             </Head>
@@ -31,7 +31,7 @@ const VerifyPage: NextPage<Props> = props => {
                     </Button>
                 </>
             )}
-        </div>
+        </>
     );
 };
 

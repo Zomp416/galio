@@ -26,6 +26,7 @@ const ReactQuill = dynamic(import("react-quill"), {
     loading: () => <div>Loading Text Editor...</div>,
 });
 
+//TODO remove
 const story = {
     _id: "a2",
     title: "Crewmate",
@@ -42,6 +43,7 @@ const story = {
     views: 210,
 };
 
+//TODO add ui to view all chapters and make edit chapter name work(?) and edit title work
 const ViewStory: React.FC = () => {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [changed, setChanged] = useState<boolean>(false);

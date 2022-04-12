@@ -5,12 +5,12 @@ import { getUserFromSession } from "../util/zilean";
 
 const LoginPage: NextPage = () => {
     return (
-        <div>
+        <>
             <Head>
                 <title>Login to Zomp</title>
             </Head>
             <Login />
-        </div>
+        </>
     );
 };
 

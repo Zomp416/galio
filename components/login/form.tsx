@@ -76,7 +76,6 @@ const Form: React.FC = () => {
                         Invalid Login Credentials.
                     </Typography>
                 )}{" "}
-                {/* TODO CHANGE URL TO FORGOT PASSWORD PAGE */}
                 <Link href="/forgot-password">Forgot Your Password?</Link>
             </div>
         </>

@@ -2,39 +2,29 @@ import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import EditComic from "../../../components/comic/edit";
 import Navbar from "../../../components/navbar";
+import { AuthProvider } from "../../../context/authcontext";
+import { getUserFromSession } from "../../../util/zilean";
 
-const EditComicPage: NextPage = () => {
+interface Props {
+    user: any;
+}
+
+const EditComicPage: NextPage<Props> = props => {
     return (
-        <div>
+        <>
             <Head>
                 <title>Comic Title</title>
             </Head>
-            <Navbar domain="comics" />
-            <EditComic />
-        </div>
+            <AuthProvider user={props.user}>
+                <Navbar domain="comics" />
+                <EditComic />
+            </AuthProvider>
+        </>
     );
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-    // Pass session cookie in request to backend
-    // const data = await getUserFromSession(context.req.headers.cookie || "");
-
-    const testUser = {
-        username: "MasonMa37",
-        email: "masonma37@gmail.com",
-        password: "12345678",
-        verified: true,
-        comics: [],
-        stories: [],
-        subscriptions: [],
-        subscriberCount: 3,
-        profilePicture: "Types.ObjectId",
-        comicRatings: [],
-        storyRatings: [],
-        createdAt: "new Date()",
-        updatedAt: "new Date()",
-    };
-
+    //TODO REMOVE TEST COMIC
     const testComic = {
         _id: context.params?.id,
         title: "Mason Ma is So Cool!",
@@ -52,10 +42,12 @@ export const getServerSideProps: GetServerSideProps = async context => {
         publishedAt: "new Date()",
     };
 
+    const result = await getUserFromSession(context.req.headers.cookie || "");
+
     return {
         props: {
             comic: testComic,
-            user: testUser,
+            user: result.data || null,
         },
     };
 };

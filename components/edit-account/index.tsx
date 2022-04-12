@@ -8,6 +8,7 @@ const EditAccount: React.FC = () => {
     return (
         <Styled.EditAccountContainer>
             <Styled.ButtonsContainer>
+                {/* TODO import router to go back to previous page */}
                 <Styled.CancelButton variant="contained" color="primary">
                     Cancel
                 </Styled.CancelButton>
@@ -21,6 +22,7 @@ const EditAccount: React.FC = () => {
                 >
                     Account Settings
                 </Typography>
+                {/* TODO save information*/}
                 <Styled.SaveButton variant="contained" color="primary">
                     Save
                 </Styled.SaveButton>
