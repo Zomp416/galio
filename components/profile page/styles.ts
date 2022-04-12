@@ -8,6 +8,7 @@ export const UserContainer = styled.div`
     flex-direction: column;
     align-items: center;
     text-align: left;
+    margin-top: 50px;
 `;
 
 export const ProfileContainer = styled.div`

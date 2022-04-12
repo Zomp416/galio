@@ -6,6 +6,7 @@ export const ViewComicContainer = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin-top: 50px;
 `;
 
 export const EditContainer = styled.div`

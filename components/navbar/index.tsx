@@ -16,9 +16,7 @@ interface NavbarLink {
     onClick?: () => any;
 }
 
-//TODO make navbar sticky!
 //TODO make search not show up on all pages!
-//TODO make search actually search
 const newId = 123; //TODO: replace once we connect with backend; initialize a new id for comic that does not exist yet
 
 const Navbar: React.FC<NavbarProps> = props => {
@@ -42,6 +40,14 @@ const Navbar: React.FC<NavbarProps> = props => {
         await logout();
         router.push("/");
         setAnchorElUser(null);
+    };
+
+    //Used to retrieve the search field
+    const handleSubmit = () => {
+        var searchBy = (document.getElementById("search") as HTMLInputElement).value;
+        router.push("/search");
+        //Send searchBy to page
+        console.log(searchBy);
     };
 
     const loggedInComicsSettings: NavbarLink[] = [
@@ -92,8 +98,9 @@ const Navbar: React.FC<NavbarProps> = props => {
 
     return (
         <AppBar
-            position="relative"
+            position="fixed"
             color="secondary"
+            // NAVBAR HEIGHT IS CORRELATED TO MARGIN ON INDIVIDUAL PAGES
             sx={{ height: "50px", padding: "0", zIndex: theme => theme.zIndex.drawer + 1 }}
         >
             <Toolbar
@@ -122,11 +129,17 @@ const Navbar: React.FC<NavbarProps> = props => {
                     }}
                 >
                     <InputBase
+                        id="search"
                         placeholder="Search"
                         inputProps={{ "aria-label": "search" }}
                         sx={{ color: "white" }}
                     />
-                    <IconButton type="submit" sx={{ p: "10px" }} aria-label="search" href="/search">
+                    <IconButton
+                        onClick={handleSubmit}
+                        sx={{ p: "10px" }}
+                        aria-label="search"
+                        //href="/search"
+                    >
                         <SearchIcon color="primary" />
                     </IconButton>
                     <Box>

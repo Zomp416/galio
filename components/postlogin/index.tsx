@@ -11,7 +11,7 @@ const PostLoginPage: React.FC = () => {
                 align="center"
                 variant="h2"
                 sx={{
-                    marginTop: "150px",
+                    marginTop: "250px",
                     marginBottom: "35px",
                     fontWeight: "bolder",
                 }}

@@ -48,18 +48,18 @@ const ViewStory: React.FC = () => {
     const [rating, setRating] = useState<number | null>(3.5);
 
     //TODO code the functions
-    function handleTextIncrease() {
+    const handleTextIncrease = () => {
         window.location.href = "pagelink";
-    }
-    function handleTextDecrease() {
+    };
+    const handleTextDecrease = () => {
         window.location.href = "pagelink";
-    }
-    function handleFonts() {
+    };
+    const handleFonts = () => {
         window.location.href = "pagelink";
-    }
-    function handleSettings() {
+    };
+    const handleSettings = () => {
         window.location.href = "pagelink";
-    }
+    };
 
     return (
         <>
