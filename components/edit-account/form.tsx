@@ -1,23 +1,29 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import * as Styled from "./styles";
-import { TextField, Typography, Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
+import {
+    TextField,
+    Typography,
+    Dialog,
+    DialogTitle,
+    DialogActions,
+    Button,
+    Divider,
+} from "@mui/material";
+import { useAuthContext } from "../../context/authcontext";
+import { update } from "../../util/zilean";
+import { deleteAccount } from "../../util/zilean";
 
 //TODO import default values from context
-const defaultValues = {
-    name: "",
-    username: "",
-    oldpassword: "",
-    newpassword: "",
-    email: "",
-    about: "",
-};
-
 const Form: React.FC = () => {
     const router = useRouter();
+    const { user } = useAuthContext();
+    const defaultValues = {
+        email: user?.email!,
+        username: user?.username!,
+        password: "123456",
+        about: user?.about!,
+    };
     const [formValues, setFormValues] = useState(defaultValues);
     const [error, setError] = useState(false);
     const [modalPasswordOpen, setModalPasswordOpen] = useState<boolean>(false);
@@ -32,12 +38,68 @@ const Form: React.FC = () => {
     };
 
     const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
         console.log(formValues);
+        event.preventDefault();
+        const data = await update({ user: formValues });
+        if (data.error) {
+            setError(true);
+        } else {
+            router.back();
+        }
+    };
+
+    const handleDelete = async (event: React.FormEvent) => {
+        console.log("asdsfasfas");
+        setModalDeleteOpen(false);
+        event.preventDefault();
+        const data = await deleteAccount();
+        if (data.error) {
+            setError(true);
+        } else {
+            router.push("/");
+        }
     };
 
     return (
         <>
+            <Styled.ButtonsContainer>
+                <Styled.CancelButton
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                        router.back();
+                    }}
+                >
+                    Cancel
+                </Styled.CancelButton>
+                <Typography
+                    variant="h4"
+                    sx={{
+                        fontWeight: "bold",
+                        fontSize: "35px",
+                        color: "black",
+                    }}
+                >
+                    Account Settings
+                </Typography>
+                {/* TODO save information*/}
+                <Styled.SaveButton variant="contained" color="primary" onClick={handleSubmit}>
+                    Save
+                </Styled.SaveButton>
+            </Styled.ButtonsContainer>
+            <Styled.ProfilePictureContainer>
+                <Styled.AddNewImage></Styled.AddNewImage>
+                <Typography
+                    variant="h4"
+                    sx={{
+                        fontSize: "17px",
+                        color: "black",
+                    }}
+                >
+                    Change Profile Picture
+                </Typography>
+            </Styled.ProfilePictureContainer>
+            <Divider sx={{ width: "100%", marginBottom: "30px" }} />
             <Dialog
                 open={modalPasswordOpen}
                 onClose={() => {
@@ -71,7 +133,7 @@ const Form: React.FC = () => {
                         label="Old Password"
                         type="oldpasword"
                         variant="outlined"
-                        value={formValues.oldpassword}
+                        value={formValues.password}
                         onChange={handleInputChange}
                         error={error}
                         style={{ width: 500, marginBottom: 30, marginLeft: 20 }}
@@ -83,7 +145,7 @@ const Form: React.FC = () => {
                         label="New Password"
                         type="newpasword"
                         variant="outlined"
-                        value={formValues.newpassword}
+                        value={formValues.password}
                         onChange={handleInputChange}
                         error={error}
                         style={{ width: 500, marginBottom: 30, marginLeft: 20 }}
@@ -95,7 +157,7 @@ const Form: React.FC = () => {
                         label="Confirm New Password"
                         type="confirmnewpasword"
                         variant="outlined"
-                        value={formValues.newpassword}
+                        value={formValues.password}
                         onChange={handleInputChange}
                         error={error}
                         style={{ width: 500, marginBottom: 30, marginLeft: 20 }}
@@ -158,12 +220,7 @@ const Form: React.FC = () => {
                     </DialogTitle>
                     <DialogActions>
                         <Styled.YesNoButtonContainer>
-                            <Styled.YesButton
-                                variant="contained"
-                                onClick={() => {
-                                    setModalDeleteOpen(false);
-                                }}
-                            >
+                            <Styled.YesButton variant="contained" href="/" onClick={handleDelete}>
                                 Yes
                             </Styled.YesButton>
                             <Styled.CancelButton
@@ -179,17 +236,6 @@ const Form: React.FC = () => {
                     </DialogActions>
                 </Styled.DialogContainer>
             </Dialog>
-            <TextField
-                id="name"
-                name="name"
-                label="Name"
-                type="name"
-                variant="outlined"
-                value={formValues.name}
-                onChange={handleInputChange}
-                error={error}
-                style={{ width: 600, marginBottom: 30 }}
-            />
             <TextField
                 id="username"
                 name="username"

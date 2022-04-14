@@ -77,3 +77,38 @@ export const logout = async (): Promise<ZileanResponse> => {
     }
     return data;
 };
+
+export const update = async (user: {
+    user: { email: string; username: string; password: string; about: string };
+}): Promise<ZileanResponse> => {
+    const res = await fetch(`${zileanOrigin}/account`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+        credentials: "include",
+    });
+    const data = await res.json();
+    if (!data || res.status !== 200) {
+        return {
+            error: "Error updating user.",
+        };
+    } else {
+        return data;
+    }
+};
+
+export const deleteAccount = async (): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/account`, {
+        method: "DELETE",
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error Deleting Account.",
+        };
+    }
+    return data;
+};
