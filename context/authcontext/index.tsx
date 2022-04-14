@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 interface IUser {
     email: string;
@@ -25,12 +25,14 @@ interface IUser {
 
 interface IAuthContext {
     user: IUser | undefined;
+    setUser?: React.Dispatch<React.SetStateAction<IUser | undefined>>;
 }
 
 const AuthContext = createContext<IAuthContext>({ user: undefined });
 
 export const AuthProvider: React.FC<{ user?: IUser }> = ({ children, user }) => {
-    return <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>;
+    const [user_, setUser] = useState(user);
+    return <AuthContext.Provider value={{ user: user_, setUser }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuthContext = () => useContext(AuthContext);
