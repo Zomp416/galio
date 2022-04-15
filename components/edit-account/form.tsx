@@ -32,12 +32,9 @@ const Form: React.FC = () => {
     const [error, setError] = useState(false);
     const [modalPasswordOpen, setModalPasswordOpen] = useState<boolean>(false);
     const [modalDeleteOpen, setModalDeleteOpen] = useState<boolean>(false);
-    console.log(error);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        console.log(name);
-        console.log(value);
         setFormValues({
             ...formValues,
             [name]: value,
