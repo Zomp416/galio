@@ -27,7 +27,6 @@ const Form: React.FC = () => {
         confirmpassword: "",
         about: user?.about!,
         password: user?.password!,
-        profilePicture: "",
     };
     const [formValues, setFormValues] = useState(defaultValues);
     const [error, setError] = useState(false);
@@ -93,13 +92,14 @@ const Form: React.FC = () => {
                 </Styled.SaveButton>
             </Styled.ButtonsContainer>
             <Styled.ProfilePictureContainer>
-                {formValues.profilePicture === "" ? (
+                <Styled.AddNewImage></Styled.AddNewImage>
+                {/* {formValues.profilePicture === "" ? (
                     <Styled.AddNewImage></Styled.AddNewImage>
                 ) : (
                     <Styled.Image src={formValues.profilePicture}></Styled.Image>
-                )}
+                )} */}
                 <label htmlFor="contained-button-file">
-                    <Input
+                    {/* <Input
                         inputProps={{ accept: "image/*" }}
                         name="profilePicture"
                         type="file"
@@ -107,7 +107,7 @@ const Form: React.FC = () => {
                         style={{ display: "none" }}
                         onChange={handleInputChange}
                         value={formValues.profilePicture}
-                    />
+                    /> */}
                     <Button variant="contained" component="span">
                         Change Profile Picture
                     </Button>

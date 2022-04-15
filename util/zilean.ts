@@ -87,7 +87,6 @@ export const update = async (user: {
         confirmpassword: string;
         about: string;
         password: string;
-        profilePicture: string;
     };
 }): Promise<ZileanResponse> => {
     const res = await fetch(`${zileanOrigin}/account`, {
