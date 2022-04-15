@@ -65,14 +65,6 @@ export const PasswordContainer = styled.div`
     // border: 1px red solid;
 `;
 
-export const ChangePasswordButton = styled(MUI_Button)`
-    padding: 2px 10px;
-    text-align: center;
-    height: 40px;
-    width: 30%;
-    line-height: 40px;
-`;
-
 export const DeleteAccountButton = styled(MUI_Button)`
     padding: 2px 10px;
     text-align: center;
@@ -114,4 +106,11 @@ export const YesButton = styled(MUI_Button)`
     :hover {
         background-color: red;
     }
+`;
+
+export const Image = styled.img`
+    flex-shrink: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
 `;

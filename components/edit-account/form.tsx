@@ -1,23 +1,33 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import * as Styled from "./styles";
-import { TextField, Typography, Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
+import {
+    TextField,
+    Typography,
+    Dialog,
+    DialogTitle,
+    DialogActions,
+    Button,
+    Divider,
+    Input,
+} from "@mui/material";
+import { useAuthContext } from "../../context/authcontext";
+import { update } from "../../util/zilean";
+import { deleteAccount } from "../../util/zilean";
 
 //TODO import default values from context
-const defaultValues = {
-    name: "",
-    username: "",
-    oldpassword: "",
-    newpassword: "",
-    email: "",
-    about: "",
-};
-
 const Form: React.FC = () => {
     const router = useRouter();
+    const { user } = useAuthContext();
+    const defaultValues = {
+        email: user?.email!,
+        username: user?.username!,
+        oldpassword: "",
+        newpassword: "",
+        confirmpassword: "",
+        about: user?.about!,
+        password: user?.password!,
+    };
     const [formValues, setFormValues] = useState(defaultValues);
     const [error, setError] = useState(false);
     const [modalPasswordOpen, setModalPasswordOpen] = useState<boolean>(false);
@@ -33,15 +43,83 @@ const Form: React.FC = () => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        console.log(formValues);
+        const data = await update({ user: formValues });
+        if (data.error) {
+            setError(true);
+        } else {
+            router.back();
+        }
+    };
+
+    const handleDelete = async (event: React.FormEvent) => {
+        setModalDeleteOpen(false);
+        event.preventDefault();
+        const data = await deleteAccount();
+        if (data.error) {
+            setError(true);
+        } else {
+            router.push("/");
+        }
     };
 
     return (
         <>
+            <Styled.ButtonsContainer>
+                <Styled.CancelButton
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                        router.back();
+                    }}
+                >
+                    Cancel
+                </Styled.CancelButton>
+                <Typography
+                    variant="h4"
+                    sx={{
+                        fontWeight: "bold",
+                        fontSize: "35px",
+                        color: "black",
+                    }}
+                >
+                    Account Settings
+                </Typography>
+                <Styled.SaveButton variant="contained" color="primary" onClick={handleSubmit}>
+                    Save
+                </Styled.SaveButton>
+            </Styled.ButtonsContainer>
+            <Styled.ProfilePictureContainer>
+                <Styled.AddNewImage></Styled.AddNewImage>
+                {/* {formValues.profilePicture === "" ? (
+                    <Styled.AddNewImage></Styled.AddNewImage>
+                ) : (
+                    <Styled.Image src={formValues.profilePicture}></Styled.Image>
+                )} */}
+                <label htmlFor="contained-button-file">
+                    {/* <Input
+                        inputProps={{ accept: "image/*" }}
+                        name="profilePicture"
+                        type="file"
+                        id="contained-button-file"
+                        style={{ display: "none" }}
+                        onChange={handleInputChange}
+                        value={formValues.profilePicture}
+                    /> */}
+                    <Button variant="contained" component="span">
+                        Change Profile Picture
+                    </Button>
+                </label>
+            </Styled.ProfilePictureContainer>
+            <Divider sx={{ width: "100%", marginBottom: "30px" }} />
             <Dialog
                 open={modalPasswordOpen}
-                onClose={() => {
+                onClose={(_, reason) => {
                     setModalPasswordOpen(false);
+                    if (reason === "backdropClick") {
+                        formValues.oldpassword = "";
+                        formValues.newpassword = "";
+                        formValues.confirmpassword = "";
+                    }
                 }}
                 fullWidth
                 PaperProps={{
@@ -66,8 +144,8 @@ const Form: React.FC = () => {
                     </DialogTitle>
                     <TextField
                         required
-                        id="oldpasword"
-                        name="oldpasword"
+                        id="oldpassword"
+                        name="oldpassword"
                         label="Old Password"
                         type="oldpasword"
                         variant="outlined"
@@ -78,10 +156,10 @@ const Form: React.FC = () => {
                     />
                     <TextField
                         required
-                        id="newpasword"
-                        name="newpasword"
+                        id="newpassword"
+                        name="newpassword"
                         label="New Password"
-                        type="newpasword"
+                        type="newpassword"
                         variant="outlined"
                         value={formValues.newpassword}
                         onChange={handleInputChange}
@@ -90,12 +168,12 @@ const Form: React.FC = () => {
                     />
                     <TextField
                         required
-                        id="confirmnewpasword"
-                        name="confirmnewpasword"
+                        id="confirmpassword"
+                        name="confirmpassword"
                         label="Confirm New Password"
-                        type="confirmnewpasword"
+                        type="confirmpassword"
                         variant="outlined"
-                        value={formValues.newpassword}
+                        value={formValues.confirmpassword}
                         onChange={handleInputChange}
                         error={error}
                         style={{ width: 500, marginBottom: 30, marginLeft: 20 }}
@@ -111,6 +189,9 @@ const Form: React.FC = () => {
                         <Button
                             onClick={() => {
                                 setModalPasswordOpen(false);
+                                formValues.oldpassword = "";
+                                formValues.newpassword = "";
+                                formValues.confirmpassword = "";
                             }}
                         >
                             Cancel
@@ -158,12 +239,7 @@ const Form: React.FC = () => {
                     </DialogTitle>
                     <DialogActions>
                         <Styled.YesNoButtonContainer>
-                            <Styled.YesButton
-                                variant="contained"
-                                onClick={() => {
-                                    setModalDeleteOpen(false);
-                                }}
-                            >
+                            <Styled.YesButton variant="contained" href="/" onClick={handleDelete}>
                                 Yes
                             </Styled.YesButton>
                             <Styled.CancelButton
@@ -179,17 +255,6 @@ const Form: React.FC = () => {
                     </DialogActions>
                 </Styled.DialogContainer>
             </Dialog>
-            <TextField
-                id="name"
-                name="name"
-                label="Name"
-                type="name"
-                variant="outlined"
-                value={formValues.name}
-                onChange={handleInputChange}
-                error={error}
-                style={{ width: 600, marginBottom: 30 }}
-            />
             <TextField
                 id="username"
                 name="username"
@@ -223,15 +288,15 @@ const Form: React.FC = () => {
                 >
                     Password:
                 </Typography>
-                <Styled.ChangePasswordButton
+                <Button
                     variant="contained"
-                    color="primary"
+                    component="span"
                     onClick={() => {
                         setModalPasswordOpen(true);
                     }}
                 >
                     Change Password
-                </Styled.ChangePasswordButton>
+                </Button>
             </Styled.PasswordContainer>
             <TextField
                 id="about"
@@ -246,6 +311,13 @@ const Form: React.FC = () => {
                 error={error}
                 style={{ width: 600, marginBottom: 40 }}
             />
+            <div style={{ marginBottom: "20px" }}>
+                {error && (
+                    <Typography color="error" variant="h5">
+                        Invalid Form Values
+                    </Typography>
+                )}{" "}
+            </div>
             <Styled.DeleteAccountButton
                 variant="contained"
                 onClick={() => {
