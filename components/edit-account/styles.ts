@@ -109,7 +109,9 @@ export const YesButton = styled(MUI_Button)`
 
 export const Image = styled.img`
     flex-shrink: 0;
-    height: 100%;
-    width: 100%;
+    width: 210px;
+    height: 210px;
     object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 10px;
 `;

@@ -35,24 +35,44 @@ const Form: React.FC = () => {
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
+        // if (name === "profilePicture" && event.target.files!.length !== 0) {
+        //     setFormValues({
+        //         ...formValues,
+        //         [name]: URL.createObjectURL((event.target as HTMLInputElement).files![0]),
+        //     });
+        // } else {
         setFormValues({
             ...formValues,
             [name]: value,
         });
+        // }
     };
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        if (formValues.newpassword !== formValues.confirmpassword) {
-            setError(true);
-        } else if (formValues.newpassword === formValues.oldpassword) {
-            setError(true);
-        } else {
+        if (
+            formValues.newpassword === "" &&
+            formValues.confirmpassword === "" &&
+            formValues.oldpassword === ""
+        ) {
             const data = await update({ user: formValues });
             if (data.error) {
                 setError(true);
             } else {
                 router.back();
+            }
+        } else {
+            if (formValues.newpassword !== formValues.confirmpassword) {
+                setError(true);
+            } else if (formValues.newpassword === formValues.oldpassword) {
+                setError(true);
+            } else {
+                const data = await update({ user: formValues });
+                if (data.error) {
+                    setError(true);
+                } else {
+                    router.back();
+                }
             }
         }
     };
@@ -102,15 +122,14 @@ const Form: React.FC = () => {
                     <Styled.Image src={formValues.profilePicture}></Styled.Image>
                 )} */}
                 <label htmlFor="contained-button-file">
-                    {/* <Input
+                    <Input
                         inputProps={{ accept: "image/*" }}
                         name="profilePicture"
                         type="file"
                         id="contained-button-file"
                         style={{ display: "none" }}
                         onChange={handleInputChange}
-                        value={formValues.profilePicture}
-                    /> */}
+                    />
                     <Button variant="contained" component="span">
                         Change Profile Picture
                     </Button>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import Link from "next/link";
+import { useRouter } from "next/router";
 import {
     Typography,
     Divider,
@@ -9,8 +9,10 @@ import {
     CardMedia,
     CardContent,
     Pagination,
+    Button,
 } from "@mui/material";
 import * as Styled from "./styles";
+import { useAuthContext } from "../../context/authcontext";
 
 const ResultCard: React.FC = () => {
     return (
@@ -46,11 +48,15 @@ const ResultCard: React.FC = () => {
     );
 };
 
-const Profile: React.FC = () => {
+const Profile: React.FC<{ user2?: any }> = ({ user2 }) => {
     const [tags, setTags] = useState<string[]>(["Comedy", "College"]);
     const [category, setCategory] = useState<string>("Comics");
     const [time, setTime] = useState<string>("Today");
     const [sort, setSort] = useState<string>("alpha");
+    const { user } = useAuthContext();
+    const finalUser = user?.username! !== user2.username! ? user2 : user;
+
+    const router = useRouter();
 
     return (
         <Styled.UserContainer>
@@ -65,7 +71,7 @@ const Profile: React.FC = () => {
                             color: "black",
                         }}
                     >
-                        Jack007
+                        {finalUser?.username!}
                     </Typography>
                     <Typography
                         variant="h4"
@@ -75,11 +81,24 @@ const Profile: React.FC = () => {
                             marginBottom: "10px",
                         }}
                     >
-                        1.4k Subscribers
+                        {finalUser?.subscriberCount!} subscribers
                     </Typography>
-                    <Styled.SubscribeButton variant="contained" color="primary">
-                        Subscribe
-                    </Styled.SubscribeButton>
+                    {user?.username! !== user2.username! ? (
+                        <Button variant="contained" color="primary" style={{ width: "60%" }}>
+                            Subscribe
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => {
+                                router.push("/edit-account");
+                            }}
+                            style={{ width: "60%" }}
+                        >
+                            Edit Profile
+                        </Button>
+                    )}
                 </Styled.TextContainer>
                 <Styled.AboutContainer>
                     <Typography
@@ -99,9 +118,7 @@ const Profile: React.FC = () => {
                             color: "black",
                         }}
                     >
-                        You would not believe your eyes If ten million fireflies, lit up the world
-                        as I fell asleep. Cause they fill the open air and leave teardrops
-                        everywhere. Youd think me rude but I would just stand and stare -Rick Astley
+                        {finalUser?.about!}
                     </Typography>
                 </Styled.AboutContainer>
             </Styled.ProfileContainer>

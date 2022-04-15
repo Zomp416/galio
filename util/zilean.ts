@@ -1,3 +1,5 @@
+import { ParsedUrlQuery } from "querystring";
+
 export const zileanOrigin = "http://localhost:3001";
 
 interface ZileanResponse {
@@ -16,6 +18,17 @@ export const getUserFromSession = async (cookie: string): Promise<ZileanResponse
         method: "GET",
         headers: {
             Cookie: cookie,
+        },
+        credentials: "include",
+    });
+    return await result.json();
+};
+
+export const getUserFromUsername = async (username: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/account/findUser/` + username, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
         },
         credentials: "include",
     });

@@ -14,7 +14,6 @@ interface Props {
     rating: number;
     views: number;
 }
-
 const BigCard: React.FC<Props> = props => {
     return (
         <Styled.Card className="detailedcard">
@@ -35,7 +34,7 @@ const BigCard: React.FC<Props> = props => {
                         </Typography>
                         <Typography variant="body2" width={"100%"}>
                             by&nbsp;
-                            <Link href={"/user/" + props.author}>
+                            <Link href={{ pathname: "/user/" + props.author, query: props.author }}>
                                 <a style={{ color: "gray" }}>{props.author}</a>
                             </Link>
                         </Typography>

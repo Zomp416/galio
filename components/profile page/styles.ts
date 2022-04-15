@@ -68,7 +68,7 @@ export const ProfilePic = styled.div`
 `;
 
 export const TextContainer = styled.div`
-    width: 15%;
+    width: 60%;
     display: flex;
     flex-direction: column;
     margin-top: 20px;
@@ -80,11 +80,4 @@ export const AboutContainer = styled.div`
     display: flex;
     flex-direction: column;
     margin-top: 20px;
-`;
-
-export const SubscribeButton = styled(MUI_Button)`
-    padding: 2px 10px;
-    text-align: center;
-    height: 30px;
-    width: 76%;
 `;
