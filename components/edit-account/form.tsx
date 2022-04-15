@@ -43,11 +43,17 @@ const Form: React.FC = () => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        const data = await update({ user: formValues });
-        if (data.error) {
+        if (formValues.newpassword !== formValues.confirmpassword) {
+            setError(true);
+        } else if (formValues.newpassword === formValues.oldpassword) {
             setError(true);
         } else {
-            router.back();
+            const data = await update({ user: formValues });
+            if (data.error) {
+                setError(true);
+            } else {
+                router.back();
+            }
         }
     };
 
