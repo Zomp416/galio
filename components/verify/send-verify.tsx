@@ -4,16 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { StyledLoginContainer, StyledAnchor } from "./styles";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 
-interface Props {
-    id: string;
-    token: string;
-    message?: string;
-}
-
-const ResetPassword: React.FC<Props> = props => {
+const SendVerify: React.FC = () => {
     return (
         <StyledLoginContainer>
             <div style={{ width: "60%", paddingTop: 100 }}>
@@ -22,25 +14,8 @@ const ResetPassword: React.FC<Props> = props => {
                         <Image src="/zompdark.svg" alt="Zomp Icon" width={250} height={75} />
                     </a>
                 </Link>
-                <h1>Reset Your Password</h1>
-                {props.message ? (
-                    <>
-                        <Typography gutterBottom variant="h3" sx={{ marginTop: "50px" }}>
-                            {props.message}
-                        </Typography>
-                        <Button
-                            component="a"
-                            href="/forgot-password"
-                            variant="contained"
-                            color="primary"
-                            sx={{ fontSize: "1.25rem", width: "50%" }}
-                        >
-                            Generate New Link
-                        </Button>
-                    </>
-                ) : (
-                    <Form id={props.id} token={props.token} />
-                )}
+                <h1>Verify Email</h1>
+                <Form />
             </div>
             <Box
                 sx={{
@@ -58,7 +33,7 @@ const ResetPassword: React.FC<Props> = props => {
                     </a>
                 </Link>
                 <div>
-                    <p>Zomp</p>
+                    <p>Clicked the wrong button?</p>
                     <Link href="/login" passHref>
                         <StyledAnchor>Login Instead</StyledAnchor>
                     </Link>
@@ -68,4 +43,4 @@ const ResetPassword: React.FC<Props> = props => {
     );
 };
 
-export default ResetPassword;
+export default SendVerify;

@@ -14,11 +14,6 @@ const nextConfig = {
                 permanent: false,
             },
             {
-                source: "/verify",
-                destination: "/",
-                permanent: false,
-            },
-            {
                 source: "/verify/:slug",
                 destination: "/",
                 permanent: false,

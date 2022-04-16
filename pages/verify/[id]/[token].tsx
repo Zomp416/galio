@@ -1,6 +1,7 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import Verify from "../../../components/verify";
+import { sendIdAndToken } from "../../../util/zilean";
 
 interface Props {
     status: boolean;
@@ -30,12 +31,19 @@ const VerifyPage: NextPage<Props> = props => {
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-    // const id = context.params?.id;
-    // const token = context.params?.token;
+    const id = context.params?.id;
+    const token = context.params?.token;
+    let status = false;
+    if (id && token) {
+        const res = await sendIdAndToken("verify", {
+            id: id as string,
+            token: token as string,
+        });
+        if (!res.error) {
+            status = true;
+        }
+    }
 
-    const status = true;
-
-    // TODO return status of request to backend using request parameters
     return {
         props: {
             status,

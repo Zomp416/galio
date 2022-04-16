@@ -14,7 +14,7 @@ const Form: React.FC = () => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        const data = await sendEmail("forgot-password", email);
+        const data = await sendEmail("send-verify", email);
         if (data.error) {
             setError(true);
         } else {
@@ -34,8 +34,8 @@ const Form: React.FC = () => {
             {sent ? (
                 <StyledForm onSubmit={handleSendAnother}>
                     <Typography variant="h5">
-                        If an account exists, an email will be sent with instructions to reset your
-                        password.
+                        If an account exists, an email will be sent with instructions to verify your
+                        email.
                     </Typography>
 
                     <Button
