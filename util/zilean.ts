@@ -178,3 +178,44 @@ export const unsubscribe = async (subscribe: { subscription: string }): Promise<
     }
     return data;
 };
+
+export const sendIdAndToken = async (
+    route: string,
+    payload: { id: string; token: string; password?: string }
+): Promise<ZileanResponse> => {
+    const res = await fetch(`${zileanOrigin}/account/${route}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    if (!data) {
+        return {
+            error: "Request to backend failed.",
+        };
+    } else {
+        return data;
+    }
+};
+
+export const sendEmail = async (route: string, email: string): Promise<ZileanResponse> => {
+    const res = await fetch(`${zileanOrigin}/account/${route}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ email }),
+    });
+    const data = await res.json();
+    if (!data) {
+        return {
+            error: "Request to backend failed.",
+        };
+    } else {
+        return data;
+    }
+};

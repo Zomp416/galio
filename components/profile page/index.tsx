@@ -235,15 +235,11 @@ const Profile: React.FC<{ user2?: any; userSubs?: any }> = ({ user2, userSubs })
                 >
                     <MenuItem value={"Comics"}>Comics</MenuItem>
                     <MenuItem value={"Stories"}>Stories</MenuItem>
-<<<<<<< HEAD
                     {finalUser.username === user?.username ? (
                         <MenuItem value={"Subscriptions"}>Subscriptions</MenuItem>
                     ) : (
                         <></>
                     )}
-=======
-                    {/* TODO add back users under subscribers and only show if it is the owner visiting own Profile */}
->>>>>>> origin/main
                 </Select>
                 <Styled.TagListContainer>
                     <Select
