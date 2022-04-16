@@ -6,6 +6,7 @@ export const MyComicsOuter = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
+    margin-top: 50px;
 `;
 
 export const MyComicsInner = styled.div`

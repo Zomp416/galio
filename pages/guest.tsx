@@ -10,6 +10,7 @@ interface Props {
     user: any;
 }
 
+//TODO fix bug where logged in users visit guest page
 const GuestPage: NextPage<Props> = props => {
     return (
         <>

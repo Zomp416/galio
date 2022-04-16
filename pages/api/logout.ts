@@ -8,7 +8,7 @@ type Data = {
 
 // Used as a testing route for logging out without using UI
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
-    const data = await logout(req.headers.cookie || "");
+    const data = await logout();
     if (data.error) {
         res.status(400).json({ error: data.error });
     } else {

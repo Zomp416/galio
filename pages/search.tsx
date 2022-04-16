@@ -9,13 +9,14 @@ interface Props {
     user: any;
 }
 
+//TODO: change url of page to be /search/[params], so we can pass searchBy result in navbar
+
 const SearchPage: NextPage<Props> = props => {
     return (
         <>
             <Head>
                 <title>Zomp Search</title>
             </Head>
-            {/* TODO: dynamically set navbar with passing props to search page*/}
 
             <AuthProvider user={props.user}>
                 <Navbar domain="search" />

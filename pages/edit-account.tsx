@@ -16,17 +16,8 @@ const EditAccountPage: NextPage<Props> = props => {
                 <title>Edit Account</title>
             </Head>
             <AuthProvider user={props.user}>
-                <div
-                    style={{
-                        width: "100%",
-                        height: "50px",
-                        backgroundColor: "#3F3F3F",
-                        color: "white",
-                    }}
-                >
-                    <Navbar domain="user" />
-                    <EditAccount />
-                </div>
+                <Navbar domain="user" />
+                <EditAccount />
             </AuthProvider>
         </>
     );

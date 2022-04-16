@@ -1,10 +1,12 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import ResetPassword from "../../../components/reset-password";
-import { Button, Typography } from "@mui/material";
+import { sendIdAndToken } from "../../../util/zilean";
 
 interface Props {
-    status: boolean;
+    message?: string;
+    id: string;
+    token: string;
 }
 
 const VerifyPage: NextPage<Props> = props => {
@@ -13,38 +15,30 @@ const VerifyPage: NextPage<Props> = props => {
             <Head>
                 <title>Reset Your Password</title>
             </Head>
-            {props.status ? (
-                <ResetPassword />
-            ) : (
-                <>
-                    <Typography gutterBottom variant="h3" sx={{ marginTop: "50px" }}>
-                        Reset link is invalid or expired!
-                    </Typography>
-                    <Button
-                        component="a"
-                        href="/forgot-password"
-                        variant="contained"
-                        color="primary"
-                        sx={{ fontSize: "1.25rem", width: "25%" }}
-                    >
-                        Send another link
-                    </Button>
-                </>
-            )}
+            <ResetPassword id={props.id} token={props.token} message={props.message} />
         </>
     );
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-    // const id = context.params?.id;
-    // const token = context.params?.token;
+    const id = context.params?.id;
+    const token = context.params?.token;
+    let message = "";
+    if (id && token) {
+        const res = await sendIdAndToken("reset-password-verify", {
+            id: id as string,
+            token: token as string,
+        });
+        if (res.error) {
+            message = "Link is invalid or expired!";
+        }
+    }
 
-    const status = true;
-
-    // TODO return status of request to backend using request parameters
     return {
         props: {
-            status,
+            message,
+            id,
+            token,
         },
     };
 };
