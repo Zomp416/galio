@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { Button as MUI_Button } from "@mui/material";
 
 export const UserContainer = styled.div`
     width: 100%;
@@ -51,7 +50,7 @@ export const CardsContainer = styled.div`
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
     margin-bottom: 40px;
 `;
 

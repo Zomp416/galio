@@ -1,5 +1,3 @@
-import { ParsedUrlQuery } from "querystring";
-
 export const zileanOrigin = "http://localhost:3001";
 
 interface ZileanResponse {
@@ -18,6 +16,17 @@ export const getUserFromSession = async (cookie: string): Promise<ZileanResponse
         method: "GET",
         headers: {
             Cookie: cookie,
+        },
+        credentials: "include",
+    });
+    return await result.json();
+};
+
+export const getUserFromID = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/account/` + id, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
         },
         credentials: "include",
     });
@@ -102,6 +111,7 @@ export const update = async (user: {
         password: string;
     };
 }): Promise<ZileanResponse> => {
+    console.log(user);
     const res = await fetch(`${zileanOrigin}/account`, {
         method: "PUT",
         headers: {
@@ -129,6 +139,42 @@ export const deleteAccount = async (): Promise<ZileanResponse> => {
     if (!data || result.status !== 200) {
         return {
             error: "Error Deleting Account.",
+        };
+    }
+    return data;
+};
+
+export const subscribe = async (subscribe: { subscription: string }): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/account/subscribe`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(subscribe),
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error Subscribing.",
+        };
+    }
+    return data;
+};
+
+export const unsubscribe = async (subscribe: { subscription: string }): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/account/unsubscribe`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(subscribe),
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error Unsubscribing.",
         };
     }
     return data;
