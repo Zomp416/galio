@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import {
     Typography,
     Divider,
@@ -69,17 +70,13 @@ const ProfileCard: React.FC<{ user2?: any }> = ({ user2 }) => {
                 width="200px"
                 image=""
                 alt="Image"
-                style={{ backgroundColor: "grey" }}
+                style={{ backgroundColor: "grey", borderRadius: "50%" }}
             />
             <CardContent>
                 <Typography variant="h5" component="div" fontWeight="bold">
-                    Comic Title
-                </Typography>
-                <Typography variant="body1" color="text.secondary" fontWeight="bold">
-                    {user2?.username!}
-                </Typography>
-                <Typography variant="body1" color="text.secondary">
-                    100 Views
+                    <Link href={{ pathname: "/user/" + user2?.username!, query: user2?.username! }}>
+                        <a style={{ textDecoration: "none", color: "black" }}>{user2?.username!}</a>
+                    </Link>
                 </Typography>
             </CardContent>
         </Card>
