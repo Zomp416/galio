@@ -1,4 +1,4 @@
-export const zileanOrigin = "http://localhost:3001";
+export const zileanOrigin = process.env.NEXT_PUBLIC_ZILEAN_ORIGIN || "http://localhost:3001";
 
 interface ZileanResponse {
     data?: any;
