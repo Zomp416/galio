@@ -56,31 +56,24 @@ export const CardsContainer = styled.div`
     margin-bottom: 40px;
 `;
 
-export const ProfilePic = styled.div`
-    background-color: grey;
-    display: flex;
-    flex-direction: column;
-    border: 110px solid grey;
-    width: 50px;
-    height: 50px;
+export const ProfilePic = styled.img`
+    width: 300px;
+    height: 300px;
     border-radius: 50%;
-    margin-bottom: 10px;
-    margin-right: 20px;
+    margin: 20px;
 `;
 
 export const TextContainer = styled.div`
-    width: 15%;
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
-    margin-right: 300px;
+    margin: 20px;
 `;
 
 export const AboutContainer = styled.div`
-    width: 100%;
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
+    margin: 20px;
+    max-width: 200px;
 `;
 
 export const SubscribeButton = styled(MUI_Button)`

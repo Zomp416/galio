@@ -1,5 +1,8 @@
-import React, { useState } from "react";
-// import Link from "next/link";
+import React, { useState, useEffect } from "react";
+import { useAuthContext } from "../../context/authcontext";
+import { useUserContext } from "../../context/usercontext";
+import { getImage, subscribe } from "../../util/zilean";
+
 import {
     Typography,
     Divider,
@@ -51,11 +54,30 @@ const Profile: React.FC = () => {
     const [category, setCategory] = useState<string>("Comics");
     const [time, setTime] = useState<string>("Today");
     const [sort, setSort] = useState<string>("alpha");
+    const [picUrl, setPicUrl] = useState<string>(
+        "http://www.industrialempathy.com/img/remote/ZiClJf-1920w.jpg"
+    );
+    const [subscribed, setSubscribed] = useState(false);
+    const { user } = useAuthContext();
+    const userview = useUserContext().user;
+
+    useEffect(() => {
+        if (userview?.profilePicture)
+            getImage(userview?.profilePicture).then(res => "baseurl" + setPicUrl(res)); // TODO: what is baseurl??
+    });
+    useEffect(() => {
+        if (user && userview) setSubscribed(user.subscriptions.includes(userview._id));
+    }, [user, userview]);
+
+    const toggleSubscribe = () => {
+        if (!subscribed && userview) subscribe(userview?._id);
+        setSubscribed(!subscribed);
+    };
 
     return (
         <Styled.UserContainer>
             <Styled.ProfileContainer>
-                <Styled.ProfilePic></Styled.ProfilePic>
+                <Styled.ProfilePic src={picUrl}></Styled.ProfilePic>
                 <Styled.TextContainer>
                     <Typography
                         variant="h4"
@@ -65,7 +87,7 @@ const Profile: React.FC = () => {
                             color: "black",
                         }}
                     >
-                        Jack007
+                        {userview?.username}
                     </Typography>
                     <Typography
                         variant="h4"
@@ -75,11 +97,29 @@ const Profile: React.FC = () => {
                             marginBottom: "10px",
                         }}
                     >
-                        1.4k Subscribers
+                        {userview?.subscriberCount} Subscribers
                     </Typography>
-                    <Styled.SubscribeButton variant="contained" color="primary">
-                        Subscribe
-                    </Styled.SubscribeButton>
+                    {user && user?._id !== userview?._id ? (
+                        subscribed ? (
+                            <Styled.SubscribeButton
+                                variant="contained"
+                                color="secondary"
+                                onClick={toggleSubscribe}
+                            >
+                                Unsubscribe
+                            </Styled.SubscribeButton>
+                        ) : (
+                            <Styled.SubscribeButton
+                                variant="contained"
+                                color="primary"
+                                onClick={toggleSubscribe}
+                            >
+                                Subscribe
+                            </Styled.SubscribeButton>
+                        )
+                    ) : (
+                        <></>
+                    )}
                 </Styled.TextContainer>
                 <Styled.AboutContainer>
                     <Typography
@@ -99,9 +139,7 @@ const Profile: React.FC = () => {
                             color: "black",
                         }}
                     >
-                        You would not believe your eyes If ten million fireflies, lit up the world
-                        as I fell asleep. Cause they fill the open air and leave teardrops
-                        everywhere. Youd think me rude but I would just stand and stare -Rick Astley
+                        {userview?.about}
                     </Typography>
                 </Styled.AboutContainer>
             </Styled.ProfileContainer>

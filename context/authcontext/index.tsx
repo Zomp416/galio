@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 
 interface IUser {
+    _id: string;
     email: string;
     username: string;
     password: string;

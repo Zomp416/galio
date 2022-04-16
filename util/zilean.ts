@@ -2,6 +2,7 @@ export const zileanOrigin = process.env.NEXT_PUBLIC_ZILEAN_ORIGIN || "http://loc
 
 interface ZileanResponse {
     data?: any;
+    message?: string;
     error?: string;
 }
 
@@ -20,6 +21,24 @@ export const getUserFromSession = async (cookie: string): Promise<ZileanResponse
         credentials: "include",
     });
     return await result.json();
+};
+
+export const getUser = async (id: string): Promise<ZileanResponse> => {
+    return await (await fetch(`${zileanOrigin}/account/${id}`)).json();
+};
+
+export const getImage = async (id: string): Promise<string> => {
+    return (await (await fetch(`${zileanOrigin}/image/${id}`)).json()).data.imageURL;
+};
+
+export const subscribe = async (id: string): Promise<ZileanResponse> => {
+    return await (
+        await fetch(`${zileanOrigin}/account/subscribe`, {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify({ subscription: id }),
+        })
+    ).json();
 };
 
 export const register = async (user: {
