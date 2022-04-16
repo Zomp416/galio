@@ -22,6 +22,28 @@ export const getUserFromSession = async (cookie: string): Promise<ZileanResponse
     return await result.json();
 };
 
+export const getUserFromID = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/account/` + id, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    return await result.json();
+};
+
+export const getUserFromUsername = async (username: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/account/findUser/` + username, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    return await result.json();
+};
+
 export const register = async (user: {
     email: string;
     username: string;
@@ -116,6 +138,42 @@ export const deleteAccount = async (): Promise<ZileanResponse> => {
     if (!data || result.status !== 200) {
         return {
             error: "Error Deleting Account.",
+        };
+    }
+    return data;
+};
+
+export const subscribe = async (subscribe: { subscription: string }): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/account/subscribe`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(subscribe),
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error Subscribing.",
+        };
+    }
+    return data;
+};
+
+export const unsubscribe = async (subscribe: { subscription: string }): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/account/unsubscribe`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(subscribe),
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error Unsubscribing.",
         };
     }
     return data;

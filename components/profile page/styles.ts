@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { Button as MUI_Button } from "@mui/material";
 
 export const UserContainer = styled.div`
     width: 100%;
@@ -52,7 +51,7 @@ export const CardsContainer = styled.div`
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
     margin-bottom: 40px;
 `;
 
@@ -69,7 +68,7 @@ export const ProfilePic = styled.div`
 `;
 
 export const TextContainer = styled.div`
-    width: 15%;
+    width: 60%;
     display: flex;
     flex-direction: column;
     margin-top: 20px;
@@ -81,11 +80,4 @@ export const AboutContainer = styled.div`
     display: flex;
     flex-direction: column;
     margin-top: 20px;
-`;
-
-export const SubscribeButton = styled(MUI_Button)`
-    padding: 2px 10px;
-    text-align: center;
-    height: 30px;
-    width: 76%;
 `;
