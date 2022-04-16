@@ -2,8 +2,14 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { Button, TextField, Typography } from "@mui/material";
 import { StyledForm } from "./styles";
+import { sendIdAndToken } from "../../util/zilean";
 
-const Form: React.FC = () => {
+interface Props {
+    id: string;
+    token: string;
+}
+
+const Form: React.FC<Props> = props => {
     const router = useRouter();
     const [formValues, setFormValues] = useState({
         password: "",
@@ -22,8 +28,20 @@ const Form: React.FC = () => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        console.log(formValues);
-        setSent(true);
+        if (formValues.password && formValues.password !== formValues.confirmPassword) {
+            return;
+        }
+        const res = await sendIdAndToken("reset-password", {
+            id: props.id,
+            token: props.token,
+            password: formValues.password,
+        });
+        if (res.error) {
+            setError(true);
+        } else {
+            setError(false);
+            setSent(true);
+        }
     };
 
     const handleGoHome = async (event: React.FormEvent) => {
