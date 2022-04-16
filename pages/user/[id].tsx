@@ -1,7 +1,7 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import Navbar from "../../components/navbar";
-import Profile from "../../components/profile page";
+import Profile from "../../components/profile";
 import { AuthProvider } from "../../context/authcontext";
 import { getUserFromSession, getUserFromUsername, getUserFromID } from "../../util/zilean";
 
