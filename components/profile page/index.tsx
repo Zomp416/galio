@@ -106,7 +106,7 @@ const Profile: React.FC<{ user2?: any; userSubs?: any }> = ({ user2, userSubs })
         const userid = { subscription: user2id };
         const data = await subscribe(userid);
         if (!data.error) {
-            router.push({ pathname: "/user/" + finalUser.username, query: finalUser.username });
+            router.push({ pathname: "/user/" + finalUser.username });
         }
     };
 
@@ -115,7 +115,7 @@ const Profile: React.FC<{ user2?: any; userSubs?: any }> = ({ user2, userSubs })
         const userid = { subscription: user2id };
         const data = await unsubscribe(userid);
         if (!data.error) {
-            router.push({ pathname: "/user/" + finalUser.username, query: finalUser.username });
+            router.push({ pathname: "/user/" + finalUser.username });
         }
         subscribed = false;
     };
