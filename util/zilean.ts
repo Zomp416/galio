@@ -111,7 +111,6 @@ export const update = async (user: {
         password: string;
     };
 }): Promise<ZileanResponse> => {
-    console.log(user);
     const res = await fetch(`${zileanOrigin}/account`, {
         method: "PUT",
         headers: {
