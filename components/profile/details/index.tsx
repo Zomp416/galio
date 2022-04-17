@@ -39,90 +39,88 @@ const Hero: React.FC<{ user2?: any }> = ({ user2 }) => {
     };
 
     return (
-        <>
-            <Styled.ProfileContainer>
-                <Styled.ProfilePic></Styled.ProfilePic>
-                <Styled.TextContainer>
-                    <Typography
-                        variant="h4"
-                        sx={{
-                            fontWeight: "bold",
-                            fontSize: "35px",
-                            color: "black",
-                        }}
-                    >
-                        {finalUser?.username!}
-                    </Typography>
-                    <Typography
-                        variant="h4"
-                        sx={{
-                            fontSize: "19px",
-                            color: "black",
-                            marginBottom: "10px",
-                        }}
-                    >
-                        {finalUser?.subscriberCount!} subscribers
-                    </Typography>
-                    {user?.username! !== user2.username! ? (
-                        subscribed ? (
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                style={{ width: "60%", backgroundColor: "red" }}
-                                onClick={e => {
-                                    handleUnsubscribe(e, user2._id.toString());
-                                }}
-                            >
-                                Unsubscribe
-                            </Button>
-                        ) : (
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                style={{ width: "60%" }}
-                                onClick={e => {
-                                    handleSubscribe(e, user2._id.toString());
-                                }}
-                            >
-                                Subscribe
-                            </Button>
-                        )
+        <Styled.DetailsContainer>
+            <Styled.ProfilePic></Styled.ProfilePic>
+            <Styled.TextContainer>
+                <Typography
+                    variant="h4"
+                    sx={{
+                        fontWeight: "bold",
+                        fontSize: "35px",
+                        color: "black",
+                    }}
+                >
+                    {finalUser?.username!}
+                </Typography>
+                <Typography
+                    variant="h4"
+                    sx={{
+                        fontSize: "19px",
+                        color: "black",
+                        marginBottom: "10px",
+                    }}
+                >
+                    {finalUser?.subscriberCount!} subscribers
+                </Typography>
+                {user?.username! !== user2.username! ? (
+                    subscribed ? (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            style={{ width: "60%", backgroundColor: "red" }}
+                            onClick={e => {
+                                handleUnsubscribe(e, user2._id.toString());
+                            }}
+                        >
+                            Unsubscribe
+                        </Button>
                     ) : (
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={() => {
-                                router.push("/edit-account");
-                            }}
                             style={{ width: "60%" }}
+                            onClick={e => {
+                                handleSubscribe(e, user2._id.toString());
+                            }}
                         >
-                            Edit Profile
+                            Subscribe
                         </Button>
-                    )}
-                </Styled.TextContainer>
-                <Styled.AboutContainer>
-                    <Typography
-                        variant="h4"
-                        sx={{
-                            fontWeight: "bold",
-                            fontSize: "35px",
-                            color: "black",
+                    )
+                ) : (
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                            router.push("/edit-account");
                         }}
+                        style={{ width: "60%" }}
                     >
-                        About
-                    </Typography>
-                    <Typography
-                        variant="h4"
-                        sx={{
-                            fontSize: "16px",
-                            color: "black",
-                        }}
-                    >
-                        {finalUser?.about!}
-                    </Typography>
-                </Styled.AboutContainer>
-            </Styled.ProfileContainer>
-        </>
+                        Edit Profile
+                    </Button>
+                )}
+            </Styled.TextContainer>
+            <Styled.AboutContainer>
+                <Typography
+                    variant="h4"
+                    sx={{
+                        fontWeight: "bold",
+                        fontSize: "35px",
+                        color: "black",
+                    }}
+                >
+                    About
+                </Typography>
+                <Typography
+                    variant="h4"
+                    sx={{
+                        fontSize: "16px",
+                        color: "black",
+                    }}
+                >
+                    {finalUser?.about!}
+                </Typography>
+            </Styled.AboutContainer>
+        </Styled.DetailsContainer>
     );
 };
 

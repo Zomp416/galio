@@ -1,35 +1,31 @@
 import styled from "@emotion/styled";
 
-export const ProfileContainer = styled.div`
-    width: 100%;
+export const DetailsContainer = styled.div`
+    width: 270px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     margin-bottom: 10px;
+    column-gap: 30px;
 `;
 
 export const ProfilePic = styled.div`
-    background-color: grey;
-    display: flex;
-    flex-direction: column;
-    border: 110px solid grey;
-    width: 50px;
-    height: 50px;
+    border: 1px solid black;
+    flex-shrink: 0;
+    width: 250px;
+    height: 250px;
     border-radius: 50%;
-    margin-bottom: 10px;
-    margin-right: 20px;
 `;
 
 export const TextContainer = styled.div`
-    width: 60%;
+    flex-grow: 2;
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
-    margin-right: 300px;
+    padding-top: 20px;
 `;
 
 export const AboutContainer = styled.div`
-    width: 100%;
+    flex-grow: 3;
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
+    padding-top: 20px;
 `;

@@ -6,11 +6,12 @@ import * as Styled from "./styles";
 
 const Profile: React.FC<{ user2?: any; userSubs?: any }> = ({ user2, userSubs }) => {
     return (
-        <Styled.UserContainer>
-            <Details user2={user2} userSubs={userSubs}></Details>
-            <Divider sx={{ width: "100%", marginBottom: "20px" }} />
-            <Results user2={user2} userSubs={userSubs}></Results>
-        </Styled.UserContainer>
+        <Styled.ZompOuter>
+            <Styled.ZompInner>
+                <Details user2={user2}></Details>
+                <Results user2={user2} userSubs={userSubs}></Results>
+            </Styled.ZompInner>
+        </Styled.ZompOuter>
     );
 };
 
