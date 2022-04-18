@@ -1,25 +1,25 @@
 import React, { useState } from "react";
 import { Typography } from "@mui/material";
 import * as Styled from "./styles";
-import { useToolTabContext } from "..";
+import { useToolContext } from "../..";
 
-const ToolItem: React.FC<{ icon: React.ReactNode; text: string; tab: number }> = props => {
+const ToolItem: React.FC<{ icon: React.ReactNode; text: string; name: string }> = props => {
     const [hovered, setHovered] = useState(false);
-    const { toolTab, setToolTab } = useToolTabContext();
+    const { tool, setTool } = useToolContext();
 
-    const toggleTab = () => {
-        setToolTab!(props.tab === toolTab ? 0 : props.tab);
+    const toggleTool = () => {
+        setTool!(props.name === tool ? "" : props.name);
     };
 
     return (
         <Styled.Item
             onMouseOver={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
-            onClick={toggleTab}
+            onClick={toggleTool}
         >
-            {toolTab === props.tab ? <Styled.Highlight /> : <></>}
+            {tool === props.name ? <Styled.Highlight /> : <></>}
             <Styled.ToolIcon>{props.icon}</Styled.ToolIcon>
-            {hovered && toolTab !== props.tab ? (
+            {hovered && tool !== props.name ? (
                 <Styled.Tooltip>
                     <Typography variant="subtitle1">{props.text}</Typography>
                 </Styled.Tooltip>

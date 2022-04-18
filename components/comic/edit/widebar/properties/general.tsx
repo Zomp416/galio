@@ -11,11 +11,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import { useToolTabContext } from "..";
-
 const GeneralProperties: React.FC = () => {
-    const { toolTab, setToolTab } = useToolTabContext();
-
     return (
         <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />} id="general-prop">

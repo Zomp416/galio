@@ -11,11 +11,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { SketchPicker } from "react-color";
 
-import { useToolTabContext } from "..";
-
 const PanelProperties: React.FC = () => {
-    const { toolTab, setToolTab } = useToolTabContext();
-
     return (
         <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />} id="general-prop">
