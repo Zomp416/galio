@@ -14,7 +14,7 @@ const ToolItem: React.FC<{ icon: React.ReactNode; text: string; name: string }> 
     return (
         <Styled.Item
             onMouseOver={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
+            onMouseOut={() => setHovered(false)}
             onClick={toggleTool}
         >
             {tool === props.name ? <Styled.Highlight /> : <></>}

@@ -1,39 +1,39 @@
 import styled from "@emotion/styled";
 
 export const Item = styled.div`
-    height: 50px;
-    width: 50px;
-    background-color: white;
+    height: 40px;
+    width: 40px;
 `;
 
 export const Highlight = styled.div`
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     box-sizing: border-box;
     border-left: 5px solid #39a78d;
     background-color: #ccc;
-    z-index: 2;
+    z-index: 20;
 `;
 
 export const ToolIcon = styled.div`
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 3;
+    cursor: pointer;
+    z-index: 30;
 `;
 
 export const Tooltip = styled.div`
     position: absolute;
-    height: 50px;
-    padding-left: 60px;
-    padding-right: 10px;
+    height: 40px;
+    padding-left: 45px;
+    padding-right: 7px;
     background-color: #39a78d;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1;
+    z-index: 10;
 `;

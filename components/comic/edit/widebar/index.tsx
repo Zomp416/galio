@@ -1,6 +1,6 @@
 import React from "react";
 import * as Styled from "./styles";
-import WidebarTitle from "./misc/widebartitle";
+import Title from "./title";
 import TitleProperties from "./properties/title";
 import GeneralProperties from "./properties/general";
 import TextProperties from "./properties/text";
@@ -12,16 +12,14 @@ const Actions: React.FC = () => {
     const { tool } = useToolContext();
 
     return (
-        <>
-            <Styled.Widebar>
-                <WidebarTitle />
-                {tool === "title" ? <TitleProperties /> : <></>}
-                {tool === "image" ? <ImageProperties /> : <></>}
-                {tool === "text" ? <TextProperties /> : <></>}
-                {tool === "panel" ? <PanelProperties /> : <></>}
-                {tool === "general" ? <></> : <GeneralProperties />}
-            </Styled.Widebar>
-        </>
+        <Styled.Widebar>
+            <Title />
+            {tool === "title" ? <TitleProperties /> : <></>}
+            {tool === "image" ? <ImageProperties /> : <></>}
+            {tool === "text" ? <TextProperties /> : <></>}
+            {tool === "panel" ? <PanelProperties /> : <></>}
+            {tool === "" ? <></> : <GeneralProperties />}
+        </Styled.Widebar>
     );
 };
 
