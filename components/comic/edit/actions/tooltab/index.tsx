@@ -8,7 +8,7 @@ const ToolItem: React.FC<{ icon: React.ReactNode; text: string; tab: number }> =
     const { toolTab, setToolTab } = useToolTabContext();
 
     const toggleTab = () => {
-        setToolTab!(props.tab === toolTab ? -1 : props.tab);
+        setToolTab!(props.tab === toolTab ? 0 : props.tab);
     };
 
     return (

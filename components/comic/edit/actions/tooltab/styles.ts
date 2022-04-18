@@ -13,7 +13,7 @@ export const Highlight = styled.div`
     box-sizing: border-box;
     border-left: 5px solid #39a78d;
     background-color: #ccc;
-    z-index: 1;
+    z-index: 2;
 `;
 
 export const ToolIcon = styled.div`
@@ -23,7 +23,7 @@ export const ToolIcon = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 2;
+    z-index: 3;
 `;
 
 export const Tooltip = styled.div`
@@ -35,4 +35,5 @@ export const Tooltip = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1;
 `;
