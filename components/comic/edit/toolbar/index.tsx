@@ -14,7 +14,7 @@ const Actions: React.FC = () => {
         <Styled.Toolbar>
             <Divider sx={{ margin: "5px", visibility: "hidden" }} />
             <ToolTab icon={<TitleIcon />} text="EDIT TITLE/DESCRIPTION" name={"title"} />
-            <ToolTab icon={<TagIcon />} text="MANAGE TAGS" name={"tags  "} />
+            <ToolTab icon={<TagIcon />} text="MANAGE TAGS" name={"tags"} />
             <Divider sx={{ margin: "2px", visibility: "hidden" }} />
             <ToolTab icon={<ImageIcon />} text="ADD IMAGE LAYER" name={"image"} />
             <ToolTab icon={<TextFieldsIcon />} text="ADD TEXT LAYER" name={"text"} />

@@ -18,7 +18,7 @@ const Actions: React.FC = () => {
             {tool === "image" ? <ImageProperties /> : <></>}
             {tool === "text" ? <TextProperties /> : <></>}
             {tool === "panel" ? <PanelProperties /> : <></>}
-            {tool === "" ? <></> : <GeneralProperties />}
+            {tool === "title" || tool === "tags" ? <></> : <GeneralProperties />}
         </Styled.Widebar>
     );
 };
