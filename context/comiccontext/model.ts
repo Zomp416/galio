@@ -29,7 +29,7 @@ enum LayerType {
     panel,
 }
 
-interface ILayer {
+export interface ILayer {
     type: LayerType;
     name: string;
     x: number;
