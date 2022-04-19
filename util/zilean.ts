@@ -219,3 +219,14 @@ export const sendEmail = async (route: string, email: string): Promise<ZileanRes
         return data;
     }
 };
+
+export const getComic = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/comic/` + id, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    return await result.json();
+};
