@@ -15,7 +15,7 @@ const ViewComicPage: NextPage<Props> = props => {
     return (
         <>
             <Head>
-                <title>Comic Title</title>
+                <title>{props.comic.title}</title>
             </Head>
             <AuthProvider user={props.user}>
                 <Navbar domain="comics" />
