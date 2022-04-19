@@ -1,28 +1,20 @@
 import React, { createContext, useContext, useState } from "react";
 
 import { IComic, ILayer } from "./model";
+import { Op, addLayerOp } from "./ops";
 
 interface IComicContext {
     comic: IComic | undefined;
-}
-
-const ComicContext = createContext<IComicContext>({ comic: undefined });
-
-interface ILayerContext {
     layers: ILayer[];
-    op: (...args: any) => void;
+    newdo: (...args: any) => void;
     undo: () => void;
     redo: () => void;
 }
 
-interface Transaction {
-    redo: () => void;
-    undo: () => void;
-}
-
-const LayerContext = createContext<ILayerContext>({
+const ComicContext = createContext<IComicContext>({
+    comic: undefined,
     layers: [],
-    op: () => {},
+    newdo: () => {},
     undo: () => {},
     redo: () => {},
 });
@@ -31,28 +23,28 @@ export const ComicProvider: React.FC<{ init_comic?: IComic }> = ({ children, ini
     const [comic, setComic] = useState(init_comic);
     const [layers, setLayers] = useState(comic?.layers || []);
 
-    const [history, setHistory] = useState<Transaction[]>([]);
+    const [history, setHistory] = useState<Op[]>([]);
     const [pos, setPos] = useState(0);
 
-    const op = (type: string, ...args: any) => {
-        if (type === "newlayer") {
-            const newOp: Transaction = {
-                redo: () => {
-                    setLayers(layers.concat(args.layer));
-                },
-                undo: () => {
-                    setLayers(layers.slice(0, -1));
-                },
-            };
-            setHistory(history.slice(0, pos).concat(newOp));
+    // add a new op
+    const newdo = (type: string, ...args: any) => {
+        let op;
+        if (type === "addlayer") op = addLayerOp(args, setLayers, layers);
+
+        if (op) {
+            setHistory(history.slice(0, pos).concat(op));
             setPos(pos + 1);
         }
     };
+
+    // undo op
     const undo = () => {
         if (pos === 0) return;
-        history[pos].undo();
+        history[pos - 1].undo();
         setPos(pos - 1);
     };
+
+    // redo op
     const redo = () => {
         if (pos === history.length) return;
         history[pos].redo();
@@ -60,10 +52,8 @@ export const ComicProvider: React.FC<{ init_comic?: IComic }> = ({ children, ini
     };
 
     return (
-        <ComicContext.Provider value={{ comic }}>
-            <LayerContext.Provider value={{ layers: comic?.layers || [], op, undo, redo }}>
-                {children}
-            </LayerContext.Provider>
+        <ComicContext.Provider value={{ comic, layers: comic?.layers || [], newdo, undo, redo }}>
+            {children}
         </ComicContext.Provider>
     );
 };
