@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 
 import { IComic, ILayer } from "./model";
-import { Op, addLayerOp } from "./ops";
+import { Op, OpArgs, addLayerOp, deleteLayerOp } from "./ops";
 
 interface IComicContext {
     comic: IComic | undefined;
@@ -27,12 +27,14 @@ export const ComicProvider: React.FC<{ init_comic?: IComic }> = ({ children, ini
     const [pos, setPos] = useState(0);
 
     // add a new op
-    const newdo = (type: string, ...args: any) => {
+    const newdo = (type: string, args: OpArgs) => {
         let op;
         if (type === "addlayer") op = addLayerOp(args, setLayers, layers);
+        if (type === "delete") op = deleteLayerOp(args, setLayers, layers);
 
         if (op) {
             setHistory(history.slice(0, pos).concat(op));
+            history[pos].redo();
             setPos(pos + 1);
         }
     };
