@@ -120,7 +120,7 @@ const Navbar: React.FC<NavbarProps> = props => {
                     padding: "0 15px",
                 }}
             >
-                <IconButton href={"/"+link} component="a" sx={{ padding: "0" }}>
+                <IconButton href={"/" + link} component="a" sx={{ padding: "0" }}>
                     <Image src="/zomplight.svg" alt="Zomp Icon" width={100} height={40} />
                     {logo}
                 </IconButton>
