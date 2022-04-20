@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Toolbar, IconButton } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import UndoIcon from "@mui/icons-material/Undo";
@@ -6,6 +6,7 @@ import RedoIcon from "@mui/icons-material/Redo";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import * as Styled from "./styles";
+import Layer from "./layer";
 
 const testComic = [
     {
@@ -18,6 +19,7 @@ const testComic = [
         rotation: 0,
         xFlip: false,
         yFlip: false,
+        visible: true,
         properties: {
             backgroundColor: "white",
             borderStyle: "solid",
@@ -36,6 +38,7 @@ const testComic = [
         rotation: 0,
         xFlip: false,
         yFlip: false,
+        visible: true,
         properties: {
             imageURL:
                 "https://gimmedelicious.com/wp-content/uploads/2019/11/chicken-taquitos-feature-1.jpg",
@@ -51,6 +54,7 @@ const testComic = [
         rotation: 0,
         xFlip: false,
         yFlip: false,
+        visible: true,
         properties: {
             text: "I Like Taquitos",
             color: "black",
@@ -65,77 +69,98 @@ const testComic = [
 ];
 
 const Editor: React.FC = () => {
-    return (
-        <Styled.EditContainer>
-            <div
-                style={{
-                    margin: "0",
-                    padding: "0",
-                    position: "relative",
-                }}
+    const [selected, setSelected] = useState<number>(-1);
+    const [zoom, setZoom] = useState<number>(1);
+
+    const generateBase = (layer: Record<any, any>, index: number) => {
+        if (layer.type === "panel") {
+            return (
+                <div
+                    key={`layer-${layer.name}`}
+                    style={{
+                        ...layer.properties,
+                        zIndex: index,
+                        width: "100%",
+                        height: "100%",
+                    }}
+                ></div>
+            );
+        } else if (layer.type === "text") {
+            return (
+                <div
+                    key={`layer-${layer.name}`}
+                    style={{
+                        ...layer.properties,
+                        zIndex: index,
+                        width: "100%",
+                        height: "100%",
+                    }}
+                >
+                    {layer.properties.text}
+                </div>
+            );
+        } else if (layer.type === "image") {
+            return (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                    src={layer.properties.imageURL!}
+                    alt="Image Layer"
+                    key={`layer-${layer.name}`}
+                    width="100%"
+                    height="100%"
+                    style={{
+                        ...layer.properties,
+                        zIndex: index,
+                    }}
+                />
+            );
+        } else {
+            return (
+                <div
+                    key={`layer-${layer.name}`}
+                    style={{
+                        ...layer.properties,
+                        zIndex: index,
+                    }}
+                ></div>
+            );
+        }
+    };
+
+    const renderLayer = (layer: Record<any, any>, index: number) => {
+        return (
+            <Layer
+                layer={layer}
+                index={index}
+                selected={index === selected}
+                setSelected={setSelected}
+                key={`zomp-layer-${index}`}
+                data-key={index}
+                zoom={zoom}
             >
-                {testComic.map((val, index) => {
-                    if (val.type === "panel") {
-                        return (
-                            <div
-                                key={`layer-${val.name}`}
-                                style={{
-                                    ...val.properties,
-                                    zIndex: index,
-                                    width: val.width,
-                                    height: val.height,
-                                    top: val.y,
-                                    left: val.x,
-                                    position: "absolute",
-                                }}
-                            ></div>
-                        );
-                    } else if (val.type === "text") {
-                        return (
-                            <p
-                                key={`layer-${val.name}`}
-                                style={{
-                                    ...val.properties,
-                                    zIndex: index,
-                                    width: val.width,
-                                    height: val.height,
-                                    top: val.y,
-                                    left: val.x,
-                                    position: "absolute",
-                                }}
-                            >
-                                {val.properties.text}
-                            </p>
-                        );
-                    } else if (val.type === "image") {
-                        return (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
-                                src={val.properties.imageURL!}
-                                alt="image-layer"
-                                key={`layer-${val.name}`}
-                                style={{
-                                    zIndex: index,
-                                    width: val.width,
-                                    height: val.height,
-                                    top: val.y,
-                                    left: val.x,
-                                    position: "absolute",
-                                }}
-                            />
-                        );
-                    }
-                })}
-            </div>
+                {generateBase(layer, index)}
+            </Layer>
+        );
+    };
+
+    // TODO MAKE THESE STYLED COMPONENTS, IM LAZY RN
+    return (
+        <div
+            style={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+            }}
+        >
             <div
                 style={{
-                    position: "absolute",
-                    bottom: 0,
                     width: "100%",
                     height: "40px",
                     backgroundColor: "white",
                     display: "flex",
                     alignItems: "center",
+                    borderBottom: "1px solid #39a78d",
                 }}
             >
                 <Toolbar>
@@ -156,7 +181,24 @@ const Editor: React.FC = () => {
                     </IconButton>
                 </Toolbar>
             </div>
-        </Styled.EditContainer>
+            <Styled.EditContainer
+                className="editorSpace"
+                onMouseDown={e => {
+                    console.log("Selected Index: -1");
+                    e.preventDefault();
+                    setSelected(-1);
+                }}
+                style={{
+                    transform: `scale(${zoom})`,
+                }}
+            >
+                {testComic.map((val, index) => {
+                    if (val.visible) {
+                        return renderLayer(val, index);
+                    }
+                })}
+            </Styled.EditContainer>
+        </div>
     );
 };
 
