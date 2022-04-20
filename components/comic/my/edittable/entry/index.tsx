@@ -5,6 +5,7 @@ import moment from "moment";
 import EditIcon from "@mui/icons-material/Edit";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Tooltip from "@mui/material/Tooltip";
 
 import { useSelectionContext } from "../..";
 import * as Styled from "./styles";
@@ -36,15 +37,21 @@ const EditTable: React.FC<Comic> = props => {
                 <TableCell style={{ width: "1px", whiteSpace: "nowrap" }}>
                     <Grow in={selection === props.index}>
                         <Styled.Menu>
-                            <Button onClick={() => router.push(`/comic/edit/${props._id}`)}>
-                                <EditIcon />
-                            </Button>
-                            <Button>
-                                <CheckCircleIcon />
-                            </Button>
-                            <Button>
-                                <DeleteIcon />
-                            </Button>
+                            <Tooltip title="Edit">
+                                <Button onClick={() => router.push(`/comic/edit/${props._id}`)}>
+                                    <EditIcon />
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title="Publish">
+                                <Button>
+                                    <CheckCircleIcon />
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title="Delete">
+                                <Button>
+                                    <DeleteIcon />
+                                </Button>
+                            </Tooltip>
                         </Styled.Menu>
                     </Grow>
                 </TableCell>

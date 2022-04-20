@@ -5,6 +5,7 @@ import moment from "moment";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import UnpublishedIcon from "@mui/icons-material/Unpublished";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Tooltip from "@mui/material/Tooltip";
 
 import { useSelectionContext } from "../..";
 import * as Styled from "./styles";
@@ -37,15 +38,21 @@ const PublishTable: React.FC<Props> = props => {
                 <TableCell style={{ width: "1px", whiteSpace: "nowrap" }}>
                     <Grow in={selection === props.index}>
                         <Styled.Menu>
-                            <Button onClick={() => router.push(`/comic/view/${props._id}`)}>
-                                <VisibilityIcon />
-                            </Button>
-                            <Button>
-                                <UnpublishedIcon />
-                            </Button>
-                            <Button>
-                                <DeleteIcon />
-                            </Button>
+                            <Tooltip title="View">
+                                <Button onClick={() => router.push(`/comic/view/${props._id}`)}>
+                                    <VisibilityIcon />
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title="Unpublish">
+                                <Button>
+                                    <UnpublishedIcon />
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title="Delete">
+                                <Button>
+                                    <DeleteIcon />
+                                </Button>
+                            </Tooltip>
                         </Styled.Menu>
                     </Grow>
                 </TableCell>
