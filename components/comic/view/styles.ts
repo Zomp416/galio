@@ -43,10 +43,11 @@ export const Tag = styled(MUI_Button)`
     margin-right: 5px;
 `;
 
-export const ComicImage = styled.div`
+export const ComicImage = styled.img`
+    flex-shrink: 0;
     width: 100%;
-    height: 620px;
-    background-color: grey;
+    height: 100%;
+    object-fit: cover;
 `;
 
 // Author + Share and Subscribe lol

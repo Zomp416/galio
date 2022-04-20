@@ -13,11 +13,13 @@ import {
 } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 import * as Styled from "./styles";
+import { useImageContext } from "../../../context/imagecontext";
 
 const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicAuthor }) => {
     const [comment, setComment] = useState<string>("");
     const [tags, setTags] = useState<string[]>(comic.tags);
     const [rating, setRating] = useState<number | null>(4.5);
+    const { image } = useImageContext();
 
     return (
         <>
@@ -43,7 +45,9 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
                         <Typography variant="h6">{comic.views + " Views"}</Typography>
                     </Styled.ViewContainer>
                 </Styled.TVContainer>
-                <Styled.ComicImage>Image</Styled.ComicImage>
+                <Styled.ComicImage
+                    src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + image?.imageURL}
+                ></Styled.ComicImage>
                 <Styled.ASSContainer>
                     <Styled.AuthorContainer>
                         <Styled.Avatar></Styled.Avatar>

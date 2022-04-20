@@ -231,6 +231,7 @@ export const getComic = async (id: string): Promise<ZileanResponse> => {
     return await result.json();
 };
 
+//LOOK INTO MONGOOSE.POPULATE
 export const getImage = async (id: string): Promise<ZileanResponse> => {
     const result = await fetch(`${zileanOrigin}/image/` + id, {
         method: "GET",

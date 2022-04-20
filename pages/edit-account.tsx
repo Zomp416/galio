@@ -26,7 +26,7 @@ const EditAccountPage: NextPage<Props> = props => {
         </>
     );
 };
-
+//LOOK INTO MONGOOSE POPULATE!!
 export const getServerSideProps: GetServerSideProps = async context => {
     const result = await getUserFromSession(context.req.headers.cookie || "");
     const result2 =
