@@ -4,6 +4,7 @@ import { Typography } from "@mui/material";
 import * as Styled from "./styles";
 import EditTable from "./edittable";
 import PublishTable from "./publishtable";
+import AddIcon from "@mui/icons-material/Add";
 
 // TODO: remove later
 const now = new Date();
@@ -71,6 +72,11 @@ const MyComics: React.FC = () => {
                             <Styled.ToggleButton value="edit">Editing</Styled.ToggleButton>
                             <Styled.ToggleButton value="publish">Published</Styled.ToggleButton>
                         </Styled.ToggleButtonGroup>
+                        {/* TODO: create new comic to link */}
+                        <Styled.EditButton href="/comic/edit/123">
+                            <Typography>New Comic</Typography>
+                            <AddIcon />
+                        </Styled.EditButton>
                     </Styled.MyComicsHeader>
                     {filter === "edit" ? (
                         <EditTable comics={comics} />

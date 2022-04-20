@@ -4,6 +4,7 @@ import { Typography } from "@mui/material";
 import * as Styled from "./styles";
 import EditTable from "./edittable";
 import PublishTable from "./publishtable";
+import AddIcon from "@mui/icons-material/Add";
 
 // TODO: remove later
 // TODO: TA comment to make icons more intuitive
@@ -72,6 +73,10 @@ const MyStories: React.FC = () => {
                             <Styled.ToggleButton value="edit">Editing</Styled.ToggleButton>
                             <Styled.ToggleButton value="publish">Published</Styled.ToggleButton>
                         </Styled.ToggleButtonGroup>
+                        <Styled.EditButton href="/story/create-new-story">
+                            <Typography>New Story</Typography>
+                            <AddIcon />
+                        </Styled.EditButton>
                     </Styled.MyStoriesHeader>
                     {filter === "edit" ? (
                         <EditTable stories={stories} />
