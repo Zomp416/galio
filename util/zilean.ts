@@ -230,3 +230,33 @@ export const getComic = async (id: string): Promise<ZileanResponse> => {
     });
     return await result.json();
 };
+
+export const getImage = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/image/` + id, {
+        method: "GET",
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data) {
+        return {
+            error: "Request to backend failed.",
+        };
+    } else {
+        return data;
+    }
+};
+
+export const createImage = async (image: FormData): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/image`, {
+        method: "POST",
+        body: image,
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error Creating Image.",
+        };
+    }
+    return data;
+};

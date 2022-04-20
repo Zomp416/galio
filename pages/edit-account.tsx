@@ -3,10 +3,12 @@ import Head from "next/head";
 import Navbar from "../components/navbar";
 import EditAccount from "../components/edit-account";
 import { AuthProvider } from "../context/authcontext";
-import { getUserFromSession } from "../util/zilean";
+import { ImageProvider } from "../context/imagecontext";
+import { getUserFromSession, getImage } from "../util/zilean";
 
 interface Props {
     user: any;
+    profilePicture: any;
 }
 
 const EditAccountPage: NextPage<Props> = props => {
@@ -16,8 +18,10 @@ const EditAccountPage: NextPage<Props> = props => {
                 <title>Edit Account</title>
             </Head>
             <AuthProvider user={props.user}>
-                <Navbar domain="user" />
-                <EditAccount />
+                <ImageProvider image={props.profilePicture}>
+                    <Navbar domain="user" />
+                    <EditAccount />
+                </ImageProvider>
             </AuthProvider>
         </>
     );
@@ -25,10 +29,17 @@ const EditAccountPage: NextPage<Props> = props => {
 
 export const getServerSideProps: GetServerSideProps = async context => {
     const result = await getUserFromSession(context.req.headers.cookie || "");
+    const result2 =
+        result.data.profilePicture !== undefined
+            ? await (
+                  await getImage(result.data.profilePicture)
+              ).data
+            : "";
 
     return {
         props: {
             user: result.data || null,
+            profilePicture: result2 || null,
         },
     };
 };
