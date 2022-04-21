@@ -1,8 +1,20 @@
 import React, { useState } from "react";
 import * as Styled from "./styles";
 import Form from "./form";
+import { useRouter } from "next/router";
+import { createStory } from "../../../util/zilean";
 
 const CreateNewStory: React.FC = () => {
+    const router = useRouter();
+
+    const handleCreateStory = async (event: React.FormEvent) => {
+        event.preventDefault();
+        const data = await createStory();
+        if (!data.error) {
+            router.push({ pathname: "/story/edit/" + data.data._id });
+        }
+    };
+
     return (
         <Styled.CreateNewStoryContainer>
             <Styled.ButtonsContainer>
@@ -10,7 +22,8 @@ const CreateNewStory: React.FC = () => {
                 <Styled.CancelButton variant="contained" color="primary">
                     Cancel
                 </Styled.CancelButton>
-                <Styled.DoneButton variant="contained" color="primary" href="/story/edit/123">
+                {/* TODO: read the form and send default data or just delte this page */}
+                <Styled.DoneButton variant="contained" color="primary" onClick={handleCreateStory}>
                     Done
                 </Styled.DoneButton>
             </Styled.ButtonsContainer>

@@ -1,10 +1,13 @@
 import React, { createContext, useContext, useState } from "react";
 import { Typography } from "@mui/material";
 
+import { useRouter } from "next/router";
 import * as Styled from "./styles";
 import EditTable from "./edittable";
 import PublishTable from "./publishtable";
 import AddIcon from "@mui/icons-material/Add";
+import { useAuthContext } from "../../../context/authcontext";
+import { createComic } from "../../../util/zilean";
 
 // TODO: remove later
 const now = new Date();
@@ -49,12 +52,24 @@ interface ISelectionContext {
 const SelectionContext = createContext<ISelectionContext>({ selection: -1 });
 
 const MyComics: React.FC = () => {
+    const { user } = useAuthContext();
+    const router = useRouter();
+    // TODO: after implementing create comics, add comic/publishedcomic here
+
     const [filter, setFilter] = useState("edit");
     const [selection, setSelection] = useState(-1);
 
     const onSetFilter = (e: any) => {
         if (filter !== e.target.value) setSelection(-1);
         setFilter(e.target.value);
+    };
+
+    const handleCreate = async (event: React.FormEvent) => {
+        event.preventDefault();
+        const data = await createComic();
+        if (!data.error) {
+            router.push({ pathname: "/comic/edit/" + data.data._id });
+        }
     };
 
     return (
@@ -73,7 +88,11 @@ const MyComics: React.FC = () => {
                             <Styled.ToggleButton value="publish">Published</Styled.ToggleButton>
                         </Styled.ToggleButtonGroup>
                         {/* TODO: create new comic to link */}
-                        <Styled.EditButton href="/comic/edit/123">
+                        <Styled.EditButton
+                            onClick={e => {
+                                handleCreate(e);
+                            }}
+                        >
                             <Typography>New Comic</Typography>
                             <AddIcon />
                         </Styled.EditButton>
