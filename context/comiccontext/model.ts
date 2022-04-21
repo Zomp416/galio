@@ -1,7 +1,7 @@
 type objectId = string;
 
 interface IImageProperties {
-    image: objectId;
+    imageURL: objectId;
 }
 
 interface ITextProperties {
@@ -23,15 +23,10 @@ interface IPanelProperties {
     borderRadius: string;
 }
 
-enum LayerType {
-    image,
-    text,
-    panel,
-}
-
 export interface ILayer {
-    type: LayerType;
+    type: string;
     name: string;
+    visible: boolean;
     x: number;
     y: number;
     width: number;
@@ -45,18 +40,18 @@ export interface ILayer {
 export interface IComic {
     title: string;
     description?: string;
-    tags: string[];
-    renderedImage: objectId;
-    author: objectId;
+    // tags: string[];
+    // renderedImage: objectId;
+    // author: objectId;
     layers: ILayer[];
-    views: number;
-    ratingTotal: number;
-    ratingCount: number;
-    comments: {
-        text: string;
-        author: objectId;
-    }[];
-    createdAt: Date;
-    updatedAt: Date;
-    publishedAt?: Date;
+    // views: number;
+    // ratingTotal: number;
+    // ratingCount: number;
+    // comments: {
+    //     text: string;
+    //     author: objectId;
+    // }[];
+    // createdAt: Date;
+    // updatedAt: Date;
+    // publishedAt?: Date;
 }

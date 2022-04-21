@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Rnd, RndResizeCallback, RndResizeStartCallback, RndDragCallback } from "react-rnd";
+import { useComicContext } from "../../../../context/comiccontext";
 import * as Styled from "./styles";
 
 interface Props {
@@ -12,6 +13,7 @@ interface Props {
 
 const Layer: React.FC<Props> = props => {
     const { layer, index, selected, setSelected, zoom } = props;
+    const { newdo } = useComicContext();
 
     const [tempResizeWidth, setTempResizeWidth] = useState(0);
     const [tempResizeHeight, setTempResizeHeight] = useState(0);
@@ -26,6 +28,7 @@ const Layer: React.FC<Props> = props => {
     const onRndDragStop: RndDragCallback = (e, data) => {
         e.stopPropagation();
         e.preventDefault();
+        newdo("moveLayer", { index, dx: data.x, dy: data.y }); // TODO: replace with the correct deltas
     };
 
     const onResizeStart: RndResizeStartCallback = (e, dir, ref) => {};
