@@ -20,10 +20,10 @@ export const addLayerOp = (args: OpArgs, setLayers: any, layers: any): Op => {
     const layer = (args as AddLayerOpArgs).layer;
     return {
         redo: () => {
-            setLayers(layers.concat(layer));
+            setLayers((ls: ILayer[]) => ls.concat(layer));
         },
         undo: () => {
-            setLayers(layers.slice(0, -1));
+            setLayers((ls: ILayer[]) => ls.slice(0, -1));
         },
     };
 };
@@ -34,10 +34,10 @@ export const deleteLayerOp = (args: OpArgs, setLayers: any, layers: any): Op => 
     const removed = layers[index];
     return {
         redo: () => {
-            setLayers(layers.slice(0, index).concat(layers.slice(index + 1)));
+            setLayers((ls: ILayer[]) => ls.slice(0, index).concat(ls.slice(index + 1)));
         },
         undo: () => {
-            setLayers(layers.slice(0, index).concat(removed).concat(layers.slice(index)));
+            setLayers((ls: ILayer[]) => ls.slice(0, index).concat(removed).concat(ls.slice(index)));
         },
     };
 };

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { IComic, ILayer } from "./model";
 import { Op, OpArgs, addLayerOp, deleteLayerOp } from "./ops";
@@ -29,13 +29,13 @@ export const ComicProvider: React.FC<{ init_comic?: IComic }> = ({ children, ini
     // add a new op
     const newdo = (type: string, args: OpArgs) => {
         let op;
-        if (type === "addlayer") op = addLayerOp(args, setLayers, layers);
-        if (type === "delete") op = deleteLayerOp(args, setLayers, layers);
+        if (type === "addLayer") op = addLayerOp(args, setLayers, layers);
+        if (type === "deleteLayer") op = deleteLayerOp(args, setLayers, layers);
 
         if (op) {
             setHistory(history.slice(0, pos).concat(op));
-            history[pos].redo();
-            setPos(pos + 1);
+            op.redo();
+            setPos(pos => pos + 1);
         }
     };
 
@@ -43,18 +43,26 @@ export const ComicProvider: React.FC<{ init_comic?: IComic }> = ({ children, ini
     const undo = () => {
         if (pos === 0) return;
         history[pos - 1].undo();
-        setPos(pos - 1);
+        setPos(pos => pos - 1);
     };
 
     // redo op
     const redo = () => {
         if (pos === history.length) return;
         history[pos].redo();
-        setPos(pos + 1);
+        setPos(pos => pos + 1);
     };
 
+    useEffect(() => {
+        console.log("layers change: ", layers);
+    }, [layers]);
+
+    useEffect(() => {
+        console.log("history change: ", history);
+    }, [history]);
+
     return (
-        <ComicContext.Provider value={{ comic, layers: comic?.layers || [], newdo, undo, redo }}>
+        <ComicContext.Provider value={{ comic, layers, newdo, undo, redo }}>
             {children}
         </ComicContext.Provider>
     );

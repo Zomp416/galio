@@ -7,70 +7,12 @@ import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import * as Styled from "./styles";
 import Layer from "./layer";
-
-const testComic = [
-    {
-        type: "panel",
-        name: "Layer 01",
-        x: 200,
-        y: 100,
-        width: 500,
-        height: 500,
-        rotation: 0,
-        xFlip: false,
-        yFlip: false,
-        visible: true,
-        properties: {
-            backgroundColor: "white",
-            borderStyle: "solid",
-            borderWidth: "1px",
-            borderColor: "black",
-            borderRadius: "0px",
-        },
-    },
-    {
-        type: "image",
-        name: "Layer 02",
-        x: 250,
-        y: 150,
-        width: 300,
-        height: 300,
-        rotation: 0,
-        xFlip: false,
-        yFlip: false,
-        visible: true,
-        properties: {
-            imageURL:
-                "https://gimmedelicious.com/wp-content/uploads/2019/11/chicken-taquitos-feature-1.jpg",
-        },
-    },
-    {
-        type: "text",
-        name: "Layer 03",
-        x: 250,
-        y: 100,
-        width: 150,
-        height: 30,
-        rotation: 0,
-        xFlip: false,
-        yFlip: false,
-        visible: true,
-        properties: {
-            text: "I Like Taquitos",
-            color: "black",
-            fontSize: "16px",
-            fontWeight: "normal",
-            fontStyle: "normal",
-            textDecoration: "none",
-            justifyContent: "center",
-            alignItems: "center",
-        },
-    },
-];
+import { useComicContext } from "../../../../context/comiccontext";
 
 const Editor: React.FC = () => {
     const [selected, setSelected] = useState<number>(-1);
     const [zoom, setZoom] = useState<number>(1);
+    const { layers, undo, redo } = useComicContext();
 
     const generateBase = (layer: Record<any, any>, index: number) => {
         if (layer.type === "panel") {
@@ -167,10 +109,22 @@ const Editor: React.FC = () => {
                     <IconButton size="medium" color="inherit" sx={{ mr: 2 }}>
                         <SaveIcon />*
                     </IconButton>
-                    <IconButton size="medium" edge="start" color="inherit" sx={{ mr: 2 }}>
+                    <IconButton
+                        size="medium"
+                        edge="start"
+                        color="inherit"
+                        sx={{ mr: 2 }}
+                        onClick={undo}
+                    >
                         <UndoIcon />
                     </IconButton>
-                    <IconButton size="medium" edge="start" color="inherit" sx={{ mr: 2 }} disabled>
+                    <IconButton
+                        size="medium"
+                        edge="start"
+                        color="inherit"
+                        sx={{ mr: 2 }}
+                        onClick={redo}
+                    >
                         <RedoIcon />
                     </IconButton>
                     <IconButton size="medium" edge="start" color="inherit" sx={{ mr: 2 }}>
@@ -192,7 +146,7 @@ const Editor: React.FC = () => {
                     transform: `scale(${zoom})`,
                 }}
             >
-                {testComic.map((val, index) => {
+                {layers.map((val, index) => {
                     if (val.visible) {
                         return renderLayer(val, index);
                     }
