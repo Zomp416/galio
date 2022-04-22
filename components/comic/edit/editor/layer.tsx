@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Rnd, RndResizeCallback, RndResizeStartCallback, RndDragCallback } from "react-rnd";
+import React from "react";
+import { Rnd, RndResizeCallback, RndDragCallback } from "react-rnd";
 import { useComicContext } from "../../../../context/comiccontext";
 import * as Styled from "./styles";
 
@@ -15,11 +15,6 @@ const Layer: React.FC<Props> = props => {
     const { layer, index, selected, setSelected, zoom } = props;
     const { newdo } = useComicContext();
 
-    const [tempResizeWidth, setTempResizeWidth] = useState(0);
-    const [tempResizeHeight, setTempResizeHeight] = useState(0);
-    const [tempTop, setTempTop] = useState(0);
-    const [tempLeft, setTempLeft] = useState(0);
-
     const onRndDrag: RndDragCallback = (e, data) => {
         layer.properties.left += data.deltaX;
         layer.properties.top += data.deltaY;
@@ -28,17 +23,25 @@ const Layer: React.FC<Props> = props => {
     const onRndDragStop: RndDragCallback = (e, data) => {
         e.stopPropagation();
         e.preventDefault();
-        newdo("moveLayer", { index, dx: data.x, dy: data.y }); // TODO: replace with the correct deltas
+        newdo("moveLayer", { index, dx: data.x, dy: data.y });
     };
 
-    const onResizeStart: RndResizeStartCallback = (e, dir, ref) => {};
-
     const onResize: RndResizeCallback = (e, dir, refToElement, delta, position) => {
+        layer.properties.x = position.x;
+        layer.properties.y = position.y;
         layer.properties.width += delta.width;
         layer.properties.height += delta.height;
     };
 
-    const onResizeStop: RndResizeCallback = (e, dir, refToElement, delta, position) => {};
+    const onResizeStop: RndResizeCallback = (e, dir, refToElement, delta, position) => {
+        newdo("resizeLayer", {
+            index,
+            dw: delta.width,
+            dh: delta.height,
+            x: position.x,
+            y: position.y,
+        });
+    };
 
     return (
         <Rnd
@@ -76,8 +79,6 @@ const Layer: React.FC<Props> = props => {
                     : {}
             }
             disableDragging={!selected}
-            // resizeGrid={grid ? [gridValue, gridValue] : null}
-            // dragGrid={grid ? [gridValue, gridValue] : null}
             scale={zoom}
             onMouseDown={e => {
                 console.log(`Selected Index: ${index}`);
@@ -88,7 +89,6 @@ const Layer: React.FC<Props> = props => {
             onDragStart={e => e.stopPropagation()}
             onDrag={onRndDrag}
             onDragStop={onRndDragStop}
-            onResizeStart={onResizeStart}
             onResize={onResize}
             onResizeStop={onResizeStop}
         >
