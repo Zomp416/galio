@@ -1,36 +1,23 @@
 import React from "react";
 import { Rnd, RndResizeCallback, RndDragCallback } from "react-rnd";
 import { useComicContext } from "../../../../context/comiccontext";
-import * as Styled from "./styles";
+import { useEditContext } from "..";
 
 interface Props {
     layer: Record<any, any>;
     index: number;
-    selected: boolean;
-    setSelected: React.Dispatch<React.SetStateAction<number>>;
     zoom: number;
 }
 
 const Layer: React.FC<Props> = props => {
-    const { layer, index, selected, setSelected, zoom } = props;
+    const { layer, index, zoom } = props;
+    const { selection, setSelection, setTool } = useEditContext();
     const { newdo } = useComicContext();
-
-    const onRndDrag: RndDragCallback = (e, data) => {
-        layer.properties.left += data.deltaX;
-        layer.properties.top += data.deltaY;
-    };
 
     const onRndDragStop: RndDragCallback = (e, data) => {
         e.stopPropagation();
         e.preventDefault();
-        newdo("moveLayer", { index, dx: data.x, dy: data.y });
-    };
-
-    const onResize: RndResizeCallback = (e, dir, refToElement, delta, position) => {
-        layer.properties.x = position.x;
-        layer.properties.y = position.y;
-        layer.properties.width += delta.width;
-        layer.properties.height += delta.height;
+        newdo("moveLayer", { index, x: data.x, y: data.y });
     };
 
     const onResizeStop: RndResizeCallback = (e, dir, refToElement, delta, position) => {
@@ -65,7 +52,7 @@ const Layer: React.FC<Props> = props => {
             }}
             position={{ x: layer.x, y: layer.y }}
             enableResizing={
-                selected
+                selection === index
                     ? {
                           top: true,
                           right: true,
@@ -78,18 +65,17 @@ const Layer: React.FC<Props> = props => {
                       }
                     : {}
             }
-            disableDragging={!selected}
+            disableDragging={selection !== index}
             scale={zoom}
             onMouseDown={e => {
                 console.log(`Selected Index: ${index}`);
                 e.stopPropagation();
                 e.preventDefault();
-                setSelected(index);
+                setSelection!(index);
+                setTool!(layer.type);
             }}
             onDragStart={e => e.stopPropagation()}
-            onDrag={onRndDrag}
             onDragStop={onRndDragStop}
-            onResize={onResize}
             onResizeStop={onResizeStop}
         >
             {props.children}

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Typography } from "@mui/material";
 import * as Styled from "./styles";
-import { useToolContext } from "../..";
+import { useEditContext } from "../..";
 
 const ToolItem: React.FC<{ icon: React.ReactNode; text: string; name: string }> = props => {
     const [hovered, setHovered] = useState(false);
-    const { tool, setTool } = useToolContext();
+    const { tool, setTool } = useEditContext();
 
     const toggleTool = () => {
         setTool!(props.name === tool ? "" : props.name);

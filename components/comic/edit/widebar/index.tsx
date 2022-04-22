@@ -6,11 +6,11 @@ import GeneralProperties from "./properties/general";
 import TextProperties from "./properties/text";
 import PanelProperties from "./properties/panel";
 import ImageProperties from "./properties/image";
-import { useToolContext } from "..";
+import { useEditContext } from "..";
 import PanelActions from "./actions/panel";
 
 const Actions: React.FC = () => {
-    const { tool } = useToolContext();
+    const { tool } = useEditContext();
 
     return (
         <Styled.Widebar>
