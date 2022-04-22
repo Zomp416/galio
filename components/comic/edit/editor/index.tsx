@@ -8,10 +8,11 @@ import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import * as Styled from "./styles";
 import Layer from "./layer";
 import { useComicContext } from "../../../../context/comiccontext";
+import { useEditContext } from "..";
 
 const Editor: React.FC = () => {
-    const [selected, setSelected] = useState<number>(-1);
     const [zoom, setZoom] = useState<number>(1);
+    const { setSelection, setTool } = useEditContext();
     const { layers, undo, redo } = useComicContext();
 
     const generateBase = (layer: Record<any, any>, index: number) => {
@@ -74,8 +75,6 @@ const Editor: React.FC = () => {
             <Layer
                 layer={layer}
                 index={index}
-                selected={index === selected}
-                setSelected={setSelected}
                 key={`zomp-layer-${index}`}
                 data-key={index}
                 zoom={zoom}
@@ -140,7 +139,8 @@ const Editor: React.FC = () => {
                 onMouseDown={e => {
                     console.log("Selected Index: -1");
                     e.preventDefault();
-                    setSelected(-1);
+                    setSelection!(-1);
+                    setTool!("");
                 }}
                 style={{
                     transform: `scale(${zoom})`,
