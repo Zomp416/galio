@@ -1,44 +1,34 @@
-import React, { useState } from "react";
-import { Rnd, RndResizeCallback, RndResizeStartCallback, RndDragCallback } from "react-rnd";
+import React from "react";
+import { Rnd, RndResizeCallback, RndDragCallback } from "react-rnd";
 import { useComicContext } from "../../../../context/comiccontext";
-import * as Styled from "./styles";
+import { useEditContext } from "..";
 
 interface Props {
     layer: Record<any, any>;
     index: number;
-    selected: boolean;
-    setSelected: React.Dispatch<React.SetStateAction<number>>;
     zoom: number;
 }
 
 const Layer: React.FC<Props> = props => {
-    const { layer, index, selected, setSelected, zoom } = props;
+    const { layer, index, zoom } = props;
+    const { selection, setSelection, setTool } = useEditContext();
     const { newdo } = useComicContext();
-
-    const [tempResizeWidth, setTempResizeWidth] = useState(0);
-    const [tempResizeHeight, setTempResizeHeight] = useState(0);
-    const [tempTop, setTempTop] = useState(0);
-    const [tempLeft, setTempLeft] = useState(0);
-
-    const onRndDrag: RndDragCallback = (e, data) => {
-        layer.properties.left += data.deltaX;
-        layer.properties.top += data.deltaY;
-    };
 
     const onRndDragStop: RndDragCallback = (e, data) => {
         e.stopPropagation();
         e.preventDefault();
-        newdo("moveLayer", { index, dx: data.x, dy: data.y }); // TODO: replace with the correct deltas
+        newdo("moveLayer", { index, x: data.x, y: data.y });
     };
 
-    const onResizeStart: RndResizeStartCallback = (e, dir, ref) => {};
-
-    const onResize: RndResizeCallback = (e, dir, refToElement, delta, position) => {
-        layer.properties.width += delta.width;
-        layer.properties.height += delta.height;
+    const onResizeStop: RndResizeCallback = (e, dir, refToElement, delta, position) => {
+        newdo("resizeLayer", {
+            index,
+            dw: delta.width,
+            dh: delta.height,
+            x: position.x,
+            y: position.y,
+        });
     };
-
-    const onResizeStop: RndResizeCallback = (e, dir, refToElement, delta, position) => {};
 
     return (
         <Rnd
@@ -62,7 +52,7 @@ const Layer: React.FC<Props> = props => {
             }}
             position={{ x: layer.x, y: layer.y }}
             enableResizing={
-                selected
+                selection === index
                     ? {
                           top: true,
                           right: true,
@@ -75,21 +65,17 @@ const Layer: React.FC<Props> = props => {
                       }
                     : {}
             }
-            disableDragging={!selected}
-            // resizeGrid={grid ? [gridValue, gridValue] : null}
-            // dragGrid={grid ? [gridValue, gridValue] : null}
+            disableDragging={selection !== index}
             scale={zoom}
             onMouseDown={e => {
                 console.log(`Selected Index: ${index}`);
                 e.stopPropagation();
                 e.preventDefault();
-                setSelected(index);
+                setSelection!(index);
+                setTool!(layer.type);
             }}
             onDragStart={e => e.stopPropagation()}
-            onDrag={onRndDrag}
             onDragStop={onRndDragStop}
-            onResizeStart={onResizeStart}
-            onResize={onResize}
             onResizeStop={onResizeStop}
         >
             {props.children}

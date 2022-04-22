@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     TextField,
     Typography,
@@ -10,8 +10,26 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { SketchPicker } from "react-color";
+import { useEditContext } from "../..";
+import { useComicContext } from "../../../../../context/comiccontext";
 
 const PanelProperties: React.FC = () => {
+    const { selection } = useEditContext();
+    const { newdo } = useComicContext();
+
+    const [borderStyle, setBorderStyle] = useState("solid");
+    const [borderWidth, setBorderWidth] = useState(0);
+    const [borderRadius, setBorderRadius] = useState(0);
+
+    const onSetBorderWidth = (e: any) => {
+        const width = parseInt(e.target.value);
+        if (width) setBorderWidth(width > 100 ? 99 : width);
+    };
+    const onSetBorderRadius = (e: any) => {
+        const radius = parseInt(e.target.value);
+        if (radius) setBorderRadius(radius > 100 ? 99 : radius);
+    };
+
     return (
         <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />} id="general-prop">
@@ -21,8 +39,12 @@ const PanelProperties: React.FC = () => {
                 <ListItem>
                     <TextField
                         id="borderStyle"
-                        value={"solid"}
+                        value={borderStyle}
                         label="Border Style"
+                        onChange={e => {
+                            setBorderStyle(e.target.value);
+                            newdo("editLayer", { index: selection, borderStyle: e.target.value });
+                        }}
                         select
                         fullWidth
                     >
@@ -49,10 +71,15 @@ const PanelProperties: React.FC = () => {
                         id="borderWidth"
                         name="borderWidth"
                         label="Border Width"
-                        type="number"
                         variant="outlined"
-                        value={1}
+                        value={borderWidth}
+                        onChange={onSetBorderWidth}
                         fullWidth
+                        onBlur={() => {
+                            if (selection !== -1) {
+                                newdo("editLayer", { index: selection, borderWidth });
+                            }
+                        }}
                     />
                 </ListItem>
                 <ListItem>
@@ -62,8 +89,14 @@ const PanelProperties: React.FC = () => {
                         label="Border Radius"
                         type="number"
                         variant="outlined"
-                        value={0}
+                        value={borderRadius}
+                        onChange={onSetBorderRadius}
                         fullWidth
+                        onBlur={() => {
+                            if (selection !== -1) {
+                                newdo("editLayer", { index: selection, borderRadius });
+                            }
+                        }}
                     />
                 </ListItem>
                 <ListItem>

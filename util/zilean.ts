@@ -271,3 +271,114 @@ export const createImage = async (image: FormData): Promise<ZileanResponse> => {
     }
     return data;
 };
+
+export const getStory = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/story/` + id, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    return await result.json();
+};
+
+export const deleteComic = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/comic/` + id, {
+        method: "DELETE",
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error Deleting Comic.",
+        };
+    }
+    return data;
+};
+
+export const deleteStory = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/story/` + id, {
+        method: "DELETE",
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error Deleting Story.",
+        };
+    }
+    return data;
+};
+
+export const publishComic = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/comic/publish/` + id, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error publishing comic.",
+        };
+    } else {
+        return data;
+    }
+};
+
+export const unpublishComic = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/comic/unpublish/` + id, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error unpublishing comic.",
+        };
+    } else {
+        return data;
+    }
+};
+
+export const publishStory = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/story/publish/` + id, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error publishing story.",
+        };
+    } else {
+        return data;
+    }
+};
+
+export const unpublishStory = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/story/unpublish/` + id, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error unpublishing story.",
+        };
+    } else {
+        return data;
+    }
+};
