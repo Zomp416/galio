@@ -21,13 +21,23 @@ const PanelProperties: React.FC = () => {
     const [borderWidth, setBorderWidth] = useState(0);
     const [borderRadius, setBorderRadius] = useState(0);
 
+    const onSetBorderStyle = (e: any) => {
+        setBorderStyle(e.target.value);
+        if (selection !== -1) newdo("editLayer", { index: selection, borderStyle: e.target.value });
+    };
     const onSetBorderWidth = (e: any) => {
-        const width = parseInt(e.target.value);
-        if (width) setBorderWidth(width > 100 ? 99 : width);
+        let width = parseInt(e.target.value);
+        if (isNaN(width)) width = 0;
+        if (width > 1000) width = 999;
+        setBorderWidth(width);
+        if (selection !== -1) newdo("editLayer", { index: selection, borderWidth: width });
     };
     const onSetBorderRadius = (e: any) => {
-        const radius = parseInt(e.target.value);
-        if (radius) setBorderRadius(radius > 100 ? 99 : radius);
+        let radius = parseInt(e.target.value);
+        if (isNaN(radius)) radius = 0;
+        if (radius > 1000) radius = 999;
+        setBorderRadius(radius);
+        if (selection !== -1) newdo("editLayer", { index: selection, borderRadius: radius });
     };
 
     return (
@@ -41,10 +51,7 @@ const PanelProperties: React.FC = () => {
                         id="borderStyle"
                         value={borderStyle}
                         label="Border Style"
-                        onChange={e => {
-                            setBorderStyle(e.target.value);
-                            newdo("editLayer", { index: selection, borderStyle: e.target.value });
-                        }}
+                        onChange={onSetBorderStyle}
                         select
                         fullWidth
                     >
@@ -75,11 +82,6 @@ const PanelProperties: React.FC = () => {
                         value={borderWidth}
                         onChange={onSetBorderWidth}
                         fullWidth
-                        onBlur={() => {
-                            if (selection !== -1) {
-                                newdo("editLayer", { index: selection, borderWidth });
-                            }
-                        }}
                     />
                 </ListItem>
                 <ListItem>
@@ -87,16 +89,10 @@ const PanelProperties: React.FC = () => {
                         id="borderRadius"
                         name="borderRadius"
                         label="Border Radius"
-                        type="number"
                         variant="outlined"
                         value={borderRadius}
                         onChange={onSetBorderRadius}
                         fullWidth
-                        onBlur={() => {
-                            if (selection !== -1) {
-                                newdo("editLayer", { index: selection, borderRadius });
-                            }
-                        }}
                     />
                 </ListItem>
                 <ListItem>
