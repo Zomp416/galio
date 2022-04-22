@@ -27,7 +27,27 @@ interface ResizeLayerOpArgs {
     y: number;
 }
 
-export type OpArgs = AddLayerOpArgs | DeleteLayerOpArgs | MoveLayerOpArgs | ResizeLayerOpArgs;
+interface EditLayerOpArgs {
+    index: number;
+    text?: string;
+    color?: string;
+    fontSize?: string;
+    fontWeight?: string;
+    fontStyle?: string;
+    textDecoration?: string;
+    backgroundColor?: string;
+    borderStyle?: string;
+    borderWidth?: string;
+    borderColor?: string;
+    borderRadius?: string;
+}
+
+export type OpArgs =
+    | AddLayerOpArgs
+    | DeleteLayerOpArgs
+    | MoveLayerOpArgs
+    | ResizeLayerOpArgs
+    | EditLayerOpArgs;
 
 const replaced = (layers: ILayer[], index: number, replacement: ILayer) => {
     return layers
@@ -87,6 +107,37 @@ export const resizeLayerOp = (args: OpArgs, setLayers: any, layers: any): Op => 
     res.y = y;
     res.width += dw;
     res.height += dh;
+    return {
+        redo: () => {
+            setLayers((ls: ILayer[]) => replaced(ls, index, res));
+        },
+        undo: () => {
+            setLayers((ls: ILayer[]) => replaced(ls, index, layers[index]));
+        },
+    };
+};
+
+// op for resizing a layer
+export const editLayerOp = (args: OpArgs, setLayers: any, layers: any): Op => {
+    const { index, ...style } = args as EditLayerOpArgs;
+    const { ...res } = layers[index];
+    const { ...properties } = res.properties;
+
+    // maybe there is a better way to do this
+    if (style.text) properties.text = style.text;
+    if (style.color) properties.color = style.color;
+    if (style.fontSize) properties.fontSize = style.fontSize;
+    if (style.fontWeight) properties.fontWeight = style.fontWeight;
+    if (style.fontStyle) properties.fontStyle = style.fontStyle;
+    if (style.textDecoration) properties.textDecoration = style.textDecoration;
+    if (style.backgroundColor) properties.backgroundColor = style.backgroundColor;
+    if (style.borderStyle) properties.borderStyle = style.borderStyle;
+    if (style.borderWidth) properties.borderWidth = style.borderWidth;
+    if (style.borderColor) properties.borderColor = style.borderColor;
+    if (style.borderRadius) properties.borderRadius = style.borderRadius;
+
+    res.properties = properties;
+
     return {
         redo: () => {
             setLayers((ls: ILayer[]) => replaced(ls, index, res));
