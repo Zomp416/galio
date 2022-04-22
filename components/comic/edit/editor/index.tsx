@@ -16,60 +16,64 @@ const Editor: React.FC = () => {
     const { layers, undo, redo } = useComicContext();
 
     useEffect(() => {
+        const handleKeyPress = (e: KeyboardEvent) => {
+            const commandKey = e.ctrlKey || e.metaKey; // Ctrl OR Cmd
+            if (!commandKey) return;
+
+            // Ctrl/Cmd + z (undo)
+            if (e.key === "z") {
+                e.preventDefault();
+                undo();
+                console.log("UNDO");
+            }
+            // Ctrl/Cmd + y (redo)
+            else if (e.key === "y") {
+                e.preventDefault();
+                console.log("REDO");
+                redo();
+            }
+            // Ctrl/Cmd + d (duplicate)
+            else if (e.key === "d") {
+                e.preventDefault();
+                // TODO DUPLICATE SELECTED ELEMENT
+                console.log("DUPLICATE");
+            }
+            // Ctrl/Cmd + s (save)
+            else if (e.key === "s") {
+                e.preventDefault();
+                // TODO SAVE COMIC
+                console.log("SAVE");
+            } else if (e.key === "ArrowUp") {
+                e.preventDefault();
+                // Ctrl/Cmd + Up + Shift (move to front)
+                if (e.shiftKey) {
+                    // TODO MOVE SELECTED LAYER
+                    console.log("MOVE TO FRONT");
+                }
+                // Ctrl/Cmd + Up (move up one)
+                else {
+                    // TODO MOVE SELECTED LAYER
+                    console.log("MOVE UP ONE");
+                }
+            } else if (e.key === "ArrowDown") {
+                e.preventDefault();
+                // Ctrl/Cmd + Down + Shift (move to bottom)
+                if (e.shiftKey) {
+                    // TODO MOVE SELECTED LAYER
+                    console.log("MOVE TO BOTTOM");
+                }
+                // Ctrl/Cmd + Down (move down one)
+                else {
+                    // TODO MOVE SELECTED LAYER
+                    console.log("MOVE DOWN ONE");
+                }
+            }
+        };
         document.addEventListener("keydown", handleKeyPress);
         return () => {
             document.removeEventListener("keydown", handleKeyPress);
         };
-    }, []);
-
-    const handleKeyPress = (e: KeyboardEvent) => {
-        const commandKey = e.ctrlKey || e.metaKey; // Ctrl OR Cmd
-        if (!commandKey) return;
-        e.preventDefault();
-
-        // Ctrl/Cmd + z (undo)
-        if (e.key === "z") {
-            console.log("UNDO");
-            undo();
-        }
-        // Ctrl/Cmd + y (redo)
-        else if (e.key === "y") {
-            console.log("REDO");
-            redo();
-        }
-        // Ctrl/Cmd + d (duplicate)
-        else if (e.key === "d") {
-            // TODO DUPLICATE SELECTED ELEMENT
-            console.log("DUPLICATE");
-        }
-        // Ctrl/Cmd + s (save)
-        else if (e.key === "s") {
-            // TODO SAVE COMIC
-            console.log("SAVE");
-        } else if (e.key === "ArrowUp") {
-            // Ctrl/Cmd + Up + Shift (move to front)
-            if (e.shiftKey) {
-                // TODO MOVE SELECTED LAYER
-                console.log("MOVE TO FRONT");
-            }
-            // Ctrl/Cmd + Up (move up one)
-            else {
-                // TODO MOVE SELECTED LAYER
-                console.log("MOVE UP ONE");
-            }
-        } else if (e.key === "ArrowDown") {
-            // Ctrl/Cmd + Down + Shift (move to bottom)
-            if (e.shiftKey) {
-                // TODO MOVE SELECTED LAYER
-                console.log("MOVE TO BOTTOM");
-            }
-            // Ctrl/Cmd + Down (move down one)
-            else {
-                // TODO MOVE SELECTED LAYER
-                console.log("MOVE DOWN ONE");
-            }
-        }
-    };
+    }, [undo, redo]);
 
     const generateBase = (layer: Record<any, any>, index: number) => {
         if (layer.type === "panel") {
