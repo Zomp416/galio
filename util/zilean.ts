@@ -289,3 +289,39 @@ export const deleteComic = async (id: string): Promise<ZileanResponse> => {
     }
     return data;
 };
+
+export const publishComic = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/comic/publish/` + id, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error publishing comic.",
+        };
+    } else {
+        return data;
+    }
+};
+
+export const unpublishComic = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/comic/unpublish/` + id, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error unpublishing comic.",
+        };
+    } else {
+        return data;
+    }
+};

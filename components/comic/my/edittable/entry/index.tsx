@@ -6,7 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Tooltip from "@mui/material/Tooltip";
-import { deleteComic } from "../../../../../util/zilean";
+import { publishComic, deleteComic } from "../../../../../util/zilean";
 
 import { useSelectionContext } from "../..";
 import * as Styled from "./styles";
@@ -26,6 +26,15 @@ const EditTable: React.FC<Comic> = props => {
     const onSelect = () => {
         if (props.index == selection) setSelection!(-1);
         else setSelection!(props.index);
+    };
+
+    const handlePublish = async (event: React.FormEvent) => {
+        event.preventDefault();
+        const data = await publishComic(props._id);
+        if (!data.error) {
+            //TODO swap to publish table or published comic
+            router.push({ pathname: "/comic/my/" });
+        }
     };
 
     const handleDelete = async (event: React.FormEvent) => {
@@ -53,8 +62,11 @@ const EditTable: React.FC<Comic> = props => {
                                 </Button>
                             </Tooltip>
                             <Tooltip title="Publish">
-                                {/* TODO: publish comic */}
-                                <Button>
+                                <Button
+                                    onClick={e => {
+                                        handlePublish(e);
+                                    }}
+                                >
                                     <CheckCircleIcon />
                                 </Button>
                             </Tooltip>

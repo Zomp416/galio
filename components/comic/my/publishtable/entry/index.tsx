@@ -6,7 +6,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import UnpublishedIcon from "@mui/icons-material/Unpublished";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Tooltip from "@mui/material/Tooltip";
-import { deleteComic } from "../../../../../util/zilean";
+import { unpublishComic, deleteComic } from "../../../../../util/zilean";
 
 import { useSelectionContext } from "../..";
 import * as Styled from "./styles";
@@ -27,6 +27,15 @@ const PublishTable: React.FC<Props> = props => {
     const onSelect = () => {
         if (props.index == selection) setSelection!(-1);
         else setSelection!(props.index);
+    };
+
+    const handleUnpublish = async (event: React.FormEvent) => {
+        event.preventDefault();
+        const data = await unpublishComic(props._id);
+        if (!data.error) {
+            //TODO swap to edit table or unpublished comic
+            router.push({ pathname: "/comic/my/" });
+        }
     };
 
     const handleDelete = async (event: React.FormEvent) => {
@@ -55,7 +64,11 @@ const PublishTable: React.FC<Props> = props => {
                             </Tooltip>
                             <Tooltip title="Unpublish">
                                 {/* TODO: unpublish comic */}
-                                <Button>
+                                <Button
+                                    onClick={e => {
+                                        handleUnpublish(e);
+                                    }}
+                                >
                                     <UnpublishedIcon />
                                 </Button>
                             </Tooltip>
