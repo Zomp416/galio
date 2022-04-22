@@ -275,3 +275,17 @@ export const getStory = async (id: string): Promise<ZileanResponse> => {
     });
     return await result.json();
 };
+
+export const deleteComic = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/comic/` + id, {
+        method: "DELETE",
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error Deleting Comic.",
+        };
+    }
+    return data;
+};

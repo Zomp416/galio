@@ -39,9 +39,6 @@ const MyComics: React.FC<ComicProps> = props => {
         }
     };
 
-    // TODO: after implementing create comics, add comic/publishedcomic here
-    // iterate thorugh comics2; and separate the pbulsiehd and unpublished
-
     return (
         <SelectionContext.Provider value={{ selection, setSelection }}>
             <Styled.MyComicsOuter className="outer">
@@ -57,7 +54,6 @@ const MyComics: React.FC<ComicProps> = props => {
                             <Styled.ToggleButton value="edit">Editing</Styled.ToggleButton>
                             <Styled.ToggleButton value="publish">Published</Styled.ToggleButton>
                         </Styled.ToggleButtonGroup>
-                        {/* TODO: create new comic to link */}
                         <Styled.EditButton
                             onClick={e => {
                                 handleCreate(e);
