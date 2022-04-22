@@ -220,6 +220,17 @@ export const sendEmail = async (route: string, email: string): Promise<ZileanRes
     }
 };
 
+export const getComic = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/comic/comicAuthor/` + id, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    return await result.json();
+};
+
 export const createComic = async (): Promise<ZileanResponse> => {
     const res = await fetch(`${zileanOrigin}/comic`, {
         method: "POST",
@@ -237,25 +248,8 @@ export const createComic = async (): Promise<ZileanResponse> => {
     return data;
 };
 
-export const createStory = async (): Promise<ZileanResponse> => {
-    const res = await fetch(`${zileanOrigin}/story`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        credentials: "include",
-    });
-    const data = await res.json();
-    if (!data || res.status !== 200) {
-        return {
-            error: "Error creating story.",
-        };
-    }
-    return data;
-};
-
-export const getComic = async (id: string): Promise<ZileanResponse> => {
-    const result = await fetch(`${zileanOrigin}/comic/` + id, {
+export const getUserProfilePicture = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/image/profilePicture/` + id, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -263,6 +257,36 @@ export const getComic = async (id: string): Promise<ZileanResponse> => {
         credentials: "include",
     });
     return await result.json();
+};
+
+export const getImage = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/image/` + id, {
+        method: "GET",
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data) {
+        return {
+            error: "Request to backend failed.",
+        };
+    } else {
+        return data;
+    }
+};
+
+export const createImage = async (image: FormData): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/image`, {
+        method: "POST",
+        body: image,
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error Creating Image.",
+        };
+    }
+    return data;
 };
 
 export const getStory = async (id: string): Promise<ZileanResponse> => {

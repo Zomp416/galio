@@ -12,13 +12,16 @@ import {
     Input,
 } from "@mui/material";
 import { useAuthContext } from "../../context/authcontext";
+import { useImageContext } from "../../context/imagecontext";
 import { update } from "../../util/zilean";
-import { deleteAccount } from "../../util/zilean";
+import { deleteAccount, createImage } from "../../util/zilean";
 
 //TODO import default values from context
 const Form: React.FC = () => {
     const router = useRouter();
     const { user } = useAuthContext();
+    const { image } = useImageContext();
+
     const defaultValues = {
         email: user?.email!,
         username: user?.username!,
@@ -27,29 +30,39 @@ const Form: React.FC = () => {
         confirmpassword: "",
         about: user?.about!,
         password: user?.password!,
+        profilePicture: image?._id,
     };
     const [formValues, setFormValues] = useState(defaultValues);
     const [error, setError] = useState(false);
+    const [imagePreview, setImagePreview] = useState("");
+    const [finalImage, setFinalImage] = useState<File>();
     const [modalPasswordOpen, setModalPasswordOpen] = useState<boolean>(false);
     const [modalDeleteOpen, setModalDeleteOpen] = useState<boolean>(false);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        // if (name === "profilePicture" && event.target.files!.length !== 0) {
-        //     setFormValues({
-        //         ...formValues,
-        //         [name]: URL.createObjectURL((event.target as HTMLInputElement).files![0]),
-        //     });
-        // } else {
-        setFormValues({
-            ...formValues,
-            [name]: value,
-        });
-        // }
+        if (name === "profilePicture" && event.target.files!.length !== 0) {
+            console.log(URL.createObjectURL(event.target.files![0]));
+            setImagePreview(URL.createObjectURL(event.target.files![0]));
+            setFinalImage(event.target.files![0]);
+        } else {
+            setFormValues({
+                ...formValues,
+                [name]: value,
+            });
+        }
     };
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
+        if (finalImage !== undefined) {
+            let formData = new FormData();
+            formData.append("image", finalImage!);
+            formData.append("directory", "avatars");
+            formData.append("name", finalImage!.name.split(".")[0]);
+            const { data } = await createImage(formData);
+            formValues.profilePicture = data._id;
+        }
         if (
             formValues.newpassword === "" &&
             formValues.confirmpassword === "" &&
@@ -115,12 +128,17 @@ const Form: React.FC = () => {
                 </Styled.SaveButton>
             </Styled.ButtonsContainer>
             <Styled.ProfilePictureContainer>
-                <Styled.AddNewImage></Styled.AddNewImage>
-                {/* {formValues.profilePicture === "" ? (
-                    <Styled.AddNewImage></Styled.AddNewImage>
+                {finalImage === undefined ? (
+                    image === null ? (
+                        <Styled.AddNewImage></Styled.AddNewImage>
+                    ) : (
+                        <Styled.Image
+                            src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + image?.imageURL}
+                        ></Styled.Image>
+                    )
                 ) : (
-                    <Styled.Image src={formValues.profilePicture}></Styled.Image>
-                )} */}
+                    <Styled.Image src={imagePreview}></Styled.Image>
+                )}
                 <label htmlFor="contained-button-file">
                     <Input
                         inputProps={{ accept: "image/*" }}

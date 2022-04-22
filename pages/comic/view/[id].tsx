@@ -3,51 +3,43 @@ import Head from "next/head";
 import ViewComic from "../../../components/comic/view";
 import Navbar from "../../../components/navbar";
 import { AuthProvider } from "../../../context/authcontext";
-import { getUserFromSession } from "../../../util/zilean";
+import { ImageProvider } from "../../../context/imagecontext";
+import { getUserFromSession, getComic, getUserFromID, getImage } from "../../../util/zilean";
+import { useRouter } from "next/router";
 
 interface Props {
     user: any;
+    comic: any;
+    comicAuthor: any;
+    comicImage: any;
 }
 
 const ViewComicPage: NextPage<Props> = props => {
     return (
         <>
             <Head>
-                <title>Comic Title</title>
+                <title>{props.comic.title}</title>
             </Head>
             <AuthProvider user={props.user}>
-                <Navbar domain="comics" />
-                <ViewComic />
+                <ImageProvider image={props.comicImage}>
+                    <Navbar domain="comics" />
+                    <ViewComic comic={props.comic} comicAuthor={props.comicAuthor} />
+                </ImageProvider>
             </AuthProvider>
         </>
     );
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-    //TODO REMOVE TEST COMIC
-    const testComic = {
-        _id: context.params?.id,
-        title: "Mason Ma is So Cool!",
-        description: "Here is my description",
-        tags: [],
-        renderedImage: "Types.ObjectId",
-        author: "Types.ObjectId",
-        layers: [],
-        views: 1056,
-        ratingTotal: 1000,
-        ratingCount: 300,
-        comments: [],
-        createdAt: "new Date()",
-        updatedAt: "new Date()",
-        publishedAt: "new Date()",
-    };
-
+    const comic = await getComic(context.params!.id!.toString());
     const result = await getUserFromSession(context.req.headers.cookie || "");
 
     return {
         props: {
-            comic: testComic,
+            comic: comic.data,
             user: result.data || null,
+            comicAuthor: comic.data?.author || null,
+            comicImage: comic.data?.renderedImage || null,
         },
     };
 };

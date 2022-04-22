@@ -13,51 +13,53 @@ import {
 } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 import * as Styled from "./styles";
+import { useImageContext } from "../../../context/imagecontext";
 
-const ViewComic: React.FC = () => {
+const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicAuthor }) => {
     const [comment, setComment] = useState<string>("");
+    const [tags, setTags] = useState<string[]>(comic.tags);
     const [rating, setRating] = useState<number | null>(4.5);
+    const { image } = useImageContext();
 
     return (
         <>
             <Styled.ViewComicContainer>
                 <Typography variant="h4" width={"100%"}>
-                    Comic Title
+                    {comic.title}
                 </Typography>
                 <Styled.TVContainer>
                     <Styled.TagsContainer>
-                        <Styled.Tag
-                            variant="contained"
-                            color="secondary"
-                            size="small"
-                            sx={{ textTransform: "none" }}
-                        >
-                            Comedy
-                        </Styled.Tag>
-                        <Styled.Tag
-                            variant="contained"
-                            color="secondary"
-                            size="small"
-                            sx={{ textTransform: "none" }}
-                        >
-                            College
-                        </Styled.Tag>
+                        {tags.map((val, index) => (
+                            <Styled.Tag
+                                key={`${index}-tag`}
+                                variant="contained"
+                                color="secondary"
+                                size="small"
+                                sx={{ textTransform: "none" }}
+                            >
+                                {val}
+                            </Styled.Tag>
+                        ))}
                     </Styled.TagsContainer>
                     <Styled.ViewContainer>
-                        <Typography variant="h6">1.7K Views</Typography>
+                        <Typography variant="h6">{comic.views + " Views"}</Typography>
                     </Styled.ViewContainer>
                 </Styled.TVContainer>
-                <Styled.ComicImage>Image</Styled.ComicImage>
+                <Styled.ComicImage
+                    src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + image?.imageURL}
+                ></Styled.ComicImage>
                 <Styled.ASSContainer>
                     <Styled.AuthorContainer>
                         <Styled.Avatar></Styled.Avatar>
                         <div>
-                            <Link href="/user/Mason37" passHref>
+                            <Link href={"/user/" + comicAuthor.username} passHref>
                                 <Typography variant="h4" component="a" color="black">
-                                    Mason37
+                                    {comicAuthor.username}
                                 </Typography>
                             </Link>
-                            <Typography variant="h6">1.4k Subscribers</Typography>
+                            <Typography variant="h6">
+                                {comicAuthor.subscriberCount + " Subscribers"}
+                            </Typography>
                         </div>
                     </Styled.AuthorContainer>
                     <Styled.SSContainer>
