@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Toolbar, IconButton } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import UndoIcon from "@mui/icons-material/Undo";
@@ -14,6 +14,62 @@ const Editor: React.FC = () => {
     const [zoom, setZoom] = useState<number>(1);
     const { setSelection, setTool } = useEditContext();
     const { layers, undo, redo } = useComicContext();
+
+    useEffect(() => {
+        document.addEventListener("keydown", handleKeyPress);
+        return () => {
+            document.removeEventListener("keydown", handleKeyPress);
+        };
+    }, []);
+
+    const handleKeyPress = (e: KeyboardEvent) => {
+        const commandKey = e.ctrlKey || e.metaKey; // Ctrl OR Cmd
+        if (!commandKey) return;
+        e.preventDefault();
+
+        // Ctrl/Cmd + z (undo)
+        if (e.key === "z") {
+            console.log("UNDO");
+            undo();
+        }
+        // Ctrl/Cmd + y (redo)
+        else if (e.key === "y") {
+            console.log("REDO");
+            redo();
+        }
+        // Ctrl/Cmd + d (duplicate)
+        else if (e.key === "d") {
+            // TODO DUPLICATE SELECTED ELEMENT
+            console.log("DUPLICATE");
+        }
+        // Ctrl/Cmd + s (save)
+        else if (e.key === "s") {
+            // TODO SAVE COMIC
+            console.log("SAVE");
+        } else if (e.key === "ArrowUp") {
+            // Ctrl/Cmd + Up + Shift (move to front)
+            if (e.shiftKey) {
+                // TODO MOVE SELECTED LAYER
+                console.log("MOVE TO FRONT");
+            }
+            // Ctrl/Cmd + Up (move up one)
+            else {
+                // TODO MOVE SELECTED LAYER
+                console.log("MOVE UP ONE");
+            }
+        } else if (e.key === "ArrowDown") {
+            // Ctrl/Cmd + Down + Shift (move to bottom)
+            if (e.shiftKey) {
+                // TODO MOVE SELECTED LAYER
+                console.log("MOVE TO BOTTOM");
+            }
+            // Ctrl/Cmd + Down (move down one)
+            else {
+                // TODO MOVE SELECTED LAYER
+                console.log("MOVE DOWN ONE");
+            }
+        }
+    };
 
     const generateBase = (layer: Record<any, any>, index: number) => {
         if (layer.type === "panel") {
