@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Toolbar, IconButton } from "@mui/material";
+import { Toolbar, IconButton, Menu, MenuItem } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
@@ -12,11 +12,23 @@ import { useEditContext } from "..";
 
 const Editor: React.FC = () => {
     const [zoom, setZoom] = useState<number>(1);
-    const { setSelection, setTool } = useEditContext();
-    const { layers, undo, redo } = useComicContext();
+    const [contextMenu, setContextMenu] = React.useState<{
+        mouseX: number;
+        mouseY: number;
+    } | null>(null);
+    const { selection, setSelection, setTool } = useEditContext();
+    const { layers, undo, redo, newdo } = useComicContext();
 
     useEffect(() => {
         const handleKeyPress = (e: KeyboardEvent) => {
+            if ((e.key === "Backspace" || e.key === "Delete") && selection !== -1) {
+                e.preventDefault();
+                e.stopPropagation();
+                newdo("deleteLayer", { index: selection });
+                console.log(`DELETE LAYER ${selection}`);
+                return;
+            }
+
             const commandKey = e.ctrlKey || e.metaKey; // Ctrl OR Cmd
             if (!commandKey) return;
 
@@ -73,7 +85,26 @@ const Editor: React.FC = () => {
         return () => {
             document.removeEventListener("keydown", handleKeyPress);
         };
-    }, [undo, redo]);
+    }, [undo, redo, newdo, selection]);
+
+    const handleContextMenu = (event: React.MouseEvent) => {
+        event.preventDefault();
+        setContextMenu(
+            contextMenu === null
+                ? {
+                      mouseX: event.clientX - 2,
+                      mouseY: event.clientY - 4,
+                  }
+                : // repeated contextmenu when it is already open closes it with Chrome 84 on Ubuntu
+                  // Other native context menus might behave different.
+                  // With this behavior we prevent contextmenu from the backdrop to re-locale existing context menus.
+                  null
+        );
+    };
+
+    const handleClose = () => {
+        setContextMenu(null);
+    };
 
     const generateBase = (layer: Record<any, any>, index: number) => {
         if (layer.type === "panel") {
@@ -86,6 +117,7 @@ const Editor: React.FC = () => {
                         width: "100%",
                         height: "100%",
                     }}
+                    onContextMenu={handleContextMenu}
                 ></div>
             );
         } else if (layer.type === "text") {
@@ -98,6 +130,7 @@ const Editor: React.FC = () => {
                         width: "100%",
                         height: "100%",
                     }}
+                    onContextMenu={handleContextMenu}
                 >
                     {layer.properties.text}
                 </div>
@@ -115,6 +148,7 @@ const Editor: React.FC = () => {
                         ...layer.properties,
                         zIndex: index,
                     }}
+                    onContextMenu={handleContextMenu}
                 />
             );
         } else {
@@ -140,6 +174,25 @@ const Editor: React.FC = () => {
                 zoom={zoom}
             >
                 {generateBase(layer, index)}
+                <Menu
+                    open={contextMenu !== null}
+                    onClose={handleClose}
+                    anchorReference="anchorPosition"
+                    anchorPosition={
+                        contextMenu !== null
+                            ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
+                            : undefined
+                    }
+                >
+                    <MenuItem onClick={handleClose}>Duplicate Layer (Ctrl/Cmd + D)</MenuItem>
+                    <MenuItem onClick={handleClose}>Send Backwards (Ctrl/Cmd + Down)</MenuItem>
+                    <MenuItem onClick={handleClose}>
+                        Send to Bottom (Ctrl/Cmd + Shift + Down)
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>Send Forwards (Ctrl/Cmd + Up)</MenuItem>
+                    <MenuItem onClick={handleClose}>Send to Front (Ctrl/Cmd + Shift + Up)</MenuItem>
+                    <MenuItem onClick={handleClose}>Delete Layer (Delete)</MenuItem>
+                </Menu>
             </Layer>
         );
     };
