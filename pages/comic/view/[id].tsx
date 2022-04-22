@@ -33,7 +33,6 @@ const ViewComicPage: NextPage<Props> = props => {
 export const getServerSideProps: GetServerSideProps = async context => {
     const comic = await getComic(context.params!.id!.toString());
     const result = await getUserFromSession(context.req.headers.cookie || "");
-    console.log(comic.data);
 
     return {
         props: {

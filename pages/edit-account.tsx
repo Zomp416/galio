@@ -4,7 +4,7 @@ import Navbar from "../components/navbar";
 import EditAccount from "../components/edit-account";
 import { AuthProvider } from "../context/authcontext";
 import { ImageProvider } from "../context/imagecontext";
-import { getUserFromSession, getImage } from "../util/zilean";
+import { getUserFromSession, getUserProfilePicture } from "../util/zilean";
 
 interface Props {
     user: any;
@@ -29,17 +29,12 @@ const EditAccountPage: NextPage<Props> = props => {
 
 export const getServerSideProps: GetServerSideProps = async context => {
     const result = await getUserFromSession(context.req.headers.cookie || "");
-    const result2 =
-        result.data.profilePicture !== undefined
-            ? await (
-                  await getImage(result.data.profilePicture)
-              ).data
-            : "";
+    const result2 = await getUserProfilePicture(result.data._id);
 
     return {
         props: {
             user: result.data || null,
-            profilePicture: result2 || null,
+            profilePicture: result2.data.profilePicture || null,
         },
     };
 };
