@@ -17,7 +17,7 @@ const Editor: React.FC = () => {
         mouseY: number;
     } | null>(null);
     const { selection, setSelection, setTool } = useEditContext();
-    const { layers, undo, redo, newdo } = useComicContext();
+    const { layers, undo, redo, newdo, canUndo, canRedo, canSave } = useComicContext();
 
     useEffect(() => {
         const handleKeyPress = (e: KeyboardEvent) => {
@@ -218,8 +218,8 @@ const Editor: React.FC = () => {
                 }}
             >
                 <Toolbar>
-                    <IconButton size="medium" color="inherit" sx={{ mr: 2 }}>
-                        <SaveIcon />*
+                    <IconButton size="medium" color="inherit" sx={{ mr: 2 }} disabled={!canSave}>
+                        <SaveIcon /> {canSave && "*"}
                     </IconButton>
                     <IconButton
                         size="medium"
@@ -227,6 +227,7 @@ const Editor: React.FC = () => {
                         color="inherit"
                         sx={{ mr: 2 }}
                         onClick={undo}
+                        disabled={!canUndo}
                     >
                         <UndoIcon />
                     </IconButton>
@@ -236,6 +237,7 @@ const Editor: React.FC = () => {
                         color="inherit"
                         sx={{ mr: 2 }}
                         onClick={redo}
+                        disabled={!canRedo}
                     >
                         <RedoIcon />
                     </IconButton>
