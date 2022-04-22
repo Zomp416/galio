@@ -15,16 +15,16 @@ const Actions: React.FC = () => {
     return (
         <Styled.Widebar>
             <Title />
-            {tool === "title" ? <TitleProperties /> : <></>}
+            {tool === "title" && <TitleProperties />}
             {tool === "image" && <ImageProperties />}
-            {tool === "text" ? <TextProperties /> : <></>}
+            {tool === "text" && <TextProperties />}
             {tool === "panel" && (
                 <>
                     <PanelActions />
                     <PanelProperties />
                 </>
             )}
-            {tool === "title" || tool === "tags" ? <></> : <GeneralProperties />}
+            {tool === "title" || tool === "tags" || <GeneralProperties />}
         </Styled.Widebar>
     );
 };
