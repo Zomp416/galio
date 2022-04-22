@@ -5,6 +5,8 @@ import moment from "moment";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import UnpublishedIcon from "@mui/icons-material/Unpublished";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Tooltip from "@mui/material/Tooltip";
+import { unpublishStory, deleteStory } from "../../../../../util/zilean";
 
 import { useSelectionContext } from "../..";
 import * as Styled from "./styles";
@@ -27,6 +29,24 @@ const PublishTable: React.FC<Props> = props => {
         else setSelection!(props.index);
     };
 
+    const handleUnpublish = async (event: React.FormEvent) => {
+        event.preventDefault();
+        const data = await unpublishStory(props._id);
+        if (!data.error) {
+            //TODO swap to edit table or unpublished comic
+            router.push({ pathname: "/story/my/" });
+        }
+    };
+
+    const handleDelete = async (event: React.FormEvent) => {
+        event.preventDefault();
+        //TODO implement popup to confirm deletion
+        const data = await deleteStory(props._id);
+        if (!data.error) {
+            router.push({ pathname: "/story/my/" });
+        }
+    };
+
     return (
         <>
             <TableRow onClick={onSelect}>
@@ -37,15 +57,29 @@ const PublishTable: React.FC<Props> = props => {
                 <TableCell style={{ width: "1px", whiteSpace: "nowrap" }}>
                     <Grow in={selection === props.index}>
                         <Styled.Menu>
-                            <Button onClick={() => router.push(`/story/view/${props._id}`)}>
-                                <VisibilityIcon />
-                            </Button>
-                            <Button>
-                                <UnpublishedIcon />
-                            </Button>
-                            <Button>
-                                <DeleteIcon />
-                            </Button>
+                            <Tooltip title="View">
+                                <Button onClick={() => router.push(`/story/view/${props._id}`)}>
+                                    <VisibilityIcon />
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title="Unpublish">
+                                <Button
+                                    onClick={e => {
+                                        handleUnpublish(e);
+                                    }}
+                                >
+                                    <UnpublishedIcon />
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title="Delete">
+                                <Button
+                                    onClick={e => {
+                                        handleDelete(e);
+                                    }}
+                                >
+                                    <DeleteIcon />
+                                </Button>
+                            </Tooltip>
                         </Styled.Menu>
                     </Grow>
                 </TableCell>

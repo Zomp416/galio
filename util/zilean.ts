@@ -219,3 +219,159 @@ export const sendEmail = async (route: string, email: string): Promise<ZileanRes
         return data;
     }
 };
+
+export const createComic = async (): Promise<ZileanResponse> => {
+    const res = await fetch(`${zileanOrigin}/comic`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    const data = await res.json();
+    if (!data || res.status !== 200) {
+        return {
+            error: "Error creating comic.",
+        };
+    }
+    return data;
+};
+
+export const createStory = async (): Promise<ZileanResponse> => {
+    const res = await fetch(`${zileanOrigin}/story`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    const data = await res.json();
+    if (!data || res.status !== 200) {
+        return {
+            error: "Error creating story.",
+        };
+    }
+    return data;
+};
+
+export const getComic = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/comic/` + id, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    return await result.json();
+};
+
+export const getStory = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/story/` + id, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    return await result.json();
+};
+
+export const deleteComic = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/comic/` + id, {
+        method: "DELETE",
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error Deleting Comic.",
+        };
+    }
+    return data;
+};
+
+export const deleteStory = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/story/` + id, {
+        method: "DELETE",
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error Deleting Story.",
+        };
+    }
+    return data;
+};
+
+export const publishComic = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/comic/publish/` + id, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error publishing comic.",
+        };
+    } else {
+        return data;
+    }
+};
+
+export const unpublishComic = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/comic/unpublish/` + id, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error unpublishing comic.",
+        };
+    } else {
+        return data;
+    }
+};
+
+export const publishStory = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/story/publish/` + id, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error publishing story.",
+        };
+    } else {
+        return data;
+    }
+};
+
+export const unpublishStory = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/story/unpublish/` + id, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error unpublishing story.",
+        };
+    } else {
+        return data;
+    }
+};

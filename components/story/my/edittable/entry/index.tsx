@@ -5,6 +5,8 @@ import moment from "moment";
 import EditIcon from "@mui/icons-material/Edit";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Tooltip from "@mui/material/Tooltip";
+import { publishStory, deleteStory } from "../../../../../util/zilean";
 
 import { useSelectionContext } from "../..";
 import * as Styled from "./styles";
@@ -26,6 +28,24 @@ const EditTable: React.FC<Story> = props => {
         else setSelection!(props.index);
     };
 
+    const handlePublish = async (event: React.FormEvent) => {
+        event.preventDefault();
+        const data = await publishStory(props._id);
+        if (!data.error) {
+            //TODO swap to publish table or published comic
+            router.push({ pathname: "/story/my/" });
+        }
+    };
+
+    const handleDelete = async (event: React.FormEvent) => {
+        event.preventDefault();
+        //TODO implement popup to confirm deletion
+        const data = await deleteStory(props._id);
+        if (!data.error) {
+            router.push({ pathname: "/story/my/" });
+        }
+    };
+
     return (
         <>
             <TableRow onClick={onSelect}>
@@ -36,15 +56,29 @@ const EditTable: React.FC<Story> = props => {
                 <TableCell style={{ width: "1px", whiteSpace: "nowrap" }}>
                     <Grow in={selection === props.index}>
                         <Styled.Menu>
-                            <Button onClick={() => router.push(`/story/edit/${props._id}`)}>
-                                <EditIcon />
-                            </Button>
-                            <Button>
-                                <CheckCircleIcon />
-                            </Button>
-                            <Button>
-                                <DeleteIcon />
-                            </Button>
+                            <Tooltip title="Edit">
+                                <Button onClick={() => router.push(`/story/edit/${props._id}`)}>
+                                    <EditIcon />
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title="Publish">
+                                <Button
+                                    onClick={e => {
+                                        handlePublish(e);
+                                    }}
+                                >
+                                    <CheckCircleIcon />
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title="Delete">
+                                <Button
+                                    onClick={e => {
+                                        handleDelete(e);
+                                    }}
+                                >
+                                    <DeleteIcon />
+                                </Button>
+                            </Tooltip>
                         </Styled.Menu>
                     </Grow>
                 </TableCell>

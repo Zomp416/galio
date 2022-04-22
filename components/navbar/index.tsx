@@ -5,6 +5,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useRouter } from "next/router";
 import { logout } from "../../util/zilean";
 import { useAuthContext } from "../../context/authcontext";
+import { createComic } from "../../util/zilean";
 
 interface NavbarProps {
     domain: string;
@@ -17,7 +18,6 @@ interface NavbarLink {
 }
 
 //TODO make search not show up on all pages!
-const newId = 123; //TODO: replace once we connect with backend; initialize a new id for comic that does not exist yet
 
 const Navbar: React.FC<NavbarProps> = props => {
     //Get user context to determine if the user is logged in
@@ -50,9 +50,19 @@ const Navbar: React.FC<NavbarProps> = props => {
         console.log(searchBy);
     };
 
+    //Used to create comics/stories
+    const handleCreateComic = async () => {
+        //event.preventDefault(); having event prevents it from being a input in onclick
+        const data = await createComic();
+        if (!data.error) {
+            router.push({ pathname: "/comic/edit/" + data.data._id });
+        }
+    };
+
     const loggedInComicsSettings: NavbarLink[] = [
-        { display: "Start New Comic", url: "/comic/edit/" + newId },
+        { display: "Start New Comic", onClick: handleCreateComic },
         { display: "My Comics", url: "/comic/my" },
+        { display: "Visit Stories", url: "/story/hub" },
         { display: "My Profile", url: "/user/" + (user ? user?.username : "N/A") },
         { display: "Account Settings", url: "/edit-account" },
         { display: "Log Out", onClick: handleLogout },
@@ -60,6 +70,7 @@ const Navbar: React.FC<NavbarProps> = props => {
     const loggedInStoriesSettings: NavbarLink[] = [
         { display: "Start New Story", url: "/story/create-new-story" },
         { display: "My Stories", url: "/story/my" },
+        { display: "Visit Comics", url: "/comic/hub" },
         { display: "My Profile", url: "/user/" + (user ? user?.username : "N/A") },
         { display: "Account Settings", url: "/edit-account" },
         { display: "Log Out", onClick: handleLogout },
@@ -86,6 +97,8 @@ const Navbar: React.FC<NavbarProps> = props => {
         ) : (
             ""
         );
+    var link =
+        props.domain == "comics" ? "comic/hub" : props.domain == "stories" ? "story/hub" : "";
 
     //Used to display the appropiate menu (Guest, LoggedInComics, LoggedInStories, PostLogin)
     var settings: NavbarLink[] = loggedIn
@@ -116,7 +129,7 @@ const Navbar: React.FC<NavbarProps> = props => {
                     padding: "0 15px",
                 }}
             >
-                <IconButton href="/" component="a" sx={{ padding: "0" }}>
+                <IconButton href={"/" + link} component="a" sx={{ padding: "0" }}>
                     <Image src="/zomplight.svg" alt="Zomp Icon" width={100} height={40} />
                     {logo}
                 </IconButton>
@@ -147,7 +160,7 @@ const Navbar: React.FC<NavbarProps> = props => {
                             <Avatar />
                         </IconButton>
                         <Menu
-                            sx={{ mt: "45px" }}
+                            sx={{ mt: "40px" }}
                             id="menu-appbar"
                             anchorEl={anchorElUser}
                             anchorOrigin={{

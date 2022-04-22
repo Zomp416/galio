@@ -4,42 +4,12 @@ import { Typography } from "@mui/material";
 import * as Styled from "./styles";
 import EditTable from "./edittable";
 import PublishTable from "./publishtable";
+import AddIcon from "@mui/icons-material/Add";
 
-// TODO: remove later
-// TODO: TA comment to make icons more intuitive
-const now = new Date();
-const stories = [
-    {
-        _id: "a1",
-        title: "Taquitos",
-        splashURL:
-            "https://gimmedelicious.com/wp-content/uploads/2019/11/chicken-taquitos-feature-1.jpg",
-        updatedAt: new Date(now.getTime() - 300000000),
-        publishedAt: new Date(now.getTime() - 600000000),
-        rating: 3.4,
-        views: 567,
-    },
-    {
-        _id: "a2",
-        title: "Crewmate",
-        splashURL:
-            "https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/crewmate-indra-tirto.jpg",
-        updatedAt: new Date(now.getTime() - 90000000),
-        publishedAt: new Date(now.getTime() - 200000000),
-        rating: 4.3,
-        views: 210,
-    },
-    {
-        _id: "a3",
-        title: "League of Legends",
-        splashURL:
-            "https://static.wikia.nocookie.net/leagueoflegends/images/3/34/Featherknight_PenguSkin.jpg",
-        updatedAt: new Date(now.getTime() - 10000000),
-        publishedAt: new Date(now.getTime() - 50000000),
-        rating: 4.8,
-        views: 101,
-    },
-];
+interface StoryProps {
+    published: any[];
+    unpublished: any[];
+}
 
 interface ISelectionContext {
     selection: number;
@@ -48,7 +18,7 @@ interface ISelectionContext {
 
 const SelectionContext = createContext<ISelectionContext>({ selection: -1 });
 
-const MyStories: React.FC = () => {
+const MyStories: React.FC<StoryProps> = props => {
     const [filter, setFilter] = useState("edit");
     const [selection, setSelection] = useState(-1);
 
@@ -72,11 +42,15 @@ const MyStories: React.FC = () => {
                             <Styled.ToggleButton value="edit">Editing</Styled.ToggleButton>
                             <Styled.ToggleButton value="publish">Published</Styled.ToggleButton>
                         </Styled.ToggleButtonGroup>
+                        <Styled.EditButton href="/story/create-new-story">
+                            <Typography>New Story</Typography>
+                            <AddIcon />
+                        </Styled.EditButton>
                     </Styled.MyStoriesHeader>
                     {filter === "edit" ? (
-                        <EditTable stories={stories} />
+                        <EditTable stories={props.unpublished} />
                     ) : (
-                        <PublishTable stories={stories} />
+                        <PublishTable stories={props.published} />
                     )}
                 </Styled.MyStoriesInner>
             </Styled.MyStoriesOuter>
