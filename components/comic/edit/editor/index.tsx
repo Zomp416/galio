@@ -12,7 +12,7 @@ import { useEditContext } from "..";
 
 const Editor: React.FC = () => {
     const [zoom, setZoom] = useState<number>(1);
-    const { setSelection } = useEditContext();
+    const { setSelection, setTool } = useEditContext();
     const { layers, undo, redo } = useComicContext();
 
     const generateBase = (layer: Record<any, any>, index: number) => {
@@ -140,6 +140,7 @@ const Editor: React.FC = () => {
                     console.log("Selected Index: -1");
                     e.preventDefault();
                     setSelection!(-1);
+                    setTool!("");
                 }}
                 style={{
                     transform: `scale(${zoom})`,

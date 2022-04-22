@@ -11,7 +11,7 @@ interface Props {
 
 const Layer: React.FC<Props> = props => {
     const { layer, index, zoom } = props;
-    const { selection, setSelection } = useEditContext();
+    const { selection, setSelection, setTool } = useEditContext();
     const { newdo } = useComicContext();
 
     const onRndDragStop: RndDragCallback = (e, data) => {
@@ -71,7 +71,8 @@ const Layer: React.FC<Props> = props => {
                 console.log(`Selected Index: ${index}`);
                 e.stopPropagation();
                 e.preventDefault();
-                setSelection(index);
+                setSelection!(index);
+                setTool!(layer.type);
             }}
             onDragStart={e => e.stopPropagation()}
             onDragStop={onRndDragStop}
