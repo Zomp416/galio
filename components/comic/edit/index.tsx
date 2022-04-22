@@ -4,18 +4,21 @@ import Widebar from "./widebar";
 import Editor from "./editor";
 import * as Styled from "./styles";
 
-interface IToolContext {
+interface IEditContext {
     tool: string;
     setTool?: React.Dispatch<React.SetStateAction<string>>;
+    selection: number;
+    setSelection?: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const ToolContext = createContext<IToolContext>({ tool: "" });
+const EditContext = createContext<IEditContext>({ tool: "", selection: -1 });
 
 const EditComic: React.FC = () => {
     const [tool, setTool] = useState("");
+    const [selection, setSelection] = useState(-1);
 
     return (
-        <ToolContext.Provider value={{ tool, setTool }}>
+        <EditContext.Provider value={{ tool, setTool, selection, setSelection }}>
             <Styled.EditorOuter>
                 <Styled.EditorInner>
                     <Toolbar />
@@ -23,10 +26,10 @@ const EditComic: React.FC = () => {
                     <Editor />
                 </Styled.EditorInner>
             </Styled.EditorOuter>
-        </ToolContext.Provider>
+        </EditContext.Provider>
     );
 };
 
-export const useToolContext = () => useContext(ToolContext);
+export const useEditContext = () => useContext(EditContext);
 
 export default EditComic;

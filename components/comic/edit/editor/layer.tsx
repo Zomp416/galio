@@ -1,18 +1,17 @@
 import React from "react";
 import { Rnd, RndResizeCallback, RndDragCallback } from "react-rnd";
 import { useComicContext } from "../../../../context/comiccontext";
-import * as Styled from "./styles";
+import { useEditContext } from "..";
 
 interface Props {
     layer: Record<any, any>;
     index: number;
-    selected: boolean;
-    setSelected: React.Dispatch<React.SetStateAction<number>>;
     zoom: number;
 }
 
 const Layer: React.FC<Props> = props => {
-    const { layer, index, selected, setSelected, zoom } = props;
+    const { layer, index, zoom } = props;
+    const { selection, setSelection } = useEditContext();
     const { newdo } = useComicContext();
 
     const onRndDragStop: RndDragCallback = (e, data) => {
@@ -53,7 +52,7 @@ const Layer: React.FC<Props> = props => {
             }}
             position={{ x: layer.x, y: layer.y }}
             enableResizing={
-                selected
+                selection === index
                     ? {
                           top: true,
                           right: true,
@@ -66,13 +65,13 @@ const Layer: React.FC<Props> = props => {
                       }
                     : {}
             }
-            disableDragging={!selected}
+            disableDragging={selection !== index}
             scale={zoom}
             onMouseDown={e => {
                 console.log(`Selected Index: ${index}`);
                 e.stopPropagation();
                 e.preventDefault();
-                setSelected(index);
+                setSelection(index);
             }}
             onDragStart={e => e.stopPropagation()}
             onDragStop={onRndDragStop}

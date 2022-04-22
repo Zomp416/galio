@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography } from "@mui/material";
-import { useToolContext } from "..";
+import { useEditContext } from "..";
 
 const title = (tool: string) => {
     switch (tool) {
@@ -20,7 +20,7 @@ const title = (tool: string) => {
 };
 
 const Title: React.FC = () => {
-    const { tool } = useToolContext();
+    const { tool } = useEditContext();
 
     return (
         <div style={{ width: "100%", textAlign: "center", padding: "10px" }}>
