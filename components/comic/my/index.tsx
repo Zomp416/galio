@@ -6,43 +6,12 @@ import * as Styled from "./styles";
 import EditTable from "./edittable";
 import PublishTable from "./publishtable";
 import AddIcon from "@mui/icons-material/Add";
-import { useAuthContext } from "../../../context/authcontext";
 import { createComic } from "../../../util/zilean";
 
-// TODO: remove later
-const now = new Date();
-const comics = [
-    {
-        _id: "a1",
-        title: "Taquitos",
-        splashURL:
-            "https://gimmedelicious.com/wp-content/uploads/2019/11/chicken-taquitos-feature-1.jpg",
-        updatedAt: new Date(now.getTime() - 300000000),
-        publishedAt: new Date(now.getTime() - 600000000),
-        rating: 3.4,
-        views: 567,
-    },
-    {
-        _id: "a2",
-        title: "Crewmate",
-        splashURL:
-            "https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/crewmate-indra-tirto.jpg",
-        updatedAt: new Date(now.getTime() - 90000000),
-        publishedAt: new Date(now.getTime() - 200000000),
-        rating: 4.3,
-        views: 210,
-    },
-    {
-        _id: "a3",
-        title: "League of Legends",
-        splashURL:
-            "https://static.wikia.nocookie.net/leagueoflegends/images/3/34/Featherknight_PenguSkin.jpg",
-        updatedAt: new Date(now.getTime() - 10000000),
-        publishedAt: new Date(now.getTime() - 50000000),
-        rating: 4.8,
-        views: 101,
-    },
-];
+interface ComicProps {
+    published: any[];
+    unpublished: any[];
+}
 
 interface ISelectionContext {
     selection: number;
@@ -51,10 +20,8 @@ interface ISelectionContext {
 
 const SelectionContext = createContext<ISelectionContext>({ selection: -1 });
 
-const MyComics: React.FC = () => {
-    const { user } = useAuthContext();
+const MyComics: React.FC<ComicProps> = props => {
     const router = useRouter();
-    // TODO: after implementing create comics, add comic/publishedcomic here
 
     const [filter, setFilter] = useState("edit");
     const [selection, setSelection] = useState(-1);
@@ -71,6 +38,9 @@ const MyComics: React.FC = () => {
             router.push({ pathname: "/comic/edit/" + data.data._id });
         }
     };
+
+    // TODO: after implementing create comics, add comic/publishedcomic here
+    // iterate thorugh comics2; and separate the pbulsiehd and unpublished
 
     return (
         <SelectionContext.Provider value={{ selection, setSelection }}>
@@ -98,9 +68,9 @@ const MyComics: React.FC = () => {
                         </Styled.EditButton>
                     </Styled.MyComicsHeader>
                     {filter === "edit" ? (
-                        <EditTable comics={comics} />
+                        <EditTable comics={props.unpublished} />
                     ) : (
-                        <PublishTable comics={comics} />
+                        <PublishTable comics={props.published} />
                     )}
                 </Styled.MyComicsInner>
             </Styled.MyComicsOuter>

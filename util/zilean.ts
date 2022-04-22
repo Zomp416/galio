@@ -253,3 +253,25 @@ export const createStory = async (): Promise<ZileanResponse> => {
     }
     return data;
 };
+
+export const getComic = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/comic/` + id, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    return await result.json();
+};
+
+export const getStory = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/story/` + id, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    return await result.json();
+};
