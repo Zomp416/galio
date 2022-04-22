@@ -21,6 +21,9 @@ const PanelProperties: React.FC = () => {
     const [borderWidth, setBorderWidth] = useState(0);
     const [borderRadius, setBorderRadius] = useState(0);
 
+    const [borderColor, setBorderColor] = useState("#000000");
+    const [backgroundColor, setBackgroundColor] = useState("#000000");
+
     const onSetBorderStyle = (e: any) => {
         setBorderStyle(e.target.value);
         if (selection !== -1) newdo("editLayer", { index: selection, borderStyle: e.target.value });
@@ -38,6 +41,15 @@ const PanelProperties: React.FC = () => {
         if (radius > 1000) radius = 999;
         setBorderRadius(radius);
         if (selection !== -1) newdo("editLayer", { index: selection, borderRadius: radius });
+    };
+    const onSetBorderColor = (color: any) => {
+        setBorderColor(color);
+        if (selection !== -1) newdo("editLayer", { index: selection, borderColor: `${color.hex}` });
+    };
+    const onSetBackgroundColor = (color: any) => {
+        setBackgroundColor(color);
+        if (selection !== -1)
+            newdo("editLayer", { index: selection, backgroundColor: `${color.hex}` });
     };
 
     return (
@@ -99,13 +111,13 @@ const PanelProperties: React.FC = () => {
                     <Typography variant="h6">Border Color: #000000</Typography>
                 </ListItem>
                 <ListItem sx={{ paddingTop: "0" }}>
-                    <SketchPicker color={"000000"} />
+                    <SketchPicker color={borderColor} onChange={onSetBorderColor} />
                 </ListItem>
                 <ListItem>
                     <Typography variant="h6">Background Color: #000000</Typography>
                 </ListItem>
                 <ListItem sx={{ paddingTop: "0" }}>
-                    <SketchPicker color={"000000"} />
+                    <SketchPicker color={backgroundColor} onChange={onSetBackgroundColor} />
                 </ListItem>
             </List>
         </Accordion>
