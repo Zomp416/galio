@@ -5,6 +5,7 @@ import Navbar from "../../../components/navbar";
 import { AuthProvider } from "../../../context/authcontext";
 import { ImageProvider } from "../../../context/imagecontext";
 import { getUserFromSession, getComic, getUserFromID, getImage } from "../../../util/zilean";
+import { useRouter } from "next/router";
 
 interface Props {
     user: any;
@@ -31,21 +32,15 @@ const ViewComicPage: NextPage<Props> = props => {
 
 export const getServerSideProps: GetServerSideProps = async context => {
     const comic = await getComic(context.params!.id!.toString());
-    const comicAuthor = await getUserFromID(comic.data.author.toString());
     const result = await getUserFromSession(context.req.headers.cookie || "");
-    const result2 =
-        comic.data.renderedImage !== undefined
-            ? await (
-                  await getImage(comic.data.renderedImage)
-              ).data
-            : "";
+    console.log(comic.data);
 
     return {
         props: {
             comic: comic.data,
             user: result.data || null,
-            comicAuthor: comicAuthor.data,
-            comicImage: result2 || "",
+            comicAuthor: comic.data?.author || null,
+            comicImage: comic.data?.renderedImage || null,
         },
     };
 };

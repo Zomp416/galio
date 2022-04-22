@@ -221,7 +221,7 @@ export const sendEmail = async (route: string, email: string): Promise<ZileanRes
 };
 
 export const getComic = async (id: string): Promise<ZileanResponse> => {
-    const result = await fetch(`${zileanOrigin}/comic/` + id, {
+    const result = await fetch(`${zileanOrigin}/comic/comicAuthor/` + id, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -231,7 +231,17 @@ export const getComic = async (id: string): Promise<ZileanResponse> => {
     return await result.json();
 };
 
-//LOOK INTO MONGOOSE.POPULATE
+export const getUserProfilePicture = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/image/profilePicture/` + id, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    return await result.json();
+};
+
 export const getImage = async (id: string): Promise<ZileanResponse> => {
     const result = await fetch(`${zileanOrigin}/image/` + id, {
         method: "GET",
