@@ -75,7 +75,7 @@ export const deleteLayerOp = (args: OpArgs, setLayers: any, layers: ILayer[]): O
     const removed = layers[index];
     return {
         redo: () => {
-            setLayers((ls: ILayer[]) => ls.slice(0, index).concat(ls.slice(index + 1)));
+            setLayers((ls: ILayer[]) => ls.filter((val, i) => i !== index));
         },
         undo: () => {
             setLayers((ls: ILayer[]) => ls.slice(0, index).concat(removed).concat(ls.slice(index)));

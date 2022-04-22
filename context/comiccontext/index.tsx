@@ -17,6 +17,9 @@ interface IComicContext {
     newdo: (...args: any) => void;
     undo: () => void;
     redo: () => void;
+    canUndo: boolean;
+    canRedo: boolean;
+    canSave: boolean;
 }
 
 const ComicContext = createContext<IComicContext>({
@@ -25,6 +28,9 @@ const ComicContext = createContext<IComicContext>({
     newdo: () => {},
     undo: () => {},
     redo: () => {},
+    canUndo: false,
+    canRedo: false,
+    canSave: false,
 });
 
 export const ComicProvider: React.FC<{ init_comic?: IComic }> = ({ children, init_comic }) => {
@@ -73,7 +79,18 @@ export const ComicProvider: React.FC<{ init_comic?: IComic }> = ({ children, ini
     }, [history]);
 
     return (
-        <ComicContext.Provider value={{ comic, layers, newdo, undo, redo }}>
+        <ComicContext.Provider
+            value={{
+                comic,
+                layers,
+                newdo,
+                undo,
+                redo,
+                canUndo: pos !== 0,
+                canRedo: pos !== history.length,
+                canSave: history.length !== 0,
+            }}
+        >
             {children}
         </ComicContext.Provider>
     );
