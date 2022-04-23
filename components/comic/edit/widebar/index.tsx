@@ -10,7 +10,7 @@ import { useEditContext } from "..";
 import PanelActions from "./actions/panel";
 
 const Actions: React.FC = () => {
-    const { tool } = useEditContext();
+    const { tool, selection } = useEditContext();
 
     return (
         <Styled.Widebar>
@@ -24,7 +24,7 @@ const Actions: React.FC = () => {
                     <PanelProperties />
                 </>
             )}
-            {tool === "title" || tool === "tags" || <GeneralProperties />}
+            {selection !== -1 && <GeneralProperties />}
         </Styled.Widebar>
     );
 };
