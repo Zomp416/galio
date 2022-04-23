@@ -9,12 +9,18 @@ import {
     AccordionSummary,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { createImage } from "../../../../../util/zilean";
 
 const ImageUploadProperties: React.FC = () => {
     const [upload, setUpload] = useState<File>();
 
     const doUpload = async () => {
-        console.log("uploading image");
+        let form = new FormData();
+        form.append("image", upload!);
+        form.append("directory", "assets");
+        form.append("name", upload!.name.split(".")[0]);
+        const { data, error } = await createImage(form);
+        if (error) alert(error);
     };
 
     return (
