@@ -1,4 +1,4 @@
-import { ILayer } from "./model";
+import { ILayer, IComic } from "./model";
 
 export interface Op {
     redo: () => void;
@@ -55,6 +55,16 @@ interface EditLayerOpArgs {
     borderWidth?: string;
     borderColor?: string;
     borderRadius?: string;
+}
+
+interface EditComicOpArgs {
+    squish?: string;
+    title?: string;
+    description?: string;
+    coverArt?: {
+        imageURL: string;
+    };
+    tags?: [];
 }
 
 export type OpArgs =
@@ -243,6 +253,21 @@ export const editLayerOp = (args: OpArgs, setLayers: any, layer: ILayer): Op => 
         },
         undo: () => {
             setLayers((ls: ILayer[]) => replaced(ls, index, layer));
+        },
+    };
+};
+
+export const editComicOp = (args: OpArgs, setComic: any, comic: IComic): Op => {
+    const comicArgs = args as EditComicOpArgs;
+
+    return {
+        redo: () => {
+            setComic((c: IComic) => {
+                return { ...c, ...comicArgs };
+            });
+        },
+        undo: () => {
+            setComic(comic);
         },
     };
 };

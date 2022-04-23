@@ -10,6 +10,7 @@ import {
     resizeLayerOp,
     editLayerOp,
     shiftLayerOp,
+    editComicOp,
 } from "./ops";
 
 interface IComicContext {
@@ -58,6 +59,22 @@ export const ComicProvider: React.FC<{ init_comic?: IComic }> = ({ children, ini
             op = editLayerOp(args, setLayers, layer!);
             if (squishing === (args as any).squish) {
                 op = editLayerOp(args, setLayers, layer!);
+                op.undo = history[pos - 1].undo;
+                setHistory(history.slice(0, pos - 1).concat(op));
+                op.redo();
+            } else {
+                setHistory(history.slice(0, pos).concat(op));
+                op.redo();
+                setPos(pos => pos + 1);
+                setSquishing((args as any).squish);
+            }
+            op = undefined;
+        }
+
+        if (type === "editComic") {
+            op = editComicOp(args, setComic, comic!);
+            if (squishing === (args as any).squish) {
+                op = editComicOp(args, setComic, comic!);
                 op.undo = history[pos - 1].undo;
                 setHistory(history.slice(0, pos - 1).concat(op));
                 op.redo();

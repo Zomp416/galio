@@ -40,7 +40,10 @@ export interface ILayer {
 export interface IComic {
     title: string;
     description?: string;
-    // tags: string[];
+    coverArt?: {
+        imageURL: string;
+    };
+    tags: string[];
     // renderedImage: objectId;
     // author: objectId;
     layers: ILayer[];
