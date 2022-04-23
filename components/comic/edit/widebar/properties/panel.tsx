@@ -12,17 +12,23 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { SketchPicker } from "react-color";
 import { useEditContext } from "../..";
 import { useComicContext } from "../../../../../context/comiccontext";
+import { IPanelProperties } from "../../../../../context/comiccontext/model";
 
 const PanelProperties: React.FC = () => {
     const { selection } = useEditContext();
-    const { newdo } = useComicContext();
+    const { newdo, layers } = useComicContext();
 
-    const [borderStyle, setBorderStyle] = useState("solid");
-    const [borderWidth, setBorderWidth] = useState(0);
-    const [borderRadius, setBorderRadius] = useState(0);
+    const properties =
+        selection === -1 ? undefined : (layers[selection]?.properties as IPanelProperties);
 
-    const [borderColor, setBorderColor] = useState("#000000");
-    const [backgroundColor, setBackgroundColor] = useState("#000000");
+    const [borderStyle, setBorderStyle] = useState(properties ? properties.borderStyle : "solid");
+    const [borderWidth, setBorderWidth] = useState(properties ? properties.borderWidth : 0);
+    const [borderRadius, setBorderRadius] = useState(properties ? properties.borderRadius : 0);
+
+    const [borderColor, setBorderColor] = useState(properties ? properties.borderColor : "#000000");
+    const [backgroundColor, setBackgroundColor] = useState(
+        properties ? properties.backgroundColor : "#000000"
+    );
 
     const onSetBorderStyle = (e: any) => {
         setBorderStyle(e.target.value);
