@@ -13,6 +13,7 @@ interface Props {
 const myComic = {
     title: "taquito",
     description: "im on a ta-'quito diet'",
+    tags: [],
     layers: [
         {
             type: "panel",

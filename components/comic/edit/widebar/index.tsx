@@ -6,6 +6,7 @@ import GeneralProperties from "./properties/general";
 import TextProperties from "./properties/text";
 import PanelProperties from "./properties/panel";
 import ImageProperties from "./properties/image";
+import TagProperties from "./properties/tags";
 import { useEditContext } from "..";
 import PanelActions from "./actions/panel";
 
@@ -18,13 +19,14 @@ const Actions: React.FC = () => {
             {tool === "title" && <TitleProperties />}
             {tool === "image" && <ImageProperties />}
             {tool === "text" && <TextProperties />}
+            {tool === "tags" && <TagProperties />}
             {tool === "panel" && (
                 <>
                     <PanelActions />
                     <PanelProperties />
                 </>
             )}
-            {selection !== -1 && <GeneralProperties />}
+            {selection !== -1 && tool !== "title" && tool !== "tags" && <GeneralProperties />}
         </Styled.Widebar>
     );
 };
