@@ -131,6 +131,8 @@ const Editor: React.FC = () => {
                         zIndex: index,
                         width: "100%",
                         height: "100%",
+                        WebkitTransform: `rotate(${layer.rotation}deg) 
+                             scale(${layer.xFlip ? "-1" : "1"}, ${layer.yFlip ? "-1" : "1"})`,
                     }}
                     onContextMenu={handleContextMenu}
                 ></div>
@@ -144,6 +146,8 @@ const Editor: React.FC = () => {
                         zIndex: index,
                         width: "100%",
                         height: "100%",
+                        WebkitTransform: `rotate(${layer.rotation}deg) 
+                             scale(${layer.xFlip ? "-1" : "1"}, ${layer.yFlip ? "-1" : "1"})`,
                     }}
                     onContextMenu={handleContextMenu}
                 >
@@ -162,6 +166,8 @@ const Editor: React.FC = () => {
                     style={{
                         ...layer.properties,
                         zIndex: index,
+                        WebkitTransform: `rotate(${layer.rotation}deg) 
+                             scale(${layer.xFlip ? "-1" : "1"}, ${layer.yFlip ? "-1" : "1"})`,
                     }}
                     onContextMenu={handleContextMenu}
                 />
@@ -173,6 +179,8 @@ const Editor: React.FC = () => {
                     style={{
                         ...layer.properties,
                         zIndex: index,
+                        WebkitTransform: `rotate(${layer.rotation}deg) 
+                             scale(${layer.xFlip ? "-1" : "1"}, ${layer.yFlip ? "-1" : "1"})`,
                     }}
                 ></div>
             );
