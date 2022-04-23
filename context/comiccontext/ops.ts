@@ -27,6 +27,11 @@ interface ResizeLayerOpArgs {
     y: number;
 }
 
+interface ShiftLayerOpArgs {
+    index: number;
+    dir: "top" | "bottom" | "back" | "forward";
+}
+
 interface EditLayerOpArgs {
     name: string;
     visible: boolean;
@@ -56,7 +61,8 @@ export type OpArgs =
     | DeleteLayerOpArgs
     | MoveLayerOpArgs
     | ResizeLayerOpArgs
-    | EditLayerOpArgs;
+    | EditLayerOpArgs
+    | ShiftLayerOpArgs;
 
 const replaced = (layers: ILayer[], index: number, replacement: ILayer) => {
     return layers
@@ -105,6 +111,101 @@ export const moveLayerOp = (args: OpArgs, setLayers: any, layers: any): Op => {
         undo: () => {
             setLayers((ls: ILayer[]) => replaced(ls, index, layers[index]));
         },
+    };
+};
+
+// op for shifting a layer
+export const shiftLayerOp = (args: OpArgs, setLayers: any, layers: ILayer[]): Op => {
+    const { index, dir } = args as ShiftLayerOpArgs;
+    const removed = layers[index];
+    if (dir === "bottom") {
+        return {
+            redo: () => {
+                setLayers((ls: ILayer[]) => {
+                    const temp = ls.filter((val, i) => i !== index);
+                    temp.unshift(removed);
+                    return temp;
+                });
+            },
+            undo: () => {
+                setLayers((ls: ILayer[]) => {
+                    const first = ls.shift();
+                    if (first) {
+                        return ls.slice(0, index).concat(removed).concat(ls.slice(index));
+                    }
+                    return ls;
+                });
+            },
+        };
+    } else if (dir === "top") {
+        return {
+            redo: () => {
+                setLayers((ls: ILayer[]) => ls.filter((val, i) => i !== index).concat(removed));
+            },
+            undo: () => {
+                setLayers((ls: ILayer[]) => {
+                    const first = ls.pop();
+                    if (first) {
+                        return ls.slice(0, index).concat(removed).concat(ls.slice(index));
+                    }
+                    return ls;
+                });
+            },
+        };
+    } else if (dir === "back") {
+        return {
+            redo: () => {
+                if (index !== 0) {
+                    setLayers((ls: ILayer[]) => {
+                        const newLayers = [...ls];
+                        const temp = newLayers[index];
+                        newLayers[index] = newLayers[index - 1];
+                        newLayers[index - 1] = temp;
+                        return newLayers;
+                    });
+                }
+            },
+            undo: () => {
+                if (index !== 0) {
+                    setLayers((ls: ILayer[]) => {
+                        const newLayers = [...ls];
+                        const temp = newLayers[index];
+                        newLayers[index] = newLayers[index - 1];
+                        newLayers[index - 1] = temp;
+                        return newLayers;
+                    });
+                }
+            },
+        };
+    } else if (dir === "forward") {
+        return {
+            redo: () => {
+                if (index !== layers.length - 1) {
+                    setLayers((ls: ILayer[]) => {
+                        const newLayers = [...ls];
+                        const temp = newLayers[index];
+                        newLayers[index] = newLayers[index + 1];
+                        newLayers[index + 1] = temp;
+                        return newLayers;
+                    });
+                }
+            },
+            undo: () => {
+                if (index !== layers.length - 1) {
+                    setLayers((ls: ILayer[]) => {
+                        const newLayers = [...ls];
+                        const temp = newLayers[index];
+                        newLayers[index] = newLayers[index + 1];
+                        newLayers[index + 1] = temp;
+                        return newLayers;
+                    });
+                }
+            },
+        };
+    }
+    return {
+        redo: () => {},
+        undo: () => {},
     };
 };
 

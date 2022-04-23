@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import Toolbar from "./toolbar";
 import Widebar from "./widebar";
 import Editor from "./editor";

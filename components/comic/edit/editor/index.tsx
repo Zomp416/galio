@@ -47,8 +47,13 @@ const Editor: React.FC = () => {
             // Ctrl/Cmd + d (duplicate)
             else if (e.key === "d") {
                 e.preventDefault();
-                // TODO DUPLICATE SELECTED ELEMENT
-                console.log("DUPLICATE");
+                if (selection >= 0) {
+                    console.log("DUPLICATE");
+                    const newLayer = { ...layers[selection] };
+                    newLayer.x += 15;
+                    newLayer.y += 15;
+                    newdo("addLayer", { layer: newLayer });
+                }
             }
             // Ctrl/Cmd + s (save)
             else if (e.key === "s") {
@@ -59,25 +64,33 @@ const Editor: React.FC = () => {
                 e.preventDefault();
                 // Ctrl/Cmd + Up + Shift (move to front)
                 if (e.shiftKey) {
-                    // TODO MOVE SELECTED LAYER
-                    console.log("MOVE TO FRONT");
+                    if (selection >= 0 && selection < layers.length - 1) {
+                        console.log("MOVE TO FRONT");
+                        newdo("shiftLayer", { index: selection, dir: "top" });
+                    }
                 }
                 // Ctrl/Cmd + Up (move up one)
                 else {
-                    // TODO MOVE SELECTED LAYER
-                    console.log("MOVE UP ONE");
+                    if (selection >= 0 && selection < layers.length - 1) {
+                        console.log("MOVE UP ONE");
+                        newdo("shiftLayer", { index: selection, dir: "top" });
+                    }
                 }
             } else if (e.key === "ArrowDown") {
                 e.preventDefault();
                 // Ctrl/Cmd + Down + Shift (move to bottom)
                 if (e.shiftKey) {
-                    // TODO MOVE SELECTED LAYER
-                    console.log("MOVE TO BOTTOM");
+                    if (selection > 0) {
+                        console.log("MOVE TO BOTTOM");
+                        newdo("shiftLayer", { index: selection, dir: "bottom" });
+                    }
                 }
                 // Ctrl/Cmd + Down (move down one)
                 else {
-                    // TODO MOVE SELECTED LAYER
-                    console.log("MOVE DOWN ONE");
+                    if (selection > 0) {
+                        console.log("MOVE DOWN ONE");
+                        newdo("shiftLayer", { index: selection, dir: "back" });
+                    }
                 }
             }
         };
@@ -174,25 +187,6 @@ const Editor: React.FC = () => {
                 zoom={zoom}
             >
                 {generateBase(layer, index)}
-                <Menu
-                    open={contextMenu !== null}
-                    onClose={handleClose}
-                    anchorReference="anchorPosition"
-                    anchorPosition={
-                        contextMenu !== null
-                            ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
-                            : undefined
-                    }
-                >
-                    <MenuItem onClick={handleClose}>Duplicate Layer (Ctrl/Cmd + D)</MenuItem>
-                    <MenuItem onClick={handleClose}>Send Backwards (Ctrl/Cmd + Down)</MenuItem>
-                    <MenuItem onClick={handleClose}>
-                        Send to Bottom (Ctrl/Cmd + Shift + Down)
-                    </MenuItem>
-                    <MenuItem onClick={handleClose}>Send Forwards (Ctrl/Cmd + Up)</MenuItem>
-                    <MenuItem onClick={handleClose}>Send to Front (Ctrl/Cmd + Shift + Up)</MenuItem>
-                    <MenuItem onClick={handleClose}>Delete Layer (Delete)</MenuItem>
-                </Menu>
             </Layer>
         );
     };
@@ -252,10 +246,13 @@ const Editor: React.FC = () => {
             <Styled.EditContainer
                 className="editorSpace"
                 onMouseDown={e => {
-                    console.log("Selected Index: -1");
-                    e.preventDefault();
-                    setSelection!(-1);
-                    setTool!("");
+                    const name = (e.target as HTMLElement).className;
+                    if (name && name.includes("editorSpace")) {
+                        console.log("Selected Index: -1");
+                        e.preventDefault();
+                        setSelection!(-1);
+                        setTool!("");
+                    }
                 }}
                 style={{
                     transform: `scale(${zoom})`,
@@ -266,6 +263,79 @@ const Editor: React.FC = () => {
                         return renderLayer(val, index);
                     }
                 })}
+                <Menu
+                    open={contextMenu !== null}
+                    onClose={handleClose}
+                    anchorReference="anchorPosition"
+                    anchorPosition={
+                        contextMenu !== null
+                            ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
+                            : undefined
+                    }
+                >
+                    <MenuItem
+                        onClick={() => {
+                            if (selection >= 0) {
+                                const newLayer = { ...layers[selection] };
+                                newLayer.x += 15;
+                                newLayer.y += 15;
+                                newdo("addLayer", { layer: newLayer });
+                                handleClose();
+                            }
+                        }}
+                    >
+                        Duplicate Layer (Ctrl/Cmd + D)
+                    </MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            if (selection > 0) {
+                                newdo("shiftLayer", { index: selection, dir: "back" });
+                                handleClose();
+                            }
+                        }}
+                    >
+                        Send Backwards (Ctrl/Cmd + Down)
+                    </MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            if (selection > 0) {
+                                newdo("shiftLayer", { index: selection, dir: "bottom" });
+                                handleClose();
+                            }
+                        }}
+                    >
+                        Send to Bottom (Ctrl/Cmd + Shift + Down)
+                    </MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            if (selection >= 0 && selection < layers.length - 1) {
+                                newdo("shiftLayer", { index: selection, dir: "forward" });
+                                handleClose();
+                            }
+                        }}
+                    >
+                        Send Forwards (Ctrl/Cmd + Up)
+                    </MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            if (selection >= 0 && selection < layers.length - 1) {
+                                console.log(`Shifting Index ${selection}`);
+                                newdo("shiftLayer", { index: selection, dir: "top" });
+                                handleClose();
+                            }
+                        }}
+                    >
+                        Send to Front (Ctrl/Cmd + Shift + Up)
+                    </MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            newdo("deleteLayer", { index: selection });
+                            handleClose();
+                        }}
+                    >
+                        Delete Layer (Delete)
+                    </MenuItem>
+                </Menu>
             </Styled.EditContainer>
         </div>
     );
