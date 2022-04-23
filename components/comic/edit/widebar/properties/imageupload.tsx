@@ -9,10 +9,12 @@ import {
     AccordionSummary,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useComicContext } from "../../../../../context/comiccontext";
 import { createImage } from "../../../../../util/zilean";
 
 const ImageUploadProperties: React.FC = () => {
     const [upload, setUpload] = useState<File>();
+    const { newdo } = useComicContext();
 
     const doUpload = async () => {
         let form = new FormData();
@@ -21,12 +23,29 @@ const ImageUploadProperties: React.FC = () => {
         form.append("name", upload!.name.split(".")[0]);
         const { data, error } = await createImage(form);
         if (error) alert(error);
+        newdo("addLayer", {
+            layer: {
+                type: "image",
+                name: "Image Layer",
+                x: 0,
+                y: 0,
+                width: 200,
+                height: 200,
+                rotation: 0,
+                xFlip: false,
+                yFlip: false,
+                visible: true,
+                properties: {
+                    imageURL: "https://zomp-media.s3.us-east-1.amazonaws.com/" + data.imageURL,
+                },
+            },
+        });
     };
 
     return (
         <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />} id="general-prop">
-                <Typography fontWeight="bold">ImageUpload</Typography>
+                <Typography fontWeight="bold">Image Upload</Typography>
             </AccordionSummary>
             <List>
                 {upload && (
