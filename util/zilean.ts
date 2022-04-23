@@ -280,13 +280,7 @@ export const createImage = async (image: FormData): Promise<ZileanResponse> => {
         body: image,
         credentials: "include",
     });
-    const data = await result.json();
-    if (!data || result.status !== 200) {
-        return {
-            error: "Error Creating Image.",
-        };
-    }
-    return data;
+    return await result.json();
 };
 
 export const getStory = async (id: string): Promise<ZileanResponse> => {

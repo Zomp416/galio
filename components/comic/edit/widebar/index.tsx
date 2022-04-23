@@ -5,7 +5,8 @@ import TitleProperties from "./properties/title";
 import GeneralProperties from "./properties/general";
 import TextProperties from "./properties/text";
 import PanelProperties from "./properties/panel";
-import ImageProperties from "./properties/image";
+import ImageUploadProperties from "./properties/imageupload";
+import ImageSearchProperties from "./properties/imagesearch";
 import { useEditContext } from "..";
 import PanelActions from "./actions/panel";
 
@@ -16,7 +17,12 @@ const Actions: React.FC = () => {
         <Styled.Widebar>
             <Title />
             {tool === "title" && <TitleProperties />}
-            {tool === "image" && <ImageProperties />}
+            {tool === "image" && (
+                <>
+                    <ImageUploadProperties />
+                    <ImageSearchProperties />
+                </>
+            )}
             {tool === "text" && <TextProperties />}
             {tool === "panel" && (
                 <>

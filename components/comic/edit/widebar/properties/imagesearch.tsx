@@ -1,9 +1,19 @@
-import React from "react";
-import { TextField, Typography, List, ListItem, Accordion, AccordionSummary } from "@mui/material";
+import React, { useState } from "react";
+import {
+    Button,
+    TextField,
+    Typography,
+    List,
+    ListItem,
+    Accordion,
+    AccordionSummary,
+} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import debounce from "lodash.debounce";
 
-const ImageProperties: React.FC = () => {
+const ImageSearchProperties: React.FC = () => {
+    const [upload, setUpload] = useState<File>();
+
     const doDebouncedSearch = debounce(query => {
         console.log("triggered search ", query);
     }, 800);
@@ -11,7 +21,7 @@ const ImageProperties: React.FC = () => {
     return (
         <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />} id="general-prop">
-                <Typography fontWeight="bold">Image Properties</Typography>
+                <Typography fontWeight="bold">Image Search</Typography>
             </AccordionSummary>
             <List>
                 <ListItem>
@@ -28,4 +38,4 @@ const ImageProperties: React.FC = () => {
     );
 };
 
-export default ImageProperties;
+export default ImageSearchProperties;
