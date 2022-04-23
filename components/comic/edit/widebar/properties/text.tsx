@@ -35,24 +35,45 @@ const TextProperties: React.FC = () => {
         if (size < 10) size = 10;
         if (size > 1000) size = 999;
         setFontSize(size);
-        if (selection !== -1) newdo("editLayer", { index: selection, fontSize: size });
+        if (selection !== -1)
+            newdo("editLayer", {
+                index: selection,
+                squish: "fontSize",
+                fontSize: size,
+            });
     };
     const onSetFontWeight = (e: any) => {
         setFontWeight(e.target.value);
-        if (selection !== -1) newdo("editLayer", { index: selection, fontWeight: e.target.value });
+        if (selection !== -1)
+            newdo("editLayer", {
+                index: selection,
+                fontWeight: e.target.value,
+            });
     };
     const onSetFontStyle = (e: any) => {
         setFontStyle(e.target.value);
-        if (selection !== -1) newdo("editLayer", { index: selection, fontStyle: e.target.value });
+        if (selection !== -1)
+            newdo("editLayer", {
+                index: selection,
+                fontStyle: e.target.value,
+            });
     };
     const onSetTextDecoration = (e: any) => {
         setTextDecoration(e.target.value);
         if (selection !== -1)
-            newdo("editLayer", { index: selection, textDecoration: e.target.value });
+            newdo("editLayer", {
+                index: selection,
+                textDecoration: e.target.value,
+            });
     };
     const onSetColor = (color_: any) => {
         setColor(color_);
-        if (selection !== -1) newdo("editLayer", { index: selection, color: `${color_.hex}` });
+        if (selection !== -1)
+            newdo("editLayer", {
+                index: selection,
+                squish: "color",
+                color: `${color_.hex}`,
+            });
     };
 
     return (
@@ -78,7 +99,6 @@ const TextProperties: React.FC = () => {
                         id="fontSize"
                         name="fontSize"
                         label="Font Size"
-                        type="number"
                         variant="outlined"
                         value={fontSize}
                         onChange={onSetFontSize}
@@ -140,7 +160,7 @@ const TextProperties: React.FC = () => {
                     <Typography variant="h6">Color: #000000</Typography>
                 </ListItem>
                 <ListItem sx={{ paddingTop: "0" }}>
-                    <SketchPicker color={"000000"} />
+                    <SketchPicker color={color} onChange={onSetColor} />
                 </ListItem>
             </List>
         </Accordion>
