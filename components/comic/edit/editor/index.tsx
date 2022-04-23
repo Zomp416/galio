@@ -21,6 +21,8 @@ const Editor: React.FC = () => {
 
     useEffect(() => {
         const handleKeyPress = (e: KeyboardEvent) => {
+            if ((e.target as HTMLElement).tagName === "INPUT") return;
+
             if ((e.key === "Backspace" || e.key === "Delete") && selection !== -1) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -251,6 +253,7 @@ const Editor: React.FC = () => {
             </div>
             <Styled.EditContainer
                 className="editorSpace"
+                id="canvas"
                 onMouseDown={e => {
                     console.log("Selected Index: -1");
                     e.preventDefault();
