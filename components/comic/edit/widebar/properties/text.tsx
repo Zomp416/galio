@@ -12,17 +12,23 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { SketchPicker } from "react-color";
 import { useEditContext } from "../..";
 import { useComicContext } from "../../../../../context/comiccontext";
+import { ITextProperties } from "../../../../../context/comiccontext/model";
 
 const TextProperties: React.FC = () => {
     const { selection } = useEditContext();
-    const { newdo } = useComicContext();
+    const { newdo, layers } = useComicContext();
 
-    const [text, setText] = useState("i liek taqiutos");
-    const [fontSize, setFontSize] = useState(16);
-    const [fontWeight, setFontWeight] = useState("normal");
-    const [fontStyle, setFontStyle] = useState("normal");
-    const [textDecoration, setTextDecoration] = useState("none");
-    const [color, setColor] = useState("#000000");
+    const properties =
+        selection === -1 ? undefined : (layers[selection]?.properties as ITextProperties);
+
+    const [text, setText] = useState(properties ? properties.text : "");
+    const [fontSize, setFontSize] = useState(properties ? properties.fontSize : 16);
+    const [fontWeight, setFontWeight] = useState(properties ? properties.fontWeight : "normal");
+    const [fontStyle, setFontStyle] = useState(properties ? properties.fontStyle : "normal");
+    const [textDecoration, setTextDecoration] = useState(
+        properties ? properties.textDecoration : "none"
+    );
+    const [color, setColor] = useState(properties ? properties.color : "#000000");
 
     const onSetText = (e: any) => {
         setText(e.target.value);
@@ -35,24 +41,45 @@ const TextProperties: React.FC = () => {
         if (size < 10) size = 10;
         if (size > 1000) size = 999;
         setFontSize(size);
-        if (selection !== -1) newdo("editLayer", { index: selection, fontSize: size });
+        if (selection !== -1)
+            newdo("editLayer", {
+                index: selection,
+                squish: "fontSize",
+                fontSize: size,
+            });
     };
     const onSetFontWeight = (e: any) => {
         setFontWeight(e.target.value);
-        if (selection !== -1) newdo("editLayer", { index: selection, fontWeight: e.target.value });
+        if (selection !== -1)
+            newdo("editLayer", {
+                index: selection,
+                fontWeight: e.target.value,
+            });
     };
     const onSetFontStyle = (e: any) => {
         setFontStyle(e.target.value);
-        if (selection !== -1) newdo("editLayer", { index: selection, fontStyle: e.target.value });
+        if (selection !== -1)
+            newdo("editLayer", {
+                index: selection,
+                fontStyle: e.target.value,
+            });
     };
     const onSetTextDecoration = (e: any) => {
         setTextDecoration(e.target.value);
         if (selection !== -1)
-            newdo("editLayer", { index: selection, textDecoration: e.target.value });
+            newdo("editLayer", {
+                index: selection,
+                textDecoration: e.target.value,
+            });
     };
     const onSetColor = (color_: any) => {
         setColor(color_);
-        if (selection !== -1) newdo("editLayer", { index: selection, color: `${color_.hex}` });
+        if (selection !== -1)
+            newdo("editLayer", {
+                index: selection,
+                squish: "color",
+                color: `${color_.hex}`,
+            });
     };
 
     return (
@@ -78,7 +105,6 @@ const TextProperties: React.FC = () => {
                         id="fontSize"
                         name="fontSize"
                         label="Font Size"
-                        type="number"
                         variant="outlined"
                         value={fontSize}
                         onChange={onSetFontSize}
@@ -140,7 +166,7 @@ const TextProperties: React.FC = () => {
                     <Typography variant="h6">Color: #000000</Typography>
                 </ListItem>
                 <ListItem sx={{ paddingTop: "0" }}>
-                    <SketchPicker color={"000000"} />
+                    <SketchPicker color={color} onChange={onSetColor} />
                 </ListItem>
             </List>
         </Accordion>

@@ -33,16 +33,17 @@ interface ShiftLayerOpArgs {
 }
 
 interface EditLayerOpArgs {
-    name: string;
-    visible: boolean;
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    rotation: number;
-    xFlip: boolean;
-    yFlip: boolean;
     index: number;
+    squish?: string;
+    name?: string;
+    visible?: boolean;
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
+    rotation?: number;
+    xFlip?: boolean;
+    yFlip?: boolean;
     text?: string;
     color?: string;
     fontSize?: string;
@@ -85,23 +86,22 @@ export const addLayerOp = (args: OpArgs, setLayers: any): Op => {
 };
 
 // op for deleting a layer
-export const deleteLayerOp = (args: OpArgs, setLayers: any, layers: ILayer[]): Op => {
+export const deleteLayerOp = (args: OpArgs, setLayers: any, layer: ILayer): Op => {
     const index = (args as DeleteLayerOpArgs).index;
-    const removed = layers[index];
     return {
         redo: () => {
             setLayers((ls: ILayer[]) => ls.filter((val, i) => i !== index));
         },
         undo: () => {
-            setLayers((ls: ILayer[]) => ls.slice(0, index).concat(removed).concat(ls.slice(index)));
+            setLayers((ls: ILayer[]) => ls.slice(0, index).concat(layer).concat(ls.slice(index)));
         },
     };
 };
 
 // op for deleteing a layer
-export const moveLayerOp = (args: OpArgs, setLayers: any, layers: any): Op => {
+export const moveLayerOp = (args: OpArgs, setLayers: any, layer: ILayer): Op => {
     const { index, x, y } = args as MoveLayerOpArgs;
-    const { ...res } = layers[index];
+    const { ...res } = layer;
     res.x = x;
     res.y = y;
     return {
@@ -109,7 +109,7 @@ export const moveLayerOp = (args: OpArgs, setLayers: any, layers: any): Op => {
             setLayers((ls: ILayer[]) => replaced(ls, index, res));
         },
         undo: () => {
-            setLayers((ls: ILayer[]) => replaced(ls, index, layers[index]));
+            setLayers((ls: ILayer[]) => replaced(ls, index, layer));
         },
     };
 };
@@ -210,9 +210,9 @@ export const shiftLayerOp = (args: OpArgs, setLayers: any, layers: ILayer[]): Op
 };
 
 // op for resizing a layer
-export const resizeLayerOp = (args: OpArgs, setLayers: any, layers: any): Op => {
+export const resizeLayerOp = (args: OpArgs, setLayers: any, layer: ILayer): Op => {
     const { index, dw, dh, x, y } = args as ResizeLayerOpArgs;
-    const { ...res } = layers[index];
+    const { ...res } = layer;
     res.x = x;
     res.y = y;
     res.width += dw;
@@ -222,19 +222,19 @@ export const resizeLayerOp = (args: OpArgs, setLayers: any, layers: any): Op => 
             setLayers((ls: ILayer[]) => replaced(ls, index, res));
         },
         undo: () => {
-            setLayers((ls: ILayer[]) => replaced(ls, index, layers[index]));
+            setLayers((ls: ILayer[]) => replaced(ls, index, layer));
         },
     };
 };
 
 // op for resizing a layer
-export const editLayerOp = (args: OpArgs, setLayers: any, layers: any): Op => {
+export const editLayerOp = (args: OpArgs, setLayers: any, layer: ILayer): Op => {
     const { index, ...properties } = args as EditLayerOpArgs;
 
     const res = {
-        ...layers[index],
+        ...layer,
         ...properties,
-        properties: { ...layers[index].properties, ...properties },
+        properties: { ...layer.properties, ...properties },
     };
 
     return {
@@ -242,7 +242,7 @@ export const editLayerOp = (args: OpArgs, setLayers: any, layers: any): Op => {
             setLayers((ls: ILayer[]) => replaced(ls, index, res));
         },
         undo: () => {
-            setLayers((ls: ILayer[]) => replaced(ls, index, layers[index]));
+            setLayers((ls: ILayer[]) => replaced(ls, index, layer));
         },
     };
 };
