@@ -4,13 +4,16 @@ import EditComic from "../../../components/comic/edit";
 import Navbar from "../../../components/navbar";
 import { AuthProvider } from "../../../context/authcontext";
 import { ComicProvider } from "../../../context/comiccontext";
-import { getUserFromSession } from "../../../util/zilean";
+import { IComic } from "../../../context/comiccontext/model";
+import { getUserFromSession, getEditComic } from "../../../util/zilean";
 
 interface Props {
     user: any;
+    comic: IComic;
 }
 
-const myComic = {
+const myComic: IComic = {
+    _id: "TEST",
     title: "taquito",
     description: "im on a ta-'quito diet'",
     tags: [],
@@ -82,7 +85,7 @@ const EditComicPage: NextPage<Props> = props => {
                 <title>Comic Title</title>
             </Head>
             <AuthProvider user={props.user}>
-                <ComicProvider init_comic={myComic}>
+                <ComicProvider init_comic={props.comic}>
                     <Navbar domain="comics" />
                     <EditComic />
                 </ComicProvider>
@@ -92,29 +95,21 @@ const EditComicPage: NextPage<Props> = props => {
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-    //TODO REMOVE TEST COMIC
-    const testComic = {
-        _id: context.params?.id,
-        title: "Mason Ma is So Cool!",
-        description: "Here is my description",
-        tags: [],
-        renderedImage: "Types.ObjectId",
-        author: "Types.ObjectId",
-        layers: [],
-        views: 1056,
-        ratingTotal: 1000,
-        ratingCount: 300,
-        comments: [],
-        createdAt: "new Date()",
-        updatedAt: "new Date()",
-        publishedAt: "new Date()",
-    };
-
     const result = await getUserFromSession(context.req.headers.cookie || "");
+    const comicRes = await getEditComic(
+        context.req.headers.cookie || "",
+        (context.params?.id as string) || "yikes"
+    );
+
+    // TODO REDIRECT IF NO COMIC WITH ID
+    let comic = myComic;
+    if (!comicRes.error && comicRes.data) {
+        comic = comicRes.data;
+    }
 
     return {
         props: {
-            comic: testComic,
+            comic,
             user: result.data || null,
         },
     };

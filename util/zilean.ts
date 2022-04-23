@@ -231,6 +231,18 @@ export const getComic = async (id: string): Promise<ZileanResponse> => {
     return await result.json();
 };
 
+export const getEditComic = async (cookie: string, id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/comic/${id}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Cookie: cookie,
+        },
+        credentials: "include",
+    });
+    return await result.json();
+};
+
 export const createComic = async (): Promise<ZileanResponse> => {
     const res = await fetch(`${zileanOrigin}/comic`, {
         method: "POST",

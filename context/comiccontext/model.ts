@@ -38,23 +38,24 @@ export interface ILayer {
 }
 
 export interface IComic {
+    _id: string;
     title: string;
     description?: string;
     coverArt?: {
         imageURL: string;
     };
     tags: string[];
-    // renderedImage: objectId;
-    // author: objectId;
+    renderedImage?: string;
+    author?: string;
     layers: ILayer[];
-    // views: number;
-    // ratingTotal: number;
-    // ratingCount: number;
-    // comments: {
-    //     text: string;
-    //     author: objectId;
-    // }[];
-    // createdAt: Date;
-    // updatedAt: Date;
-    // publishedAt?: Date;
+    views?: number;
+    ratingTotal?: number;
+    ratingCount?: number;
+    comments?: {
+        text: string;
+        author: objectId;
+    }[];
+    createdAt?: Date;
+    updatedAt?: Date;
+    publishedAt?: Date;
 }
