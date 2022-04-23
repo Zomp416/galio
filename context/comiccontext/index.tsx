@@ -9,6 +9,7 @@ import {
     moveLayerOp,
     resizeLayerOp,
     editLayerOp,
+    shiftLayerOp,
 } from "./ops";
 
 interface IComicContext {
@@ -50,6 +51,7 @@ export const ComicProvider: React.FC<{ init_comic?: IComic }> = ({ children, ini
         if (type === "deleteLayer") op = deleteLayerOp(args, setLayers, layer!);
         if (type === "moveLayer") op = moveLayerOp(args, setLayers, layer!);
         if (type === "resizeLayer") op = resizeLayerOp(args, setLayers, layer!);
+        if (type === "shiftLayer") op = shiftLayerOp(args, setLayers, layers);
 
         // logic for editLayer is a lot more complicated to account for 'squishing together similar ops'
         if (type === "editLayer") {
