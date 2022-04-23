@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     TextField,
     Typography,
@@ -10,8 +10,51 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { SketchPicker } from "react-color";
+import { useEditContext } from "../..";
+import { useComicContext } from "../../../../../context/comiccontext";
 
 const TextProperties: React.FC = () => {
+    const { selection } = useEditContext();
+    const { newdo } = useComicContext();
+
+    const [text, setText] = useState("i liek taqiutos");
+    const [fontSize, setFontSize] = useState(16);
+    const [fontWeight, setFontWeight] = useState("normal");
+    const [fontStyle, setFontStyle] = useState("normal");
+    const [textDecoration, setTextDecoration] = useState("none");
+    const [color, setColor] = useState("#000000");
+
+    const onSetText = (e: any) => {
+        setText(e.target.value);
+        if (selection !== -1) newdo("editLayer", { index: selection, text: e.target.value });
+    };
+
+    const onSetFontSize = (e: any) => {
+        let size = parseInt(e.target.value);
+        if (isNaN(size)) size = 16;
+        if (size < 10) size = 10;
+        if (size > 1000) size = 999;
+        setFontSize(size);
+        if (selection !== -1) newdo("editLayer", { index: selection, fontSize: size });
+    };
+    const onSetFontWeight = (e: any) => {
+        setFontWeight(e.target.value);
+        if (selection !== -1) newdo("editLayer", { index: selection, fontWeight: e.target.value });
+    };
+    const onSetFontStyle = (e: any) => {
+        setFontStyle(e.target.value);
+        if (selection !== -1) newdo("editLayer", { index: selection, fontStyle: e.target.value });
+    };
+    const onSetTextDecoration = (e: any) => {
+        setTextDecoration(e.target.value);
+        if (selection !== -1)
+            newdo("editLayer", { index: selection, textDecoration: e.target.value });
+    };
+    const onSetColor = (color_: any) => {
+        setColor(color_);
+        if (selection !== -1) newdo("editLayer", { index: selection, color: `${color_.hex}` });
+    };
+
     return (
         <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />} id="panel1a-header">
@@ -25,7 +68,8 @@ const TextProperties: React.FC = () => {
                         label="Text"
                         type="text"
                         variant="outlined"
-                        value="Hello World"
+                        value={text}
+                        onChange={onSetText}
                         fullWidth
                     />
                 </ListItem>
@@ -36,12 +80,20 @@ const TextProperties: React.FC = () => {
                         label="Font Size"
                         type="number"
                         variant="outlined"
-                        value="16"
+                        value={fontSize}
+                        onChange={onSetFontSize}
                         fullWidth
                     />
                 </ListItem>
                 <ListItem>
-                    <TextField id="fontWeight" value={"bold"} label="Font Weight" select fullWidth>
+                    <TextField
+                        id="fontWeight"
+                        value={fontWeight}
+                        onChange={onSetFontWeight}
+                        label="Font Weight"
+                        select
+                        fullWidth
+                    >
                         <MenuItem value={"bold"}>
                             <span style={{ fontWeight: "bold" }}>Bold</span>
                         </MenuItem>
@@ -52,7 +104,14 @@ const TextProperties: React.FC = () => {
                     </TextField>
                 </ListItem>
                 <ListItem>
-                    <TextField id="fontStyle" value={"normal"} label="Font Style" select fullWidth>
+                    <TextField
+                        id="fontStyle"
+                        value={fontStyle}
+                        onChange={onSetFontStyle}
+                        label="Font Style"
+                        select
+                        fullWidth
+                    >
                         <MenuItem value={"normal"}>Normal</MenuItem>
                         <MenuItem value={"italic"}>
                             <span style={{ fontStyle: "italic" }}>Italic</span>
@@ -62,7 +121,8 @@ const TextProperties: React.FC = () => {
                 <ListItem>
                     <TextField
                         id="textDecoration"
-                        value={"none"}
+                        value={textDecoration}
+                        onChange={onSetTextDecoration}
                         label="Text Decoration"
                         select
                         fullWidth

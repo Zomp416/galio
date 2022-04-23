@@ -28,6 +28,15 @@ interface ResizeLayerOpArgs {
 }
 
 interface EditLayerOpArgs {
+    name: string;
+    visible: boolean;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    rotation: number;
+    xFlip: boolean;
+    yFlip: boolean;
     index: number;
     text?: string;
     color?: string;
@@ -119,24 +128,13 @@ export const resizeLayerOp = (args: OpArgs, setLayers: any, layers: any): Op => 
 
 // op for resizing a layer
 export const editLayerOp = (args: OpArgs, setLayers: any, layers: any): Op => {
-    const { index, ...style } = args as EditLayerOpArgs;
-    const { ...res } = layers[index];
-    const { ...properties } = res.properties;
+    const { index, ...properties } = args as EditLayerOpArgs;
 
-    // maybe there is a better way to do this
-    if (style.text) properties.text = style.text;
-    if (style.color) properties.color = style.color;
-    if (style.fontSize) properties.fontSize = style.fontSize;
-    if (style.fontWeight) properties.fontWeight = style.fontWeight;
-    if (style.fontStyle) properties.fontStyle = style.fontStyle;
-    if (style.textDecoration) properties.textDecoration = style.textDecoration;
-    if (style.backgroundColor) properties.backgroundColor = style.backgroundColor;
-    if (style.borderStyle) properties.borderStyle = style.borderStyle;
-    if (style.borderWidth) properties.borderWidth = style.borderWidth;
-    if (style.borderColor) properties.borderColor = style.borderColor;
-    if (style.borderRadius) properties.borderRadius = style.borderRadius;
-
-    res.properties = properties;
+    const res = {
+        ...layers[index],
+        ...properties,
+        properties: { ...layers[index].properties, ...properties },
+    };
 
     return {
         redo: () => {
