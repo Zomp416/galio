@@ -4,7 +4,6 @@ import MyComics from "../../components/comic/my";
 import Navbar from "../../components/navbar";
 import { AuthProvider } from "../../context/authcontext";
 import { getUserFromSession, getComic } from "../../util/zilean";
-import Login from "../../components/login";
 
 interface Props {
     user: any;
@@ -13,22 +12,15 @@ interface Props {
 }
 
 const MyComicsPage: NextPage<Props> = props => {
-    var temp = (
-        <AuthProvider user={props.user}>
-            <Navbar domain="comics" />
-            <MyComics published={props.published} unpublished={props.unpublished} />
-        </AuthProvider>
-    );
-    if (!props.user) {
-        temp = <Login />;
-    }
-
     return (
         <>
             <Head>
                 <title>My Comics</title>
             </Head>
-            {temp}
+            <AuthProvider user={props.user}>
+                <Navbar domain="comics" />
+                <MyComics published={props.published} unpublished={props.unpublished} />
+            </AuthProvider>
         </>
     );
 };
@@ -47,6 +39,14 @@ export const getServerSideProps: GetServerSideProps = async context => {
                 unpublished.push(result2.data);
             }
         }
+    } else {
+        // No data means that the backend was not able to find a user from the session cookie.
+        return {
+            redirect: {
+                destination: "/login",
+                permanent: false,
+            },
+        };
     }
 
     return {
