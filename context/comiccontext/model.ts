@@ -4,7 +4,7 @@ interface IImageProperties {
     imageURL: objectId;
 }
 
-interface ITextProperties {
+export interface ITextProperties {
     text: string;
     color: string;
     fontSize: string;
@@ -15,7 +15,7 @@ interface ITextProperties {
     alignItems: string;
 }
 
-interface IPanelProperties {
+export interface IPanelProperties {
     backgroundColor: string;
     borderStyle: string;
     borderWidth: string;

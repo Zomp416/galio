@@ -38,21 +38,41 @@ export const ComicProvider: React.FC<{ init_comic?: IComic }> = ({ children, ini
     const [layers, setLayers] = useState(comic?.layers || []);
 
     const [history, setHistory] = useState<Op[]>([]);
+    const [squishing, setSquishing] = useState("");
     const [pos, setPos] = useState(0);
 
     // add a new op
     const newdo = (type: string, args: OpArgs) => {
-        let op;
+        let op: Op | undefined;
+        let layer = "index" in args ? layers[args.index] : undefined;
+
         if (type === "addLayer") op = addLayerOp(args, setLayers);
-        if (type === "deleteLayer") op = deleteLayerOp(args, setLayers, layers);
-        if (type === "moveLayer") op = moveLayerOp(args, setLayers, layers);
-        if (type === "resizeLayer") op = resizeLayerOp(args, setLayers, layers);
-        if (type === "editLayer") op = editLayerOp(args, setLayers, layers);
+        if (type === "deleteLayer") op = deleteLayerOp(args, setLayers, layer!);
+        if (type === "moveLayer") op = moveLayerOp(args, setLayers, layer!);
+        if (type === "resizeLayer") op = resizeLayerOp(args, setLayers, layer!);
+
+        // logic for editLayer is a lot more complicated to account for 'squishing together similar ops'
+        if (type === "editLayer") {
+            op = editLayerOp(args, setLayers, layer!);
+            if (squishing === (args as any).squish) {
+                op = editLayerOp(args, setLayers, layer!);
+                op.undo = history[pos - 1].undo;
+                setHistory(history.slice(0, pos - 1).concat(op));
+                op.redo();
+            } else {
+                setHistory(history.slice(0, pos).concat(op));
+                op.redo();
+                setPos(pos => pos + 1);
+                setSquishing((args as any).squish);
+            }
+            op = undefined;
+        }
 
         if (op) {
             setHistory(history.slice(0, pos).concat(op));
             op.redo();
             setPos(pos => pos + 1);
+            setSquishing("");
         }
     };
 
@@ -61,6 +81,7 @@ export const ComicProvider: React.FC<{ init_comic?: IComic }> = ({ children, ini
         if (pos === 0) return;
         history[pos - 1].undo();
         setPos(pos => pos - 1);
+        setSquishing("");
     };
 
     // redo op
@@ -68,6 +89,7 @@ export const ComicProvider: React.FC<{ init_comic?: IComic }> = ({ children, ini
         if (pos === history.length) return;
         history[pos].redo();
         setPos(pos => pos + 1);
+        setSquishing("");
     };
 
     useEffect(() => {
