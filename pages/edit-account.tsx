@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     return {
         props: {
             user: result.data || null,
-            profilePicture: result2.data.profilePicture || null,
+            profilePicture: result2.data?.profilePicture || null,
         },
     };
 };

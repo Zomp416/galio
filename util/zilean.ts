@@ -249,7 +249,7 @@ export const createComic = async (): Promise<ZileanResponse> => {
 };
 
 export const getUserProfilePicture = async (id: string): Promise<ZileanResponse> => {
-    const result = await fetch(`${zileanOrigin}/image/profilePicture/` + id, {
+    const result = await fetch(`${zileanOrigin}/image/` + id, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -280,13 +280,9 @@ export const createImage = async (image: FormData): Promise<ZileanResponse> => {
         body: image,
         credentials: "include",
     });
-    const data = await result.json();
-    if (!data || result.status !== 200) {
-        return {
-            error: "Error Creating Image.",
-        };
-    }
-    return data;
+    const { data, error } = await result.json();
+    if (error) return { error };
+    else return data;
 };
 
 export const getStory = async (id: string): Promise<ZileanResponse> => {

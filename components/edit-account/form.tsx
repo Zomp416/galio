@@ -60,8 +60,9 @@ const Form: React.FC = () => {
             formData.append("image", finalImage!);
             formData.append("directory", "avatars");
             formData.append("name", finalImage!.name.split(".")[0]);
-            const { data } = await createImage(formData);
-            formValues.profilePicture = data._id;
+            const res = await createImage(formData);
+            if (res.error) alert(res.error);
+            else formValues.profilePicture = res.data._id;
         }
         if (
             formValues.newpassword === "" &&
