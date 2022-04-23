@@ -39,6 +39,14 @@ export const getServerSideProps: GetServerSideProps = async context => {
                 unpublished.push(result2.data);
             }
         }
+    } else {
+        // No data means that the backend was not able to find a user from the session cookie.
+        return {
+            redirect: {
+                destination: "/login",
+                permanent: false,
+            },
+        };
     }
 
     return {
