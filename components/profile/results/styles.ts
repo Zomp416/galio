@@ -62,6 +62,12 @@ export const CardThumbnail = styled.img`
     object-fit: cover;
 `;
 
+export const CardNoThumbnail = styled.div`
+    width: 100%;
+    height: 100%;
+    background-color: grey;
+`;
+
 export const Pagination = styled.div`
     align-self: center;
 `;

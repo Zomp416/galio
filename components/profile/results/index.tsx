@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -16,12 +16,33 @@ import {
 } from "@mui/material";
 import * as Styled from "./styles";
 import { useAuthContext } from "../../../context/authcontext";
+import { getImage } from "../../../util/zilean";
 
 const ResultCard: React.FC<{ comic?: any; user?: any }> = ({ comic, user }) => {
+    const [comicImage, setComicImage] = useState<string>("");
+    useEffect(() => {
+        async function getComicImage() {
+            console.log(comic.renderedImage);
+            if (comic.renderedImage !== undefined) {
+                const { data } = await getImage(comic.renderedImage.toString());
+                setComicImage("https://zomp-media.s3.us-east-1.amazonaws.com/" + data.imageURL);
+            }
+        }
+        getComicImage();
+    });
+
     return (
         <Styled.ResultCard>
             <Styled.CardThumbnailContainer>
-                <Styled.CardThumbnail src="http://phototours.us/wp-content/uploads/2017/12/20036014.jpg" />
+                <Link href={`/comic/view/` + comic._id}>
+                    <a>
+                        {comicImage === "" ? (
+                            <Styled.CardNoThumbnail></Styled.CardNoThumbnail>
+                        ) : (
+                            <Styled.CardThumbnail src={comicImage} />
+                        )}
+                    </a>
+                </Link>
             </Styled.CardThumbnailContainer>
             <CardContent>
                 <Typography variant="h5" component="div" fontWeight="bold">
