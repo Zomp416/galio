@@ -45,9 +45,13 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
                         <Typography variant="h6">{comic.views + " Views"}</Typography>
                     </Styled.ViewContainer>
                 </Styled.TVContainer>
-                <Styled.ComicImage
-                    src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + image?.imageURL}
-                ></Styled.ComicImage>
+                {image?.imageURL === undefined ? (
+                    <Styled.NoComicImage></Styled.NoComicImage>
+                ) : (
+                    <Styled.ComicImage
+                        src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + image?.imageURL}
+                    ></Styled.ComicImage>
+                )}
                 <Styled.ASSContainer>
                     <Styled.AuthorContainer>
                         <Styled.Avatar></Styled.Avatar>

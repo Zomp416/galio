@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -16,25 +16,43 @@ import {
 } from "@mui/material";
 import * as Styled from "./styles";
 import { useAuthContext } from "../../../context/authcontext";
+import { getImage } from "../../../util/zilean";
 
-const ResultCard: React.FC<{ user2?: any }> = ({ user2 }) => {
-    const { user } = useAuthContext();
-    const finalUser = user?.username! === user2.username! ? user : user2;
+const ResultCard: React.FC<{ comic?: any; user?: any }> = ({ comic, user }) => {
+    const [comicImage, setComicImage] = useState<string>("");
+    useEffect(() => {
+        async function getComicImage() {
+            console.log(comic.renderedImage);
+            if (comic.renderedImage !== undefined) {
+                const { data } = await getImage(comic.renderedImage.toString());
+                setComicImage("https://zomp-media.s3.us-east-1.amazonaws.com/" + data.imageURL);
+            }
+        }
+        getComicImage();
+    });
 
     return (
         <Styled.ResultCard>
             <Styled.CardThumbnailContainer>
-                <Styled.CardThumbnail src="http://phototours.us/wp-content/uploads/2017/12/20036014.jpg" />
+                <Link href={`/comic/view/` + comic._id}>
+                    <a>
+                        {comicImage === "" ? (
+                            <Styled.CardNoThumbnail></Styled.CardNoThumbnail>
+                        ) : (
+                            <Styled.CardThumbnail src={comicImage} />
+                        )}
+                    </a>
+                </Link>
             </Styled.CardThumbnailContainer>
             <CardContent>
                 <Typography variant="h5" component="div" fontWeight="bold">
-                    Comic Title
+                    {comic.title}
                 </Typography>
                 <Typography variant="body1" color="text.secondary" fontWeight="bold">
-                    {finalUser?.username!}
+                    {user.username}
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
-                    100 Views
+                    {comic.views + " views"}
                 </Typography>
             </CardContent>
         </Styled.ResultCard>
@@ -77,7 +95,7 @@ const Hero: React.FC<{ user2?: any; userSubs?: any }> = ({ user2, userSubs }) =>
     const [time, setTime] = useState<string>("Today");
     const [sort, setSort] = useState<string>("alpha");
     const { user } = useAuthContext();
-    const finalUser = user?.username! !== user2.username! ? user2 : user;
+    const finalUser = user2;
 
     const onSetCategory = (_: any, val: any) => {
         setCategory(val);
@@ -129,10 +147,11 @@ const Hero: React.FC<{ user2?: any; userSubs?: any }> = ({ user2, userSubs }) =>
                 </Styled.CardsContainer>
             ) : (
                 <Stack>
-                    <ResultCard user2={user2} />
-                    <ResultCard user2={user2} />
-                    <ResultCard user2={user2} />
-                    <ResultCard user2={user2} />
+                    {finalUser.comics.map(function (comic: any, index: any) {
+                        if (comic.publishedAt !== null && comic.publishedAt !== undefined) {
+                            return <ResultCard key={index} comic={comic} user={user2} />;
+                        }
+                    })}
                 </Stack>
             )}
             <Styled.Pagination>

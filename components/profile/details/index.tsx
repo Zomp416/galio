@@ -7,7 +7,7 @@ import { unsubscribe, subscribe } from "../../../util/zilean";
 
 const Hero: React.FC<{ user2?: any }> = ({ user2 }) => {
     const { user } = useAuthContext();
-    const finalUser = user?.username! !== user2.username! ? user2 : user;
+    const finalUser = user2;
     const router = useRouter();
     let subscribed = false;
 
@@ -40,7 +40,16 @@ const Hero: React.FC<{ user2?: any }> = ({ user2 }) => {
 
     return (
         <Styled.DetailsContainer>
-            <Styled.ProfilePic></Styled.ProfilePic>
+            {finalUser.profilePicture === undefined ? (
+                <Styled.AvatarProfile></Styled.AvatarProfile>
+            ) : (
+                <Styled.ProfilePic
+                    src={
+                        "https://zomp-media.s3.us-east-1.amazonaws.com/" +
+                        finalUser.profilePicture.imageURL
+                    }
+                ></Styled.ProfilePic>
+            )}
             <Styled.TextContainer>
                 <Typography
                     variant="h4"
