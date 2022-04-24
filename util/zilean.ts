@@ -1,3 +1,4 @@
+import { IComic } from "../context/comiccontext/model";
 export const zileanOrigin = process.env.NEXT_PUBLIC_ZILEAN_ORIGIN || "http://localhost:3001";
 
 interface ZileanResponse {
@@ -337,6 +338,24 @@ export const deleteStory = async (id: string): Promise<ZileanResponse> => {
     if (!data || result.status !== 200) {
         return {
             error: "Error Deleting Story.",
+        };
+    }
+    return data;
+};
+
+export const saveComic = async (comic: IComic): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/comic/${comic._id}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({ comic }),
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error Updating Comic.",
         };
     }
     return data;

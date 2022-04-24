@@ -16,7 +16,7 @@ const Editor: React.FC = () => {
         mouseX: number;
         mouseY: number;
     } | null>(null);
-    const { selection, setSelection, setTool } = useEditContext();
+    const { selection, setSelection, setTool, saveComic } = useEditContext();
     const { layers, undo, redo, newdo, canUndo, canRedo, canSave } = useComicContext();
 
     useEffect(() => {
@@ -60,7 +60,9 @@ const Editor: React.FC = () => {
             // Ctrl/Cmd + s (save)
             else if (e.key === "s") {
                 e.preventDefault();
-                // TODO SAVE COMIC
+                if (canSave) {
+                    saveComic!();
+                }
                 console.log("SAVE");
             } else if (e.key === "ArrowUp") {
                 e.preventDefault();
@@ -117,7 +119,7 @@ const Editor: React.FC = () => {
         );
     };
 
-    const handleClose = () => {
+    const handleCloseContext = () => {
         setContextMenu(null);
     };
 
@@ -222,7 +224,13 @@ const Editor: React.FC = () => {
                 }}
             >
                 <Toolbar>
-                    <IconButton size="medium" color="inherit" sx={{ mr: 2 }} disabled={!canSave}>
+                    <IconButton
+                        size="medium"
+                        color="inherit"
+                        sx={{ mr: 2 }}
+                        disabled={!canSave}
+                        onClick={saveComic}
+                    >
                         <SaveIcon /> {canSave && "*"}
                     </IconButton>
                     <IconButton
@@ -276,7 +284,7 @@ const Editor: React.FC = () => {
                 })}
                 <Menu
                     open={contextMenu !== null}
-                    onClose={handleClose}
+                    onClose={handleCloseContext}
                     anchorReference="anchorPosition"
                     anchorPosition={
                         contextMenu !== null
@@ -291,7 +299,7 @@ const Editor: React.FC = () => {
                                 newLayer.x += 15;
                                 newLayer.y += 15;
                                 newdo("addLayer", { layer: newLayer });
-                                handleClose();
+                                handleCloseContext();
                             }
                         }}
                     >
@@ -301,7 +309,7 @@ const Editor: React.FC = () => {
                         onClick={() => {
                             if (selection > 0) {
                                 newdo("shiftLayer", { index: selection, dir: "back" });
-                                handleClose();
+                                handleCloseContext();
                             }
                         }}
                     >
@@ -311,7 +319,7 @@ const Editor: React.FC = () => {
                         onClick={() => {
                             if (selection > 0) {
                                 newdo("shiftLayer", { index: selection, dir: "bottom" });
-                                handleClose();
+                                handleCloseContext();
                             }
                         }}
                     >
@@ -321,7 +329,7 @@ const Editor: React.FC = () => {
                         onClick={() => {
                             if (selection >= 0 && selection < layers.length - 1) {
                                 newdo("shiftLayer", { index: selection, dir: "forward" });
-                                handleClose();
+                                handleCloseContext();
                             }
                         }}
                     >
@@ -332,7 +340,7 @@ const Editor: React.FC = () => {
                             if (selection >= 0 && selection < layers.length - 1) {
                                 console.log(`Shifting Index ${selection}`);
                                 newdo("shiftLayer", { index: selection, dir: "top" });
-                                handleClose();
+                                handleCloseContext();
                             }
                         }}
                     >
@@ -341,7 +349,7 @@ const Editor: React.FC = () => {
                     <MenuItem
                         onClick={() => {
                             newdo("deleteLayer", { index: selection });
-                            handleClose();
+                            handleCloseContext();
                         }}
                     >
                         Delete Layer (Delete)
