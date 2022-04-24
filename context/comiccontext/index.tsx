@@ -22,6 +22,7 @@ interface IComicContext {
     canUndo: boolean;
     canRedo: boolean;
     canSave: boolean;
+    clearHistory?: () => void;
 }
 
 const ComicContext = createContext<IComicContext>({
@@ -57,7 +58,7 @@ export const ComicProvider: React.FC<{ init_comic?: IComic }> = ({ children, ini
         // logic for editLayer is a lot more complicated to account for 'squishing together similar ops'
         if (type === "editLayer") {
             op = editLayerOp(args, setLayers, layer!);
-            if (squishing === (args as any).squish) {
+            if (squishing === (args as any).squish && pos > 0) {
                 op = editLayerOp(args, setLayers, layer!);
                 op.undo = history[pos - 1].undo;
                 setHistory(history.slice(0, pos - 1).concat(op));
@@ -73,7 +74,7 @@ export const ComicProvider: React.FC<{ init_comic?: IComic }> = ({ children, ini
 
         if (type === "editComic") {
             op = editComicOp(args, setComic, comic!);
-            if (squishing === (args as any).squish) {
+            if (squishing === (args as any).squish && pos > 0) {
                 op = editComicOp(args, setComic, comic!);
                 op.undo = history[pos - 1].undo;
                 setHistory(history.slice(0, pos - 1).concat(op));
@@ -130,6 +131,10 @@ export const ComicProvider: React.FC<{ init_comic?: IComic }> = ({ children, ini
                 canUndo: pos !== 0,
                 canRedo: pos !== history.length,
                 canSave: history.length !== 0,
+                clearHistory: () => {
+                    setHistory([]);
+                    setPos(0);
+                },
             }}
         >
             {children}
