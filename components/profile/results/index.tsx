@@ -46,9 +46,10 @@ const ResultCard: React.FC<{ comic?: any; user?: any }> = ({ comic, user }) => {
             </Styled.CardThumbnailContainer>
             <CardContent>
                 <Typography variant="h5" component="div" fontWeight="bold">
-                    {user.username}
+                    {comic.title}
                 </Typography>
                 <Typography variant="body1" color="text.secondary" fontWeight="bold">
+                    {user.username}
                     {comic.title}
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
@@ -148,7 +149,9 @@ const Hero: React.FC<{ user2?: any; userSubs?: any }> = ({ user2, userSubs }) =>
             ) : (
                 <Stack>
                     {finalUser.comics.map(function (comic: any, index: any) {
-                        return <ResultCard key={index} comic={comic} user={user2} />;
+                        if (comic.publishedAt !== null && comic.publishedAt !== undefined) {
+                            return <ResultCard key={index} comic={comic} user={user2} />;
+                        }
                     })}
                 </Stack>
             )}
