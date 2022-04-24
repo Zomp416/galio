@@ -52,7 +52,7 @@ const ResultCard: React.FC<{ comic?: any; user?: any }> = ({ comic, user }) => {
                     {comic.title}
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
-                    {comic.views + "views"}
+                    {comic.views + " views"}
                 </Typography>
             </CardContent>
         </Styled.ResultCard>
