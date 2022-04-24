@@ -5,7 +5,6 @@ import TitleProperties from "./properties/title";
 import GeneralProperties from "./properties/general";
 import TextProperties from "./properties/text";
 import PanelProperties from "./properties/panel";
-import ImageProperties from "./properties/image";
 import TagProperties from "./properties/tags";
 import ImageUploadProperties from "./properties/imageupload";
 import ImageSearchProperties from "./properties/imagesearch";

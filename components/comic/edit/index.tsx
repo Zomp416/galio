@@ -1,11 +1,16 @@
 import React, { createContext, useContext, useState } from "react";
+import { useRouter } from "next/router";
 import { Snackbar, Alert, Typography } from "@mui/material";
 import Toolbar from "./toolbar";
 import Widebar from "./widebar";
 import Editor from "./editor";
 import { useComicContext } from "../../../context/comiccontext";
 import * as Styled from "./styles";
-import { saveComic as saveComicZilean } from "../../../util/zilean";
+import {
+    saveComic as saveComicZilean,
+    createImage,
+    publishComic as publishComicZilean,
+} from "../../../util/zilean";
 
 interface IEditContext {
     tool: string;
@@ -13,11 +18,13 @@ interface IEditContext {
     selection: number;
     setSelection?: React.Dispatch<React.SetStateAction<number>>;
     saveComic?: () => Promise<void>;
+    publishComic?: (file: File) => Promise<void>;
 }
 
 const EditContext = createContext<IEditContext>({ tool: "", selection: -1 });
 
 const EditComic: React.FC = () => {
+    const router = useRouter();
     const [tool, setTool] = useState("");
     const [selection, setSelection] = useState(-1);
     const [open, setOpen] = useState<boolean>(false);
@@ -37,6 +44,19 @@ const EditComic: React.FC = () => {
         }
     };
 
+    const publishComic = async (file: File) => {
+        if (!comic) return;
+        let form = new FormData();
+        form.append("image", file);
+        form.append("directory", "assets");
+        form.append("name", file.name.split(".")[0]);
+        const res = await createImage(form);
+        if (res.data && !res.error) {
+            await publishComicZilean(comic._id, res.data);
+            router.push("/comic/my");
+        }
+    };
+
     const showSaveToast = () => {
         setOpen(true);
     };
@@ -50,7 +70,9 @@ const EditComic: React.FC = () => {
     };
 
     return (
-        <EditContext.Provider value={{ tool, setTool, selection, setSelection, saveComic }}>
+        <EditContext.Provider
+            value={{ tool, setTool, selection, setSelection, saveComic, publishComic }}
+        >
             <Styled.EditorOuter>
                 <Styled.EditorInner>
                     <Toolbar />
