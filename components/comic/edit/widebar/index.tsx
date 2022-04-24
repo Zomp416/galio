@@ -4,13 +4,14 @@ import Title from "./title";
 import TitleProperties from "./properties/title";
 import GeneralProperties from "./properties/general";
 import TextProperties from "./properties/text";
+import TextActions from "./actions/text";
 import PanelProperties from "./properties/panel";
+import PanelActions from "./actions/panel";
 import TagProperties from "./properties/tags";
-import ImageUploadProperties from "./properties/imageupload";
-import ImageSearchProperties from "./properties/imagesearch";
+import ImageUploadProperties from "./actions/imageupload";
+import ImageSearchProperties from "./actions/imagesearch";
 
 import { useEditContext } from "..";
-import PanelActions from "./actions/panel";
 
 const Actions: React.FC = () => {
     const { tool, selection } = useEditContext();
@@ -25,7 +26,12 @@ const Actions: React.FC = () => {
                     <ImageSearchProperties />
                 </>
             )}
-            {tool === "text" && <TextProperties />}
+            {tool === "text" && (
+                <>
+                    <TextActions />
+                    <TextProperties />
+                </>
+            )}
             {tool === "tags" && <TagProperties />}
             {tool === "panel" && (
                 <>
