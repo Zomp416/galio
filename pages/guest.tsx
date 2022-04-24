@@ -28,9 +28,17 @@ const GuestPage: NextPage<Props> = props => {
 export const getServerSideProps: GetServerSideProps<Props> = async context => {
     const result = await getUserFromSession(context.req.headers.cookie || "");
 
+    if (!result.data) {
+        return {
+            props: {
+                user: result.data || null,
+            },
+        };
+    }
     return {
-        props: {
-            user: result.data || null,
+        redirect: {
+            destination: "/",
+            permanent: false,
         },
     };
 };

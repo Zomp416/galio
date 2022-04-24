@@ -32,7 +32,7 @@ const EditTable: React.FC<Comic> = props => {
         event.preventDefault();
         const data = await publishComic(props._id);
         if (!data.error) {
-            //TODO swap to publish table or published comic
+            //TODO swap to publish table or published comic; maybe confirm if image exist
             router.push({ pathname: "/comic/my/" });
         }
     };

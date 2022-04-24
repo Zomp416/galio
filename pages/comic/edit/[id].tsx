@@ -107,6 +107,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
         comic = comicRes.data;
     }
 
+    //TODO confirm proper author
     return {
         props: {
             comic,

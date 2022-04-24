@@ -43,7 +43,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
     };
 
     const result = await getUserFromSession(context.req.headers.cookie || "");
-
+    //TODO confirm proper author
+    //TODO should be story
     return {
         props: {
             comic: testComic,
