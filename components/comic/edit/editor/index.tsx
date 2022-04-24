@@ -125,7 +125,7 @@ const Editor: React.FC = () => {
     };
 
     const handlePublishClick = async () => {
-        const editor = document.getElementById("masonma!");
+        const editor = document.getElementById("canvas");
         if (!editor) return;
         const rendered = await domtoimage.toBlob(editor);
         const f = new File([rendered], "filename");
@@ -296,13 +296,11 @@ const Editor: React.FC = () => {
                     transform: `scale(${zoom})`,
                 }}
             >
-                <div id="masonma!">
-                    {layers.map((val, index) => {
-                        if (val.visible) {
-                            return renderLayer(val, index);
-                        }
-                    })}
-                </div>
+                {layers.map((val, index) => {
+                    if (val.visible) {
+                        return renderLayer(val, index);
+                    }
+                })}
                 <Menu
                     open={contextMenu !== null}
                     onClose={handleCloseContext}
