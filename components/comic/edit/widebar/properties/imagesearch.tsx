@@ -3,9 +3,11 @@ import { TextField, Typography, List, ListItem, Accordion, AccordionSummary } fr
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import debounce from "lodash.debounce";
 import { searchImage } from "../../../../../util/zilean";
+import { useComicContext } from "../../../../../context/comiccontext";
 
 const ImageSearchProperties: React.FC = () => {
     const [results, setResults] = useState([]);
+    const { newdo } = useComicContext();
 
     const doDebouncedSearch = debounce(async query => {
         console.log("triggered search ", query);
@@ -13,6 +15,26 @@ const ImageSearchProperties: React.FC = () => {
         if (error) alert(error);
         if (data) setResults(data.map((x: any) => x.imageURL));
     }, 800);
+
+    const doInsertFromSearch = (url: string) => {
+        newdo("addLayer", {
+            layer: {
+                type: "image",
+                name: "Image Layer",
+                x: 0,
+                y: 0,
+                width: 200,
+                height: 200,
+                rotation: 0,
+                xFlip: false,
+                yFlip: false,
+                visible: true,
+                properties: {
+                    imageURL: "https://zomp-media.s3.us-east-1.amazonaws.com/" + url,
+                },
+            },
+        });
+    };
 
     return (
         <Accordion>
@@ -36,6 +58,7 @@ const ImageSearchProperties: React.FC = () => {
                         <img
                             src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + url}
                             style={{ maxWidth: "100%" }}
+                            onClick={() => doInsertFromSearch(url)}
                         ></img>
                     </ListItem>
                 ))}
