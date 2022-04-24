@@ -29,12 +29,19 @@ const EditAccountPage: NextPage<Props> = props => {
 
 export const getServerSideProps: GetServerSideProps = async context => {
     const result = await getUserFromSession(context.req.headers.cookie || "");
-    const result2 = await getUserProfilePicture(result.data._id);
-
+    if (result.data) {
+        const result2 = await getUserProfilePicture(result.data._id);
+        return {
+            props: {
+                user: result.data || null,
+                profilePicture: result2.data.profilePicture || null,
+            },
+        };
+    }
     return {
-        props: {
-            user: result.data || null,
-            profilePicture: result2.data.profilePicture || null,
+        redirect: {
+            destination: "/",
+            permanent: false,
         },
     };
 };

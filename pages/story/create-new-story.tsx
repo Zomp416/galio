@@ -35,9 +35,20 @@ const CreateNewStoryPage: NextPage<Props> = props => {
 export const getServerSideProps: GetServerSideProps = async context => {
     const result = await getUserFromSession(context.req.headers.cookie || "");
 
+    if (result.data) {
+        if (result.data.verified) {
+            //only verified users
+            return {
+                props: {
+                    user: result.data || null,
+                },
+            };
+        }
+    }
     return {
-        props: {
-            user: result.data || null,
+        redirect: {
+            destination: "/",
+            permanent: false,
         },
     };
 };
