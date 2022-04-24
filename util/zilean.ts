@@ -283,6 +283,14 @@ export const createImage = async (image: FormData): Promise<ZileanResponse> => {
     return await result.json();
 };
 
+export const searchImage = async (query: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/image/search?value=${query}`, {
+        method: "GET",
+        credentials: "include",
+    });
+    return result.json();
+};
+
 export const getStory = async (id: string): Promise<ZileanResponse> => {
     const result = await fetch(`${zileanOrigin}/story/` + id, {
         method: "GET",
