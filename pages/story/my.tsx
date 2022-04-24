@@ -33,10 +33,12 @@ export const getServerSideProps: GetServerSideProps = async context => {
         var stories = result.data.stories;
         for (var i = 0; i < stories!.length; i++) {
             const result2 = await getStory(stories![i]);
-            if (result2.data.publishedAt) {
-                published.push(result2.data);
-            } else {
-                unpublished.push(result2.data);
+            if (result2.data) {
+                if (result2.data.publishedAt) {
+                    published.push(result2.data);
+                } else {
+                    unpublished.push(result2.data);
+                }
             }
         }
     } else {
