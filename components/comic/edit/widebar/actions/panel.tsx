@@ -1,20 +1,21 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { Button } from "@mui/material";
 
 import { useComicContext } from "../../../../../context/comiccontext";
 
 const PanelActions: React.FC = () => {
     const { newdo } = useComicContext();
 
-    const addPanel = () => {
+    const doInsertSquare = () => {
         newdo("addLayer", {
             layer: {
                 type: "panel",
                 name: "Layer 01",
-                x: Math.random() * 400,
-                y: Math.random() * 400,
-                width: Math.random() * 400,
-                height: Math.random() * 400,
+                x: 0,
+                y: 0,
+                width: 200,
+                height: 200,
                 rotation: 0,
                 xFlip: false,
                 yFlip: false,
@@ -24,63 +25,77 @@ const PanelActions: React.FC = () => {
                         Math.random() * 255
                     })`,
                     borderStyle: "solid",
-                    borderWidth: "1px",
+                    borderWidth: 1,
                     borderColor: "black",
-                    borderRadius: "0px",
+                    borderRadius: 0,
+                },
+            },
+        });
+    };
+
+    const doInsertCircle = () => {
+        newdo("addLayer", {
+            layer: {
+                type: "panel",
+                name: "Layer 01",
+                x: 0,
+                y: 0,
+                width: 200,
+                height: 200,
+                rotation: 0,
+                xFlip: false,
+                yFlip: false,
+                visible: true,
+                properties: {
+                    backgroundColor: `rgb(${Math.random() * 255},${Math.random() * 255},${
+                        Math.random() * 255
+                    })`,
+                    borderStyle: "solid",
+                    borderWidth: 1,
+                    borderColor: "black",
+                    borderRadius: 999,
                 },
             },
         });
     };
 
     return (
-        <Options>
-            <ButtonBox>
-                <Square onClick={addPanel} />
-            </ButtonBox>
-            <ButtonBox>
+        <>
+            <Button
+                variant="outlined"
+                sx={{ marginBottom: "10px" }}
+                onClick={doInsertSquare}
+                fullWidth
+            >
+                Square Panel
+                <Square />
+            </Button>
+            <Button
+                variant="outlined"
+                sx={{ marginBottom: "10px" }}
+                onClick={doInsertCircle}
+                fullWidth
+            >
+                Rounded Panel
                 <Circle />
-            </ButtonBox>
-        </Options>
+            </Button>
+        </>
     );
 };
 
-const Options = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    gridgap: 20px;
-    margin-bottom: 20px;
-`;
-
 const Square = styled.div`
-    width: 80px;
-    height: 80px;
+    width: 30px;
+    height: 20px;
+    margin-left: 10px;
     background-color: gray;
-    &:hover {
-        width: 90px;
-        height: 90px;
-        cursor: pointer;
-    }
 `;
 
 const Circle = styled.div`
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
+    width: 35px;
+    height: 20px;
+    margin-left: 10px;
+    border-radius: 10px;
     background-color: gray;
-    &:hover {
-        width: 90px;
-        height: 90px;
-        cursor: pointer;
-    }
-`;
-
-const ButtonBox = styled.div`
-    width: 90px;
-    height: 90px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 `;
 
 export default PanelActions;
