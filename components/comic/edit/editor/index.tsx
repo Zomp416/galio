@@ -9,6 +9,7 @@ import * as Styled from "./styles";
 import Layer from "./layer";
 import { useComicContext } from "../../../../context/comiccontext";
 import { useEditContext } from "..";
+import domtoimage from "dom-to-image";
 
 const Editor: React.FC = () => {
     const [zoom, setZoom] = useState<number>(1);
@@ -16,7 +17,7 @@ const Editor: React.FC = () => {
         mouseX: number;
         mouseY: number;
     } | null>(null);
-    const { selection, setSelection, setTool, saveComic } = useEditContext();
+    const { selection, setSelection, setTool, saveComic, publishComic } = useEditContext();
     const { layers, undo, redo, newdo, canUndo, canRedo, canSave } = useComicContext();
 
     useEffect(() => {
@@ -121,6 +122,14 @@ const Editor: React.FC = () => {
 
     const handleCloseContext = () => {
         setContextMenu(null);
+    };
+
+    const handlePublishClick = async () => {
+        const editor = document.getElementById("canvas");
+        if (!editor) return;
+        const rendered = await domtoimage.toBlob(editor);
+        const f = new File([rendered], "filename");
+        publishComic!(f);
     };
 
     const generateBase = (layer: Record<any, any>, index: number) => {
@@ -258,6 +267,16 @@ const Editor: React.FC = () => {
                     </IconButton>
                     <IconButton size="medium" edge="start" color="inherit" sx={{ mr: 2 }}>
                         <ZoomOutIcon />
+                    </IconButton>
+                    <IconButton
+                        size="medium"
+                        edge="start"
+                        color="inherit"
+                        sx={{ mr: 2 }}
+                        disabled={!layers || !layers.length}
+                        onClick={handlePublishClick}
+                    >
+                        PUBLISH
                     </IconButton>
                 </Toolbar>
             </div>
