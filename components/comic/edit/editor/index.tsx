@@ -319,6 +319,7 @@ const Editor: React.FC = () => {
                                 newLayer.y += 15;
                                 newdo("addLayer", { layer: newLayer });
                                 handleCloseContext();
+                                setSelection!(selection + 1);
                             }
                         }}
                     >
@@ -329,6 +330,7 @@ const Editor: React.FC = () => {
                             if (selection > 0) {
                                 newdo("shiftLayer", { index: selection, dir: "back" });
                                 handleCloseContext();
+                                setSelection!(Math.max(0, selection - 1));
                             }
                         }}
                     >
@@ -339,6 +341,7 @@ const Editor: React.FC = () => {
                             if (selection > 0) {
                                 newdo("shiftLayer", { index: selection, dir: "bottom" });
                                 handleCloseContext();
+                                setSelection!(0);
                             }
                         }}
                     >
@@ -349,6 +352,7 @@ const Editor: React.FC = () => {
                             if (selection >= 0 && selection < layers.length - 1) {
                                 newdo("shiftLayer", { index: selection, dir: "forward" });
                                 handleCloseContext();
+                                setSelection!(Math.min(selection + 1, layers.length - 1));
                             }
                         }}
                     >
@@ -360,6 +364,7 @@ const Editor: React.FC = () => {
                                 console.log(`Shifting Index ${selection}`);
                                 newdo("shiftLayer", { index: selection, dir: "top" });
                                 handleCloseContext();
+                                setSelection!(layers.length - 1);
                             }
                         }}
                     >
@@ -369,6 +374,7 @@ const Editor: React.FC = () => {
                         onClick={() => {
                             newdo("deleteLayer", { index: selection });
                             handleCloseContext();
+                            setSelection!(-1);
                         }}
                     >
                         Delete Layer (Delete)
