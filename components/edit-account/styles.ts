@@ -62,7 +62,6 @@ export const PasswordContainer = styled.div`
     align-items: center;
     width: 50%;
     margin-bottom: 25px;
-    // border: 1px red solid;
 `;
 
 export const DeleteAccountButton = styled(MUI_Button)`

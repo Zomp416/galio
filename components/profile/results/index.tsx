@@ -17,10 +17,7 @@ import {
 import * as Styled from "./styles";
 import { useAuthContext } from "../../../context/authcontext";
 
-const ResultCard: React.FC<{ user2?: any }> = ({ user2 }) => {
-    const { user } = useAuthContext();
-    const finalUser = user?.username! === user2.username! ? user : user2;
-
+const ResultCard: React.FC<{ comic?: any; user?: any }> = ({ comic, user }) => {
     return (
         <Styled.ResultCard>
             <Styled.CardThumbnailContainer>
@@ -28,13 +25,13 @@ const ResultCard: React.FC<{ user2?: any }> = ({ user2 }) => {
             </Styled.CardThumbnailContainer>
             <CardContent>
                 <Typography variant="h5" component="div" fontWeight="bold">
-                    Comic Title
+                    {user.username}
                 </Typography>
                 <Typography variant="body1" color="text.secondary" fontWeight="bold">
-                    {finalUser?.username!}
+                    {comic.title}
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
-                    100 Views
+                    {comic.views + "views"}
                 </Typography>
             </CardContent>
         </Styled.ResultCard>
@@ -77,7 +74,7 @@ const Hero: React.FC<{ user2?: any; userSubs?: any }> = ({ user2, userSubs }) =>
     const [time, setTime] = useState<string>("Today");
     const [sort, setSort] = useState<string>("alpha");
     const { user } = useAuthContext();
-    const finalUser = user?.username! !== user2.username! ? user2 : user;
+    const finalUser = user2;
 
     const onSetCategory = (_: any, val: any) => {
         setCategory(val);
@@ -129,10 +126,9 @@ const Hero: React.FC<{ user2?: any; userSubs?: any }> = ({ user2, userSubs }) =>
                 </Styled.CardsContainer>
             ) : (
                 <Stack>
-                    <ResultCard user2={user2} />
-                    <ResultCard user2={user2} />
-                    <ResultCard user2={user2} />
-                    <ResultCard user2={user2} />
+                    {finalUser.comics.map(function (comic: any, index: any) {
+                        return <ResultCard key={index} comic={comic} user={user2} />;
+                    })}
                 </Stack>
             )}
             <Styled.Pagination>
