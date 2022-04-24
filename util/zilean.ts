@@ -380,7 +380,7 @@ export const saveComic = async (comic: IComic): Promise<ZileanResponse> => {
 
 export const publishComic = async (
     id: string,
-    renderedImage: Record<any, any>
+    renderedImage?: Record<any, any>
 ): Promise<ZileanResponse> => {
     const result = await fetch(`${zileanOrigin}/comic/publish/` + id, {
         method: "PUT",
