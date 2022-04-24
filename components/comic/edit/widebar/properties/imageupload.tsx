@@ -14,6 +14,7 @@ import { createImage } from "../../../../../util/zilean";
 
 const ImageUploadProperties: React.FC = () => {
     const [upload, setUpload] = useState<File>();
+    const [uploadDims, setUploadDims] = useState({ width: 100, height: 100 });
     const { newdo } = useComicContext();
 
     const doUpload = async () => {
@@ -29,8 +30,8 @@ const ImageUploadProperties: React.FC = () => {
                 name: "Image Layer",
                 x: 0,
                 y: 0,
-                width: 200,
-                height: 200,
+                width: uploadDims.width,
+                height: uploadDims.height,
                 rotation: 0,
                 xFlip: false,
                 yFlip: false,
@@ -53,6 +54,12 @@ const ImageUploadProperties: React.FC = () => {
                         <ListItem>
                             <img
                                 src={URL.createObjectURL(upload)}
+                                onLoad={e =>
+                                    setUploadDims({
+                                        width: e.currentTarget.width,
+                                        height: e.currentTarget.height,
+                                    })
+                                }
                                 style={{ maxWidth: "100%" }}
                             ></img>
                         </ListItem>
