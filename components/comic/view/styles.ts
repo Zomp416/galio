@@ -50,6 +50,12 @@ export const ComicImage = styled.img`
     object-fit: cover;
 `;
 
+export const NoComicImage = styled.div`
+    width: 100%;
+    height: 620px;
+    background-color: grey;
+`;
+
 // Author + Share and Subscribe lol
 export const ASSContainer = styled.div`
     margin-top: 20px;
