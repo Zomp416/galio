@@ -9,6 +9,7 @@ import * as Styled from "./styles";
 import Layer from "./layer";
 import { useComicContext } from "../../../../context/comiccontext";
 import { useEditContext } from "..";
+import domtoimage from "dom-to-image";
 
 const Editor: React.FC = () => {
     const [zoom, setZoom] = useState<number>(1);
@@ -16,7 +17,7 @@ const Editor: React.FC = () => {
         mouseX: number;
         mouseY: number;
     } | null>(null);
-    const { selection, setSelection, setTool, saveComic } = useEditContext();
+    const { selection, setSelection, setTool, saveComic, publishComic } = useEditContext();
     const { layers, undo, redo, newdo, canUndo, canRedo, canSave } = useComicContext();
 
     useEffect(() => {
@@ -121,6 +122,14 @@ const Editor: React.FC = () => {
 
     const handleCloseContext = () => {
         setContextMenu(null);
+    };
+
+    const handlePublishClick = async () => {
+        const editor = document.getElementById("canvas");
+        if (!editor) return;
+        const rendered = await domtoimage.toBlob(editor);
+        const f = new File([rendered], "filename");
+        publishComic!(f);
     };
 
     const generateBase = (layer: Record<any, any>, index: number) => {
@@ -259,6 +268,16 @@ const Editor: React.FC = () => {
                     <IconButton size="medium" edge="start" color="inherit" sx={{ mr: 2 }}>
                         <ZoomOutIcon />
                     </IconButton>
+                    <IconButton
+                        size="medium"
+                        edge="start"
+                        color="inherit"
+                        sx={{ mr: 2 }}
+                        disabled={!layers || !layers.length}
+                        onClick={handlePublishClick}
+                    >
+                        PUBLISH
+                    </IconButton>
                 </Toolbar>
             </div>
             <Styled.EditContainer
@@ -300,6 +319,7 @@ const Editor: React.FC = () => {
                                 newLayer.y += 15;
                                 newdo("addLayer", { layer: newLayer });
                                 handleCloseContext();
+                                setSelection!(selection + 1);
                             }
                         }}
                     >
@@ -310,6 +330,7 @@ const Editor: React.FC = () => {
                             if (selection > 0) {
                                 newdo("shiftLayer", { index: selection, dir: "back" });
                                 handleCloseContext();
+                                setSelection!(Math.max(0, selection - 1));
                             }
                         }}
                     >
@@ -320,6 +341,7 @@ const Editor: React.FC = () => {
                             if (selection > 0) {
                                 newdo("shiftLayer", { index: selection, dir: "bottom" });
                                 handleCloseContext();
+                                setSelection!(0);
                             }
                         }}
                     >
@@ -330,6 +352,7 @@ const Editor: React.FC = () => {
                             if (selection >= 0 && selection < layers.length - 1) {
                                 newdo("shiftLayer", { index: selection, dir: "forward" });
                                 handleCloseContext();
+                                setSelection!(Math.min(selection + 1, layers.length - 1));
                             }
                         }}
                     >
@@ -341,6 +364,7 @@ const Editor: React.FC = () => {
                                 console.log(`Shifting Index ${selection}`);
                                 newdo("shiftLayer", { index: selection, dir: "top" });
                                 handleCloseContext();
+                                setSelection!(layers.length - 1);
                             }
                         }}
                     >
@@ -350,6 +374,7 @@ const Editor: React.FC = () => {
                         onClick={() => {
                             newdo("deleteLayer", { index: selection });
                             handleCloseContext();
+                            setSelection!(-1);
                         }}
                     >
                         Delete Layer (Delete)

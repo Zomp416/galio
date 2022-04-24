@@ -378,12 +378,16 @@ export const saveComic = async (comic: IComic): Promise<ZileanResponse> => {
     return data;
 };
 
-export const publishComic = async (id: string): Promise<ZileanResponse> => {
+export const publishComic = async (
+    id: string,
+    renderedImage?: Record<any, any>
+): Promise<ZileanResponse> => {
     const result = await fetch(`${zileanOrigin}/comic/publish/` + id, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
         },
+        body: JSON.stringify({ renderedImage }),
         credentials: "include",
     });
     const data = await result.json();
