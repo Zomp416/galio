@@ -16,15 +16,15 @@ const ImageSearchProperties: React.FC = () => {
         if (data) setResults(data.map((x: any) => x.imageURL));
     }, 800);
 
-    const doInsertFromSearch = (url: string) => {
+    const doInsertFromSearch = (url: string, width: number, height: number) => {
         newdo("addLayer", {
             layer: {
                 type: "image",
                 name: "Image Layer",
                 x: 0,
                 y: 0,
-                width: 200,
-                height: 200,
+                width,
+                height,
                 rotation: 0,
                 xFlip: false,
                 yFlip: false,
@@ -53,12 +53,18 @@ const ImageSearchProperties: React.FC = () => {
                 </ListItem>
             </List>
             <List>
-                {results.map(url => (
-                    <ListItem>
+                {results.map((url, i) => (
+                    <ListItem key={i}>
                         <img
                             src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + url}
                             style={{ maxWidth: "100%" }}
-                            onClick={() => doInsertFromSearch(url)}
+                            onClick={e =>
+                                doInsertFromSearch(
+                                    url,
+                                    e.currentTarget.offsetWidth,
+                                    e.currentTarget.offsetHeight
+                                )
+                            }
                         ></img>
                     </ListItem>
                 ))}
