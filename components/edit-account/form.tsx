@@ -42,7 +42,6 @@ const Form: React.FC = () => {
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         if (name === "profilePicture" && event.target.files!.length !== 0) {
-            console.log(URL.createObjectURL(event.target.files![0]));
             setImagePreview(URL.createObjectURL(event.target.files![0]));
             setFinalImage(event.target.files![0]);
         } else {

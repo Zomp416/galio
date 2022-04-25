@@ -21,12 +21,16 @@ const defaultValues = {
     description: "",
 };
 
-const Form: React.FC = () => {
+const Form: React.FC<{
+    formValues?: any;
+    setFormValues?: any;
+    tags: string[];
+    setTags: any;
+    addTag: string;
+    setAddTag: any;
+}> = ({ formValues, setFormValues, tags, setTags, addTag, setAddTag }) => {
     const router = useRouter();
-    const [formValues, setFormValues] = useState(defaultValues);
     const [error, setError] = useState(false);
-    const [tags, setTags] = useState<string[]>(["Action", "Thriller"]);
-    const [addTag, setAddTag] = useState<string>("");
     const [modalOpen, setModalOpen] = useState<boolean>(false);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,14 +41,9 @@ const Form: React.FC = () => {
         });
     };
 
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
-        console.log(formValues);
-    };
-
     return (
         <>
-            <Styled.StoryDetailsForm onSubmit={handleSubmit}>
+            <Styled.StoryDetailsForm>
                 <Dialog
                     open={modalOpen}
                     onClose={() => {
@@ -59,7 +58,7 @@ const Form: React.FC = () => {
                 >
                     <DialogTitle sx={{ padding: "16px 16px" }}>Manage Tags</DialogTitle>
                     <List>
-                        {tags.map((val, index) => (
+                        {tags.map((val: any, index: any) => (
                             <ListItem key={`${index}-modal-tag`}>
                                 <ListItemText primary={val} />
                                 <ListItemAvatar>
@@ -136,7 +135,7 @@ const Form: React.FC = () => {
                         Tags:
                     </Typography>
                     <Styled.TagListContainer>
-                        {tags.map((val, index) => (
+                        {tags.map((val: any, index: any) => (
                             <Styled.Tag key={`${index}-tag`}>{val}</Styled.Tag>
                         ))}
                         <Styled.ManageTag
