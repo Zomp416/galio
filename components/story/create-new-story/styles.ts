@@ -52,7 +52,8 @@ export const AddNewImage = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 70%;
+    width: 350px;
+    margin-right: 20px;
     height: 500px;
     background-color: grey;
     font-weight: bold;
@@ -60,6 +61,14 @@ export const AddNewImage = styled.div`
     :hover {
         background-color: grey;
     }
+`;
+
+export const CoverArt = styled.img`
+    flex-shrink: 0;
+    width: 350px;
+    height: 500px;
+    object-fit: cover;
+    margin-right: 20px;
 `;
 
 export const StoryDetailsForm = styled.form`
