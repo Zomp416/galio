@@ -1,4 +1,5 @@
 import { IComic } from "../context/comiccontext/model";
+import { IStory } from "../context/storycontext/model";
 export const zileanOrigin = process.env.NEXT_PUBLIC_ZILEAN_ORIGIN || "http://localhost:3001";
 
 interface ZileanResponse {
@@ -373,6 +374,24 @@ export const saveComic = async (comic: IComic): Promise<ZileanResponse> => {
     if (!data || result.status !== 200) {
         return {
             error: "Error Updating Comic.",
+        };
+    }
+    return data;
+};
+
+export const saveStory = async (story: IStory): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/story/${story._id}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+            "Content-type": "application/json",
+        },
+        body: JSON.stringify({ story }),
+    });
+    const data = await result.json();
+    if (!data || result.status !== 200) {
+        return {
+            error: "Error Updating Story.",
         };
     }
     return data;
