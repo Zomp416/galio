@@ -25,10 +25,12 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
     const { user } = useAuthContext();
 
     let initialSubscribe = false;
-    if (comicAuthor.username === user!.username) {
-        for (let i = 0; i < user?.subscriptions?.length!; i++) {
-            if (user?.subscriptions![i] === comicAuthor._id) {
-                initialSubscribe = true;
+    if (user != null) {
+        if (comicAuthor.username === user!.username) {
+            for (let i = 0; i < user?.subscriptions?.length!; i++) {
+                if (user?.subscriptions![i] === comicAuthor._id) {
+                    initialSubscribe = true;
+                }
             }
         }
     }
@@ -103,7 +105,7 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
                             Share
                             <ShareIcon />
                         </Styled.SSButton>
-                        {user?.username! !== comicAuthor.username! ? (
+                        {user !== null && user?.username! !== comicAuthor.username! ? (
                             subscribed ? (
                                 <Styled.SSButton
                                     variant="contained"

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import Link from "next/link";
 import {
     Box,
-    Button,
     Divider,
     TextField,
     Typography,
@@ -14,25 +12,29 @@ import {
     Avatar,
 } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import Chapter from "./chapter";
 import { useAuthContext } from "../../../context/authcontext";
 import { unsubscribe, subscribe } from "../../../util/zilean";
 
 import * as Styled from "./styles";
 
-//TODO make go next and previous chapter work
-const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyAuthor }) => {
+const ViewStory: React.FC<{ story?: any; storyAuthor?: any; coverArt?: any }> = ({
+    story,
+    storyAuthor,
+    coverArt,
+}) => {
     const [comment, setComment] = useState<string>("");
     const [rating, setRating] = useState<number | null>(3.5);
     const [tags, setTags] = useState<string[]>(story.tags);
     const { user } = useAuthContext();
 
     let initialSubscribe = false;
-    if (storyAuthor.username === user!.username) {
-        for (let i = 0; i < user?.subscriptions?.length!; i++) {
-            if (user?.subscriptions![i] === storyAuthor._id) {
-                initialSubscribe = true;
+    if (user != null) {
+        if (storyAuthor.username === user!.username) {
+            for (let i = 0; i < user?.subscriptions?.length!; i++) {
+                if (user?.subscriptions![i] === storyAuthor._id) {
+                    initialSubscribe = true;
+                }
             }
         }
     }
@@ -61,16 +63,19 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
         <>
             <Styled.ViewStoryContainer>
                 <Styled.RowContainer>
-                    <Box
-                        component="img"
-                        sx={{
-                            height: 100,
-                            width: 70,
-                            paddingRight: "10px",
-                        }}
-                        alt={story.title}
-                        src={story.coverart}
-                    />
+                    {coverArt === null ? (
+                        <></>
+                    ) : (
+                        <Box
+                            component="img"
+                            sx={{
+                                height: 100,
+                                width: 70,
+                                paddingRight: "10px",
+                            }}
+                            src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + coverArt}
+                        />
+                    )}
                     <Styled.ColumnContainer>
                         <Typography variant="h4" width={"100%"} sx={{ paddingTop: "10px" }}>
                             {story.title}
@@ -97,10 +102,13 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                                 <Styled.Avatar></Styled.Avatar>
                                 <Styled.ColumnContainer>
                                     <div>
-                                        <Typography variant="h5" component="a" color="black">
-                                            <Link href={"/user/" + storyAuthor.username} passHref>
-                                                {storyAuthor.username}
-                                            </Link>
+                                        <Typography
+                                            variant="h5"
+                                            component="a"
+                                            href={"/user/" + storyAuthor.username}
+                                            color="black"
+                                        >
+                                            {storyAuthor.username}
                                         </Typography>
                                     </div>
                                     {storyAuthor.subscriberCount + " Subscribers"}
@@ -112,7 +120,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                                     Share
                                     <ShareIcon />
                                 </Styled.SSButton>
-                                {user?.username! !== storyAuthor.username! ? (
+                                {user !== null && user?.username! !== storyAuthor.username! ? (
                                     subscribed ? (
                                         <Styled.SSButton
                                             variant="contained"
@@ -142,77 +150,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                         </Styled.ASSContainer>
                     </Styled.ViewContainer>
                 </Styled.RowContainer>
-                <Styled.Story>
-                    {/* TODO display current chapter + logic for displaying title if needed */}
-                    <Styled.ButtonsContainer>
-                        <Button
-                            variant="contained"
-                            style={{
-                                backgroundColor: "#BCECDC",
-                                color: "#3F3F3F",
-                            }}
-                        >
-                            <ChevronLeftIcon />
-                            Title
-                        </Button>
-                        {/* TODO dropdown for displaying all chapter */}
-                        <Typography variant="h4" color="secondary" sx={{ fontWeight: "bold" }}>
-                            Chapter 1
-                        </Typography>
-
-                        <Button
-                            variant="contained"
-                            style={{
-                                backgroundColor: "#BCECDC",
-                                color: "#3F3F3F",
-                            }}
-                        >
-                            Chapter 2
-                            <ChevronRightIcon />
-                        </Button>
-                    </Styled.ButtonsContainer>
-
-                    <Typography
-                        sx={{
-                            marginBottom: "15px",
-                        }}
-                    >
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Amet consectetur
-                        adipiscing elit ut aliquam purus sit. Ipsum dolor sit amet consectetur
-                        adipiscing. Vulputate enim nulla aliquet porttitor lacus luctus. Risus
-                        nullam eget felis eget. Volutpat consequat mauris nunc congue nisi. Vitae
-                        tortor condimentum lacinia quis vel eros donec. Mauris sit amet massa vitae
-                        tortor. Nulla aliquet porttitor lacus luctus accumsan. Magna fermentum
-                        iaculis eu non diam phasellus vestibulum lorem. Purus non enim praesent
-                        elementum facilisis leo vel fringilla est.
-                    </Typography>
-                    <Typography
-                        sx={{
-                            marginBottom: "15px",
-                        }}
-                    >
-                        Praesent semper feugiat nibh sed. Id consectetur purus ut faucibus. Neque
-                        viverra justo nec ultrices dui sapien. Pulvinar elementum integer enim neque
-                        volutpat. Quam elementum pulvinar etiam non quam lacus suspendisse faucibus
-                        interdum. Mi sit amet mauris commodo quis imperdiet massa. Et malesuada
-                        fames ac turpis. Ac ut consequat semper viverra nam libero justo laoreet.
-                        Dui id ornare arcu odio. Varius duis at consectetur lorem donec massa.
-                        Imperdiet dui accumsan sit amet nulla facilisi morbi tempus iaculis
-                    </Typography>
-                    <Typography
-                        sx={{
-                            marginBottom: "15px",
-                        }}
-                    >
-                        Gravida in fermentum et sollicitudin ac orci. Rhoncus est pellentesque elit
-                        ullamcorper dignissim. Amet consectetur adipiscing elit ut aliquam purus
-                        sit. Ipsum dolor sit amet consectetur adipiscing. Vulputate enim nulla
-                        aliquet porttitor lacus luctus. Risus nullam eget felis .
-                    </Typography>
-
-                    <Divider />
-                </Styled.Story>
+                <Chapter story={story.story}></Chapter>
                 <Styled.ASSContainer>
                     <Typography variant="h4">Ratings</Typography>
                     <Styled.RatingsContainer>
@@ -286,11 +224,14 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                         </ListItemAvatar>
                         <ListItemText
                             primary={
-                                <Link href="/user/Joe Schmo" passHref>
-                                    <Typography variant="body1" component="a" color="black">
-                                        Joe Schmo
-                                    </Typography>
-                                </Link>
+                                <Typography
+                                    variant="body1"
+                                    component="a"
+                                    href="/user/Joe Schmo"
+                                    color="black"
+                                >
+                                    Joe Schmo
+                                </Typography>
                             }
                             secondary="Ayo! This was a good one."
                         />

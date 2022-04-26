@@ -3,12 +3,13 @@ import Head from "next/head";
 import ViewStory from "../../../components/story/view";
 import Navbar from "../../../components/navbar";
 import { AuthProvider } from "../../../context/authcontext";
-import { getUserFromSession } from "../../../util/zilean";
+import { getUserFromSession, getStory, getUserFromID, getImage } from "../../../util/zilean";
 
 interface Props {
     user: any;
     story: any;
     storyAuthor: any;
+    coverArt: any;
 }
 
 const LoginPage: NextPage<Props> = props => {
@@ -19,42 +20,40 @@ const LoginPage: NextPage<Props> = props => {
             </Head>
             <AuthProvider user={props.user}>
                 <Navbar domain="stories" />
-                <ViewStory story={props.story} storyAuthor={props.storyAuthor} />
+                <ViewStory
+                    story={props.story}
+                    storyAuthor={props.storyAuthor}
+                    coverArt={props.coverArt}
+                />
             </AuthProvider>
         </>
     );
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-    //const story = await getStory(context.params!.id!.toString());
+    const story = await getStory(context.params!.id!.toString());
     const result = await getUserFromSession(context.req.headers.cookie || "");
-
-    //TODO REMOVE TEST STORY
-    const testStory = {
-        _id: context.params?.id,
-        title: "Crewmate",
-        description: "Here is my description",
-        tags: ["test", "amongus"],
-        story: [],
-        author: result.data,
-        views: 1056,
-        ratingTotal: 1000,
-        ratingCount: 300,
-        comments: [],
-        coverart:
-            "https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/crewmate-indra-tirto.jpg",
-        createdAt: "new Date()",
-        updatedAt: "new Date()",
-        publishedAt: "new Date()",
-    };
-
-    return {
-        props: {
-            story: testStory, //story.data
-            user: result.data || null,
-            storyAuthor: testStory.author || null, //story.data?.author || null,
-        },
-    };
+    const author = await getUserFromID(story.data?.author);
+    if (story.data?.coverart) {
+        const art = await getImage(story.data?.coverart);
+        return {
+            props: {
+                story: story.data || null,
+                user: result.data || null,
+                storyAuthor: author.data || null,
+                coverArt: art.data?.imageURL || null,
+            },
+        };
+    } else {
+        return {
+            props: {
+                story: story.data || null,
+                user: result.data || null,
+                storyAuthor: author.data || null,
+                coverArt: null,
+            },
+        };
+    }
 };
 
 export default LoginPage;
