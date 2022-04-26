@@ -38,6 +38,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
     }
     const [subscribed, setSubscribed] = useState<boolean>(initialSubscribe);
 
+    // TODO subscribe doesnt update subscriber count
     const handleSubscribe = async (event: React.FormEvent, user2id: any) => {
         event.preventDefault();
         const userid = { subscription: user2id };
@@ -111,7 +112,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                                     Share
                                     <ShareIcon />
                                 </Styled.SSButton>
-                                {user?.username! === storyAuthor.username! ? (
+                                {user?.username! !== storyAuthor.username! ? (
                                     subscribed ? (
                                         <Styled.SSButton
                                             variant="contained"

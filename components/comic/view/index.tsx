@@ -14,12 +14,44 @@ import {
 import ShareIcon from "@mui/icons-material/Share";
 import * as Styled from "./styles";
 import { useImageContext } from "../../../context/imagecontext";
+import { useAuthContext } from "../../../context/authcontext";
+import { unsubscribe, subscribe } from "../../../util/zilean";
 
 const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicAuthor }) => {
     const [comment, setComment] = useState<string>("");
     const [tags, setTags] = useState<string[]>(comic.tags);
     const [rating, setRating] = useState<number | null>(4.5);
     const { image } = useImageContext();
+    const { user } = useAuthContext();
+
+    let initialSubscribe = false;
+    if (comicAuthor.username === user!.username) {
+        for (let i = 0; i < user?.subscriptions?.length!; i++) {
+            if (user?.subscriptions![i] === comicAuthor._id) {
+                initialSubscribe = true;
+            }
+        }
+    }
+    const [subscribed, setSubscribed] = useState<boolean>(initialSubscribe);
+
+    // TODO subscribe doesnt update subscriber count
+    const handleSubscribe = async (event: React.FormEvent, user2id: any) => {
+        event.preventDefault();
+        const userid = { subscription: user2id };
+        const data = await subscribe(userid);
+        if (!data.error) {
+            setSubscribed(true);
+        }
+    };
+
+    const handleUnsubscribe = async (event: React.FormEvent, user2id: any) => {
+        event.preventDefault();
+        const userid = { subscription: user2id };
+        const data = await unsubscribe(userid);
+        if (!data.error) {
+            setSubscribed(false);
+        }
+    };
 
     return (
         <>
@@ -71,9 +103,32 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
                             Share
                             <ShareIcon />
                         </Styled.SSButton>
-                        <Styled.SSButton variant="contained" color="primary" size="large">
-                            Subscribe
-                        </Styled.SSButton>
+                        {user?.username! !== comicAuthor.username! ? (
+                            subscribed ? (
+                                <Styled.SSButton
+                                    variant="contained"
+                                    color="primary"
+                                    style={{ backgroundColor: "red" }}
+                                    onClick={e => {
+                                        handleUnsubscribe(e, comicAuthor._id.toString());
+                                    }}
+                                >
+                                    Unsubscribe
+                                </Styled.SSButton>
+                            ) : (
+                                <Styled.SSButton
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={e => {
+                                        handleSubscribe(e, comicAuthor._id.toString());
+                                    }}
+                                >
+                                    Subscribe
+                                </Styled.SSButton>
+                            )
+                        ) : (
+                            <></>
+                        )}
                     </Styled.SSContainer>
                 </Styled.ASSContainer>
                 <Styled.ColumnContainer>
