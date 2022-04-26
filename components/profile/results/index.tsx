@@ -22,10 +22,11 @@ const ResultCard: React.FC<{ comic?: any; user?: any }> = ({ comic, user }) => {
     const [comicImage, setComicImage] = useState<string>("");
     useEffect(() => {
         async function getComicImage() {
-            console.log(comic.renderedImage);
             if (comic.renderedImage !== undefined) {
                 const { data } = await getImage(comic.renderedImage.toString());
-                setComicImage("https://zomp-media.s3.us-east-1.amazonaws.com/" + data.imageURL);
+                if (data.error) alert(data.error);
+                else
+                    setComicImage("https://zomp-media.s3.us-east-1.amazonaws.com/" + data.imageURL);
             }
         }
         getComicImage();
