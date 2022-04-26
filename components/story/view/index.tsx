@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Link from "next/link";
 import {
     Box,
     Button,
@@ -21,18 +20,26 @@ import { unsubscribe, subscribe } from "../../../util/zilean";
 
 import * as Styled from "./styles";
 
-//TODO make go next and previous chapter work
-const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyAuthor }) => {
+const ViewStory: React.FC<{ story?: any; storyAuthor?: any; coverArt?: any }> = ({
+    story,
+    storyAuthor,
+    coverArt,
+}) => {
     const [comment, setComment] = useState<string>("");
     const [rating, setRating] = useState<number | null>(3.5);
     const [tags, setTags] = useState<string[]>(story.tags);
     const { user } = useAuthContext();
 
+    console.log(story);
+    console.log(storyAuthor);
+
     let initialSubscribe = false;
-    if (storyAuthor.username === user!.username) {
-        for (let i = 0; i < user?.subscriptions?.length!; i++) {
-            if (user?.subscriptions![i] === storyAuthor._id) {
-                initialSubscribe = true;
+    if (user != null) {
+        if (storyAuthor.username === user!.username) {
+            for (let i = 0; i < user?.subscriptions?.length!; i++) {
+                if (user?.subscriptions![i] === storyAuthor._id) {
+                    initialSubscribe = true;
+                }
             }
         }
     }
@@ -61,16 +68,19 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
         <>
             <Styled.ViewStoryContainer>
                 <Styled.RowContainer>
-                    <Box
-                        component="img"
-                        sx={{
-                            height: 100,
-                            width: 70,
-                            paddingRight: "10px",
-                        }}
-                        alt={story.title}
-                        src={story.coverart}
-                    />
+                    {coverArt === null ? (
+                        <></>
+                    ) : (
+                        <Box
+                            component="img"
+                            sx={{
+                                height: 100,
+                                width: 70,
+                                paddingRight: "10px",
+                            }}
+                            src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + coverArt}
+                        />
+                    )}
                     <Styled.ColumnContainer>
                         <Typography variant="h4" width={"100%"} sx={{ paddingTop: "10px" }}>
                             {story.title}
@@ -97,10 +107,13 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                                 <Styled.Avatar></Styled.Avatar>
                                 <Styled.ColumnContainer>
                                     <div>
-                                        <Typography variant="h5" component="a" color="black">
-                                            <Link href={"/user/" + storyAuthor.username} passHref>
-                                                {storyAuthor.username}
-                                            </Link>
+                                        <Typography
+                                            variant="h5"
+                                            component="a"
+                                            href={"/user/" + storyAuthor.username}
+                                            color="black"
+                                        >
+                                            {storyAuthor.username}
                                         </Typography>
                                     </div>
                                     {storyAuthor.subscriberCount + " Subscribers"}
@@ -112,7 +125,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                                     Share
                                     <ShareIcon />
                                 </Styled.SSButton>
-                                {user?.username! !== storyAuthor.username! ? (
+                                {user !== null && user?.username! !== storyAuthor.username! ? (
                                     subscribed ? (
                                         <Styled.SSButton
                                             variant="contained"
@@ -286,11 +299,14 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                         </ListItemAvatar>
                         <ListItemText
                             primary={
-                                <Link href="/user/Joe Schmo" passHref>
-                                    <Typography variant="body1" component="a" color="black">
-                                        Joe Schmo
-                                    </Typography>
-                                </Link>
+                                <Typography
+                                    variant="body1"
+                                    component="a"
+                                    href="/user/Joe Schmo"
+                                    color="black"
+                                >
+                                    Joe Schmo
+                                </Typography>
                             }
                             secondary="Ayo! This was a good one."
                         />
