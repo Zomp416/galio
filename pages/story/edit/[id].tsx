@@ -19,7 +19,7 @@ const LoginPage: NextPage<Props> = props => {
                 <title>Story Title</title>
             </Head>
             <AuthProvider user={props.user}>
-                <StoryProvider story={props.story}>
+                <StoryProvider storyText={props.story}>
                     <Navbar domain="stories" />
                     <EditStory />
                 </StoryProvider>

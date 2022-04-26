@@ -4,11 +4,10 @@ import { useStoryContext } from "../../../../../context/storycontext";
 import { createImage, getImage } from "../../../../../util/zilean";
 
 const CoverArtProperties: React.FC = () => {
-    const [upload, setUpload] = useState<File>();
-    const [uploadDims, setUploadDims] = useState({ width: 100, height: 100 });
     const [imagePreview, setImagePreview] = useState("");
     const [finalImage, setFinalImage] = useState<File>();
-    const { story } = useStoryContext();
+    const [uploadDims, setUploadDims] = useState({ width: 100, height: 100 });
+    const { story, newdo } = useStoryContext();
     const [coverArt, setCoverArt] = useState<string>("");
     useEffect(() => {
         async function getCoverArt() {
@@ -22,11 +21,12 @@ const CoverArtProperties: React.FC = () => {
 
     const doUpload = async () => {
         let form = new FormData();
-        form.append("image", upload!);
+        form.append("image", finalImage!);
         form.append("directory", "thumbnails");
-        form.append("name", upload!.name.split(".")[0]);
+        form.append("name", finalImage!.name.split(".")[0]);
         const { data, error } = await createImage(form);
         if (error) alert(error);
+        newdo("editStory", { coverart: data._id });
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,23 +51,25 @@ const CoverArtProperties: React.FC = () => {
                     ) : (
                         <img
                             src={coverArt}
-                            style={{
-                                width: "230px",
-                                height: "400px",
-                                marginLeft: "10px",
-                                objectFit: "cover",
-                            }}
+                            onLoad={e =>
+                                setUploadDims({
+                                    width: e.currentTarget.width,
+                                    height: e.currentTarget.height,
+                                })
+                            }
+                            style={{ maxWidth: "100%" }}
                         ></img>
                     )
                 ) : (
                     <img
                         src={imagePreview}
-                        style={{
-                            width: "230px",
-                            height: "400px",
-                            marginLeft: "10px",
-                            objectFit: "cover",
-                        }}
+                        onLoad={e =>
+                            setUploadDims({
+                                width: e.currentTarget.width,
+                                height: e.currentTarget.height,
+                            })
+                        }
+                        style={{ maxWidth: "100%" }}
                     ></img>
                 )}
             </ListItem>
@@ -81,10 +83,17 @@ const CoverArtProperties: React.FC = () => {
                         style={{ display: "none" }}
                         onChange={handleInputChange}
                     />
-                    <Button variant="contained" component="span" style={{ marginLeft: "40px" }}>
-                        Change Cover Art
+                    <Button variant="outlined" component="span" style={{ width: "284%" }}>
+                        Upload
                     </Button>
                 </label>
+            </ListItem>
+            <ListItem>
+                {finalImage && (
+                    <Button variant="outlined" onClick={doUpload} fullWidth>
+                        Set as Cover Art
+                    </Button>
+                )}
             </ListItem>
         </List>
     );

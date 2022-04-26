@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Typography, IconButton } from "@mui/material";
 import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
@@ -8,6 +8,7 @@ import * as Styled from "./styles";
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
 import { useStoryContext } from "../../../../context/storycontext";
+import { useEditContext } from "..";
 
 const ReactQuill = dynamic(import("react-quill"), {
     ssr: false,
@@ -16,7 +17,49 @@ const ReactQuill = dynamic(import("react-quill"), {
 
 const Editor: React.FC = () => {
     const [changed, setChanged] = useState<boolean>(false);
-    const { story } = useStoryContext();
+    const { saveStory, publishStory } = useEditContext();
+    const { story, undo, redo, newdo, canUndo, canRedo, canSave } = useStoryContext();
+
+    useEffect(() => {
+        const handleKeyPress = (e: KeyboardEvent) => {
+            const commandKey = e.ctrlKey || e.metaKey; // Ctrl OR Cmd
+            if (!commandKey) return;
+            // Ctrl/Cmd + z (undo)
+            if (e.key === "z") {
+                e.preventDefault();
+                undo();
+                console.log("UNDO");
+            }
+            // Ctrl/Cmd + y (redo)
+            else if (e.key === "y") {
+                e.preventDefault();
+                console.log("REDO");
+                redo();
+            }
+
+            // Ctrl/Cmd + s (save)
+            else if (e.key === "s") {
+                e.preventDefault();
+                if (canSave) {
+                    saveStory!();
+                }
+                console.log("SAVE");
+            }
+        };
+        document.addEventListener("keydown", handleKeyPress);
+        return () => {
+            document.removeEventListener("keydown", handleKeyPress);
+        };
+    }, [undo, redo, newdo]);
+
+    // const handlePublishClick = async () => {
+    //     const editor = document.getElementById("canvas");
+    //     if (!editor) return;
+    //     const rendered = await domtoimage.toBlob(editor);
+    //     const f = new File([rendered], "filename");
+    //     publishComic!(f);
+    // };
+
     return (
         <>
             <Styled.Story>
@@ -26,17 +69,16 @@ const Editor: React.FC = () => {
                             variant="contained"
                             color="primary"
                             startIcon={<SaveIcon />}
-                            onClick={() => {
-                                setChanged(false);
-                            }}
+                            disabled={!canSave}
+                            onClick={saveStory}
                         >
-                            Save {changed && "*"}
+                            Save {canSave && "*"}
                         </Button>
-                        <IconButton>
-                            <UndoIcon color="primary" />
+                        <IconButton onClick={undo} color="inherit" disabled={!canUndo}>
+                            <UndoIcon />
                         </IconButton>
-                        <IconButton>
-                            <RedoIcon color="primary" />
+                        <IconButton onClick={redo} color="inherit" disabled={!canRedo}>
+                            <RedoIcon />
                         </IconButton>
                     </Styled.ButtonContainer>
                     <Styled.ChapterContainer>
@@ -47,12 +89,12 @@ const Editor: React.FC = () => {
                             </IconButton>
                         </Typography>
                     </Styled.ChapterContainer>
-                    <Button variant="contained" color="primary" style={{ marginLeft: "340px" }}>
+                    <Button variant="contained" color="primary" style={{ marginLeft: "370px" }}>
                         Publish
                     </Button>
                 </Styled.TitleContainer>
                 <ReactQuill
-                    defaultValue={story!.story}
+                    defaultValue={"asd"}
                     placeholder="Start Typing..."
                     style={{ marginLeft: "10px", width: "98%" }}
                     onChange={(_, __, source) => {

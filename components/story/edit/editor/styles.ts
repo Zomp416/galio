@@ -13,7 +13,7 @@ export const ButtonContainer = styled.div`
     flex-direction: row;
     width: 16%;
     margin-left: 10px;
-    margin-right: 330px;
+    margin-right: 300px;
 `;
 
 export const ChapterContainer = styled.div`
