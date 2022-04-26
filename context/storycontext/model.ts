@@ -20,7 +20,7 @@ export interface IStory {
     title: string;
     description?: string;
     tags: string[];
-    story: string;
+    story: string[];
     author: objectId;
     views: number;
     ratingTotal: number;

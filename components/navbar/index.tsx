@@ -5,7 +5,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useRouter } from "next/router";
 import { logout } from "../../util/zilean";
 import { useAuthContext } from "../../context/authcontext";
-import { createComic } from "../../util/zilean";
+import { createComic, createStory } from "../../util/zilean";
 
 interface NavbarProps {
     domain: string;
@@ -50,12 +50,21 @@ const Navbar: React.FC<NavbarProps> = props => {
         console.log(searchBy);
     };
 
-    //Used to create comics/stories
+    //Used to create comics
     const handleCreateComic = async () => {
         //event.preventDefault(); having event prevents it from being a input in onclick
         const data = await createComic();
         if (!data.error) {
             router.push({ pathname: "/comic/edit/" + data.data._id });
+        }
+    };
+
+    //Used to create stories
+    const handleCreateStory = async () => {
+        //event.preventDefault(); having event prevents it from being a input in onclick
+        const data = await createStory();
+        if (!data.error) {
+            router.push({ pathname: "/story/edit/" + data.data._id });
         }
     };
 
@@ -68,7 +77,7 @@ const Navbar: React.FC<NavbarProps> = props => {
         { display: "Log Out", onClick: handleLogout },
     ];
     const loggedInStoriesSettings: NavbarLink[] = [
-        { display: "Start New Story", url: "/story/create-new-story" },
+        { display: "Start New Story", onClick: handleCreateStory },
         { display: "My Stories", url: "/story/my" },
         { display: "Visit Comics", url: "/comic/hub" },
         { display: "My Profile", url: "/user/" + (user ? user?.username : "N/A") },
