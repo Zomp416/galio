@@ -34,23 +34,31 @@ const CoverArtProperties: React.FC = () => {
         setImagePreview(URL.createObjectURL(event.target.files![0]));
         setFinalImage(event.target.files![0]);
     };
-    console.log(finalImage);
 
     return (
         <List>
             <ListItem>
-                {coverArt === undefined ? (
-                    <div></div>
-                ) : finalImage === undefined ? (
-                    <img
-                        src={coverArt}
-                        style={{
-                            width: "230px",
-                            height: "400px",
-                            marginLeft: "10px",
-                            objectFit: "cover",
-                        }}
-                    ></img>
+                {finalImage === undefined ? (
+                    coverArt === "" ? (
+                        <div
+                            style={{
+                                width: "230px",
+                                height: "400px",
+                                marginLeft: "10px",
+                                backgroundColor: "grey",
+                            }}
+                        ></div>
+                    ) : (
+                        <img
+                            src={coverArt}
+                            style={{
+                                width: "230px",
+                                height: "400px",
+                                marginLeft: "10px",
+                                objectFit: "cover",
+                            }}
+                        ></img>
+                    )
                 ) : (
                     <img
                         src={imagePreview}
