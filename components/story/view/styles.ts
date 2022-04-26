@@ -11,16 +11,6 @@ export const ViewStoryContainer = styled.div`
     margin-top: 50px;
 `;
 
-export const ButtonsContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    background-color: #39a78e;
-    justify-content: space-between;
-    padding: 10px;
-    margin-bottom: 25px;
-`;
-
 export const RowContainer = styled.div`
     width: 100%;
     display: flex;
@@ -57,11 +47,6 @@ export const ViewContainer = styled.div`
 
 export const Tag = styled(MUI_Button)`
     margin-right: 5px;
-`;
-
-export const Story = styled.div`
-    width: 100%;
-    margin: 25px;
 `;
 
 // Author + Share and Subscribe lol
