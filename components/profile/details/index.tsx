@@ -5,7 +5,7 @@ import * as Styled from "./styles";
 import { useAuthContext } from "../../../context/authcontext";
 import { unsubscribe, subscribe } from "../../../util/zilean";
 
-const Hero: React.FC<{ user2?: any }> = ({ user2 }) => {
+const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile }) => {
     const { user } = useAuthContext();
     const finalUser = user2;
     const router = useRouter();
@@ -42,14 +42,11 @@ const Hero: React.FC<{ user2?: any }> = ({ user2 }) => {
 
     return (
         <Styled.DetailsContainer>
-            {finalUser.profilePicture === undefined ? (
+            {userProfile === null ? (
                 <Styled.AvatarProfile></Styled.AvatarProfile>
             ) : (
                 <Styled.ProfilePic
-                    src={
-                        "https://zomp-media.s3.us-east-1.amazonaws.com/" +
-                        finalUser.profilePicture.imageURL
-                    }
+                    src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + userProfile}
                 ></Styled.ProfilePic>
             )}
             <Styled.TextContainer>
