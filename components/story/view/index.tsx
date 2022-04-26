@@ -111,7 +111,6 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                                     Share
                                     <ShareIcon />
                                 </Styled.SSButton>
-                                {/* TODO do subscribe */}
                                 {user?.username! === storyAuthor.username! ? (
                                     subscribed ? (
                                         <Styled.SSButton
@@ -143,6 +142,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                     </Styled.ViewContainer>
                 </Styled.RowContainer>
                 <Styled.Story>
+                    {/* TODO display current chapter + logic for displaying title if needed */}
                     <Styled.ButtonsContainer>
                         <Button
                             variant="contained"
@@ -154,7 +154,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                             <ChevronLeftIcon />
                             Title
                         </Button>
-
+                        {/* TODO dropdown for displaying all chapter */}
                         <Typography variant="h4" color="secondary" sx={{ fontWeight: "bold" }}>
                             Chapter 1
                         </Typography>
