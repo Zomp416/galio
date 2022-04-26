@@ -47,6 +47,9 @@ const Editor: React.FC = () => {
                             </IconButton>
                         </Typography>
                     </Styled.ChapterContainer>
+                    <Button variant="contained" color="primary" style={{ marginLeft: "340px" }}>
+                        Publish
+                    </Button>
                 </Styled.TitleContainer>
                 <ReactQuill
                     defaultValue={story!.story}

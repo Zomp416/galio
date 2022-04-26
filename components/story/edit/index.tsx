@@ -4,6 +4,8 @@ import "react-quill/dist/quill.snow.css";
 import Editor from "./editor";
 import Toolbar from "./toolbar";
 import Widebar from "./widebar";
+import { useStoryContext } from "../../../context/storycontext";
+import { saveStory as saveStoryZilean } from "../../../util/zilean";
 
 interface IEditContext {
     tool: string;
@@ -16,7 +18,19 @@ const EditContext = createContext<IEditContext>({ tool: "" });
 
 const EditStory: React.FC = () => {
     const [tool, setTool] = useState("");
-    const saveStory = async () => {};
+    const { story } = useStoryContext();
+
+    const saveStory = async () => {
+        if (!story) return;
+
+        const updatedStory = { ...story };
+        const res = await saveStoryZilean(updatedStory);
+        if (!res.error && res.data) {
+            console.log("yay");
+        } else {
+            console.log(res);
+        }
+    };
     const publishStory = async () => {};
 
     return (
