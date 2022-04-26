@@ -17,8 +17,6 @@ interface NavbarLink {
     onClick?: () => any;
 }
 
-//TODO make search not show up on all pages!
-
 const Navbar: React.FC<NavbarProps> = props => {
     //Get user context to determine if the user is logged in
     const { user } = useAuthContext();

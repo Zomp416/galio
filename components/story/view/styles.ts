@@ -15,8 +15,9 @@ export const ButtonsContainer = styled.div`
     display: flex;
     flex-direction: row;
     width: 100%;
+    background-color: #39a78e;
     justify-content: space-between;
-    margin-top: 25px;
+    padding: 10px;
     margin-bottom: 25px;
 `;
 

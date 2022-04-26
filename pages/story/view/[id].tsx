@@ -7,6 +7,8 @@ import { getUserFromSession } from "../../../util/zilean";
 
 interface Props {
     user: any;
+    story: any;
+    storyAuthor: any;
 }
 
 const LoginPage: NextPage<Props> = props => {
@@ -17,37 +19,40 @@ const LoginPage: NextPage<Props> = props => {
             </Head>
             <AuthProvider user={props.user}>
                 <Navbar domain="stories" />
-                <ViewStory />
+                <ViewStory story={props.story} storyAuthor={props.storyAuthor} />
             </AuthProvider>
         </>
     );
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-    //TODO REMOVE TEST COMIC
-    const testComic = {
+    //const story = await getStory(context.params!.id!.toString());
+    const result = await getUserFromSession(context.req.headers.cookie || "");
+
+    //TODO REMOVE TEST STORY
+    const testStory = {
         _id: context.params?.id,
-        title: "Mason Ma is So Cool!",
+        title: "Crewmate",
         description: "Here is my description",
-        tags: [],
-        renderedImage: "Types.ObjectId",
-        author: "Types.ObjectId",
-        layers: [],
+        tags: ["test", "amongus"],
+        story: [],
+        author: result.data,
         views: 1056,
         ratingTotal: 1000,
         ratingCount: 300,
         comments: [],
+        coverart:
+            "https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/crewmate-indra-tirto.jpg",
         createdAt: "new Date()",
         updatedAt: "new Date()",
         publishedAt: "new Date()",
     };
 
-    const result = await getUserFromSession(context.req.headers.cookie || "");
-
     return {
         props: {
-            comic: testComic,
+            story: testStory, //story.data
             user: result.data || null,
+            storyAuthor: testStory.author || null, //story.data?.author || null,
         },
     };
 };

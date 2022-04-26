@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import {
-    AppBar,
     Box,
     Button,
     Divider,
     TextField,
-    Toolbar,
     Typography,
     Rating,
     List,
@@ -18,47 +16,45 @@ import {
 import ShareIcon from "@mui/icons-material/Share";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import TextIncreaseIcon from "@mui/icons-material/TextIncrease";
-import TextDecreaseIcon from "@mui/icons-material/TextDecrease";
-import FontDownloadIcon from "@mui/icons-material/FontDownload";
-import SettingsIcon from "@mui/icons-material/Settings";
+import { useAuthContext } from "../../../context/authcontext";
+import { unsubscribe, subscribe } from "../../../util/zilean";
 
 import * as Styled from "./styles";
 
-//TODO REMOVE
-const story = {
-    _id: "a2",
-    title: "Crewmate",
-    author: "amogus",
-    description:
-        "Among Us is a 2018 online multiplayer social deduction game developed and published by \
-        American game studio Innersloth. The game was inspired by the party game Mafia and the science \
-        fiction horror film The Thing. The game allows for cross-platform play, first being released on \
-        iOS and Android devices in June 2018 and on Windows later that year in November.",
-    splashURL:
-        "https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/crewmate-indra-tirto.jpg",
-    published: false,
-    rating: 4.3,
-    views: 210,
-};
-
 //TODO make go next and previous chapter work
-const ViewStory: React.FC = () => {
+const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyAuthor }) => {
     const [comment, setComment] = useState<string>("");
     const [rating, setRating] = useState<number | null>(3.5);
+    const [tags, setTags] = useState<string[]>(story.tags);
+    const { user } = useAuthContext();
 
-    //TODO code the functions
-    const handleTextIncrease = () => {
-        window.location.href = "pagelink";
+    let initialSubscribe = false;
+    if (storyAuthor.username === user!.username) {
+        for (let i = 0; i < user?.subscriptions?.length!; i++) {
+            if (user?.subscriptions![i] === storyAuthor._id) {
+                initialSubscribe = true;
+            }
+        }
+    }
+    const [subscribed, setSubscribed] = useState<boolean>(initialSubscribe);
+
+    // TODO subscribe doesnt update subscriber count
+    const handleSubscribe = async (event: React.FormEvent, user2id: any) => {
+        event.preventDefault();
+        const userid = { subscription: user2id };
+        const data = await subscribe(userid);
+        if (!data.error) {
+            setSubscribed(true);
+        }
     };
-    const handleTextDecrease = () => {
-        window.location.href = "pagelink";
-    };
-    const handleFonts = () => {
-        window.location.href = "pagelink";
-    };
-    const handleSettings = () => {
-        window.location.href = "pagelink";
+
+    const handleUnsubscribe = async (event: React.FormEvent, user2id: any) => {
+        event.preventDefault();
+        const userid = { subscription: user2id };
+        const data = await unsubscribe(userid);
+        if (!data.error) {
+            setSubscribed(false);
+        }
     };
 
     return (
@@ -73,30 +69,25 @@ const ViewStory: React.FC = () => {
                             paddingRight: "10px",
                         }}
                         alt={story.title}
-                        src={story.splashURL}
+                        src={story.coverart}
                     />
                     <Styled.ColumnContainer>
                         <Typography variant="h4" width={"100%"} sx={{ paddingTop: "10px" }}>
-                            Story Title
+                            {story.title}
                         </Typography>
                         <Styled.TVContainer>
                             <Styled.TagsContainer>
-                                <Styled.Tag
-                                    variant="contained"
-                                    color="secondary"
-                                    size="small"
-                                    sx={{ textTransform: "none" }}
-                                >
-                                    Comedy
-                                </Styled.Tag>
-                                <Styled.Tag
-                                    variant="contained"
-                                    color="secondary"
-                                    size="small"
-                                    sx={{ textTransform: "none" }}
-                                >
-                                    College
-                                </Styled.Tag>
+                                {tags.map((val, index) => (
+                                    <Styled.Tag
+                                        key={`${index}-tag`}
+                                        variant="contained"
+                                        color="secondary"
+                                        size="small"
+                                        sx={{ textTransform: "none" }}
+                                    >
+                                        {val}
+                                    </Styled.Tag>
+                                ))}
                             </Styled.TagsContainer>
                         </Styled.TVContainer>
                     </Styled.ColumnContainer>
@@ -107,110 +98,80 @@ const ViewStory: React.FC = () => {
                                 <Styled.ColumnContainer>
                                     <div>
                                         <Typography variant="h5" component="a" color="black">
-                                            <Link href={"/user/" + story.author} passHref>
-                                                {story.author}
+                                            <Link href={"/user/" + storyAuthor.username} passHref>
+                                                {storyAuthor.username}
                                             </Link>
                                         </Typography>
                                     </div>
-                                    1.4k Subscribers
+                                    {storyAuthor.subscriberCount + " Subscribers"}
                                 </Styled.ColumnContainer>
                             </Styled.AuthorContainer>
                             <Styled.SSContainer>
-                                <Styled.SSButton variant="contained" color="primary">
+                                {/* TODO do share */}
+                                <Styled.SSButton variant="contained" color="primary" size="large">
                                     Share
                                     <ShareIcon />
                                 </Styled.SSButton>
-                                <Styled.SSButton variant="contained" color="primary">
-                                    Subscribe
-                                </Styled.SSButton>
+                                {user?.username! !== storyAuthor.username! ? (
+                                    subscribed ? (
+                                        <Styled.SSButton
+                                            variant="contained"
+                                            color="primary"
+                                            style={{ backgroundColor: "red" }}
+                                            onClick={e => {
+                                                handleUnsubscribe(e, storyAuthor._id.toString());
+                                            }}
+                                        >
+                                            Unsubscribe
+                                        </Styled.SSButton>
+                                    ) : (
+                                        <Styled.SSButton
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={e => {
+                                                handleSubscribe(e, storyAuthor._id.toString());
+                                            }}
+                                        >
+                                            Subscribe
+                                        </Styled.SSButton>
+                                    )
+                                ) : (
+                                    <></>
+                                )}
                             </Styled.SSContainer>
                         </Styled.ASSContainer>
                     </Styled.ViewContainer>
                 </Styled.RowContainer>
                 <Styled.Story>
-                    <AppBar position="static" color="primary" sx={{ height: "50px" }}>
-                        <Toolbar
-                            disableGutters
+                    {/* TODO display current chapter + logic for displaying title if needed */}
+                    <Styled.ButtonsContainer>
+                        <Button
+                            variant="contained"
                             style={{
-                                minHeight: "50px",
-                            }}
-                            sx={{
-                                display: "flex",
-                                justifyContent: "space-evenly",
-                                alignItems: "center",
+                                backgroundColor: "#BCECDC",
+                                color: "#3F3F3F",
                             }}
                         >
-                            <Box>
-                                <TextIncreaseIcon
-                                    onClick={handleTextIncrease}
-                                    sx={[
-                                        {
-                                            marginRight: "10px",
-                                            borderRadius: "10px",
-                                            "&:hover": {
-                                                color: "#39A78E",
-                                                backgroundColor: "#BCECDC",
-                                                border: "2px solid #3F3F3F",
-                                            },
-                                        },
-                                    ]}
-                                />
-                                <TextDecreaseIcon
-                                    onClick={handleTextDecrease}
-                                    sx={[
-                                        {
-                                            marginRight: "10px",
-                                            borderRadius: "10px",
-                                            "&:hover": {
-                                                color: "#39A78E",
-                                                backgroundColor: "#BCECDC",
-                                                border: "2px solid #3F3F3F",
-                                            },
-                                        },
-                                    ]}
-                                />
-                            </Box>
-                            <FontDownloadIcon
-                                onClick={handleFonts}
-                                sx={[
-                                    {
-                                        borderRadius: "10px",
-                                        "&:hover": {
-                                            color: "#39A78E",
-                                            backgroundColor: "#BCECDC",
-                                            border: "2px solid #3F3F3F",
-                                        },
-                                    },
-                                ]}
-                            />
-                            <SettingsIcon
-                                onClick={handleSettings}
-                                sx={[
-                                    {
-                                        borderRadius: "10px",
-                                        "&:hover": {
-                                            color: "#39A78E",
-                                            backgroundColor: "#BCECDC",
-                                            border: "2px solid #3F3F3F",
-                                        },
-                                    },
-                                ]}
-                            />
-                        </Toolbar>
-                    </AppBar>
-                    <Styled.ButtonsContainer>
-                        <Button variant="contained" color="primary">
                             <ChevronLeftIcon />
                             Title
                         </Button>
-                        <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+                        {/* TODO dropdown for displaying all chapter */}
+                        <Typography variant="h4" color="secondary" sx={{ fontWeight: "bold" }}>
                             Chapter 1
                         </Typography>
-                        <Button variant="contained" color="primary">
+
+                        <Button
+                            variant="contained"
+                            style={{
+                                backgroundColor: "#BCECDC",
+                                color: "#3F3F3F",
+                            }}
+                        >
                             Chapter 2
                             <ChevronRightIcon />
                         </Button>
                     </Styled.ButtonsContainer>
+
                     <Typography
                         sx={{
                             marginBottom: "15px",
@@ -249,6 +210,7 @@ const ViewStory: React.FC = () => {
                         sit. Ipsum dolor sit amet consectetur adipiscing. Vulputate enim nulla
                         aliquet porttitor lacus luctus. Risus nullam eget felis .
                     </Typography>
+
                     <Divider />
                 </Styled.Story>
                 <Styled.ASSContainer>
