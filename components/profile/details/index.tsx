@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { Typography, Button } from "@mui/material";
 import * as Styled from "./styles";
@@ -9,15 +9,16 @@ const Hero: React.FC<{ user2?: any }> = ({ user2 }) => {
     const { user } = useAuthContext();
     const finalUser = user2;
     const router = useRouter();
-    let subscribed = false;
 
+    let initialSubscribe = false;
     if (finalUser.username === user2.username) {
         for (let i = 0; i < user?.subscriptions?.length!; i++) {
             if (user?.subscriptions![i] === user2._id) {
-                subscribed = true;
+                initialSubscribe = true;
             }
         }
     }
+    const [subscribed, setSubscribed] = useState<boolean>(initialSubscribe);
 
     const handleSubscribe = async (event: React.FormEvent, user2id: any) => {
         event.preventDefault();
@@ -25,6 +26,7 @@ const Hero: React.FC<{ user2?: any }> = ({ user2 }) => {
         const data = await subscribe(userid);
         if (!data.error) {
             router.push({ pathname: "/user/" + finalUser.username });
+            setSubscribed(true);
         }
     };
 
@@ -34,8 +36,8 @@ const Hero: React.FC<{ user2?: any }> = ({ user2 }) => {
         const data = await unsubscribe(userid);
         if (!data.error) {
             router.push({ pathname: "/user/" + finalUser.username });
+            setSubscribed(false);
         }
-        subscribed = false;
     };
 
     return (
