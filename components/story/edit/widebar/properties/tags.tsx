@@ -1,20 +1,12 @@
 import React, { useState } from "react";
-import {
-    TextField,
-    Typography,
-    List,
-    ListItem,
-    ListItemText,
-    ListItemAvatar,
-    IconButton,
-} from "@mui/material";
+import { TextField, List, ListItem, ListItemText, ListItemAvatar, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useStoryContext } from "../../../../../context/storycontext";
 
 const TagProperties: React.FC = () => {
     const [addTag, setAddTag] = useState<string>("");
-    const { story } = useStoryContext();
+    const { story, newdo } = useStoryContext();
 
     if (!story) {
         return <div></div>;
@@ -28,11 +20,11 @@ const TagProperties: React.FC = () => {
                         <ListItemText primary={val} />
                         <ListItemAvatar>
                             <IconButton
-                            // onClick={() => {
-                            //     newdo("editComic", {
-                            //         tags: comic.tags.filter(tag => tag !== val),
-                            //     });
-                            // }}
+                                onClick={() => {
+                                    newdo("editStory", {
+                                        tags: story.tags.filter(tag => tag !== val),
+                                    });
+                                }}
                             >
                                 <DeleteIcon />
                             </IconButton>
@@ -59,12 +51,12 @@ const TagProperties: React.FC = () => {
                     <ListItemAvatar>
                         <IconButton
                             disabled={!addTag}
-                            // onClick={() => {
-                            //     newdo("editComic", {
-                            //         tags: [...comic.tags, addTag],
-                            //     });
-                            //     setAddTag("");
-                            // }}
+                            onClick={() => {
+                                newdo("editStory", {
+                                    tags: [...story.tags, addTag],
+                                });
+                                setAddTag("");
+                            }}
                         >
                             <AddIcon />
                         </IconButton>

@@ -16,7 +16,7 @@ const ImageUploadProperties: React.FC = () => {
     const [upload, setUpload] = useState<File>();
     const [uploadDims, setUploadDims] = useState({ width: 100, height: 100 });
     const { newdo } = useComicContext();
-
+    console.log(upload);
     const doUpload = async () => {
         let form = new FormData();
         form.append("image", upload!);

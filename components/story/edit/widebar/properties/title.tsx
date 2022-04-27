@@ -3,7 +3,7 @@ import { TextField, List, ListItem } from "@mui/material";
 import { useStoryContext } from "../../../../../context/storycontext";
 
 const TitleProperties: React.FC = () => {
-    const { story } = useStoryContext();
+    const { story, newdo } = useStoryContext();
 
     return (
         <List>
@@ -14,13 +14,12 @@ const TitleProperties: React.FC = () => {
                     type="text"
                     variant="outlined"
                     fullWidth
-                    value={story ? story.title : "Unnamed Comic"}
-                    // onChange={e => {
-                    //     newdo("editComic", {
-                    //         squish: "title",
-                    //         title: e.target.value,
-                    //     });
-                    // }}
+                    value={story ? story.title : "Unnamed Story"}
+                    onChange={e => {
+                        newdo("editStory", {
+                            title: e.target.value,
+                        });
+                    }}
                 />
             </ListItem>
             <ListItem>
@@ -34,12 +33,11 @@ const TitleProperties: React.FC = () => {
                     rows={10}
                     maxRows={10}
                     value={story ? story.description : ""}
-                    // onChange={e => {
-                    //     newdo("editComic", {
-                    //         squish: "description",
-                    //         description: e.target.value,
-                    //     });
-                    // }}
+                    onChange={e => {
+                        newdo("editStory", {
+                            description: e.target.value,
+                        });
+                    }}
                 />
             </ListItem>
         </List>

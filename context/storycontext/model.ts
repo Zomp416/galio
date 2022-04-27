@@ -15,12 +15,17 @@ export interface ITextProperties {
     alignItems: string;
 }
 
+export interface IChapter {
+    chapterName: string;
+    text: string;
+}
+
 export interface IStory {
     _id: string;
     title: string;
     description?: string;
     tags: string[];
-    story: string[];
+    story: IChapter[];
     author: objectId;
     views: number;
     ratingTotal: number;
