@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Op, OpArgs, editStoryOp, editChapterOp } from "./ops";
+import { Op, OpArgs, editStoryOp, editChapterOp, addChapterOp, deleteChapterOp } from "./ops";
 import { IChapter, IStory } from "./model";
 
 interface IStoryContext {
@@ -51,6 +51,8 @@ export const StoryProvider: React.FC<{ storyText?: IStory }> = ({ children, stor
             op = undefined;
         }
         if (type === "editChapter") op = editChapterOp(args, setChapters, chapter!);
+        if (type === "addChapter") op = addChapterOp(args, setChapters);
+        if (type == "deleteChapter") op = deleteChapterOp(args, setChapters, chapter!);
 
         if (op) {
             setHistory(history.slice(0, pos).concat(op));

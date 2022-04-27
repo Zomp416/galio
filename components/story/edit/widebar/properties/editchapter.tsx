@@ -1,38 +1,61 @@
 import React, { useState, useEffect } from "react";
-import { List, ListItem, ListItemText, ListItemAvatar, IconButton } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
+import { List, ListItem, ListItemText, ListItemAvatar, IconButton, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { useStoryContext } from "../../../../../context/storycontext";
-import { saveStory } from "../../../../../util/zilean";
+import { useEditContext } from "../..";
 import { IChapter } from "../../../../../context/storycontext/model";
 
 const EditChaptersProperties: React.FC = () => {
-    const [addTag, setAddTag] = useState<string>("");
-    const { story, newdo } = useStoryContext();
+    const { chapters, newdo } = useStoryContext();
+    const { selection, setSelection } = useEditContext();
+    let lastIndex = chapters.length;
 
-    if (!story) {
+    if (!chapters) {
         return <div></div>;
     }
 
     return (
         <div>
             <List>
-                {story.story.map((val, index) => (
+                {chapters.map((val: any, index: any) => (
                     <ListItem key={`${index}-modal-tag`}>
                         <ListItemText primary={val.chapterName} />
                         <ListItemAvatar>
-                            <IconButton
-                            // onClick={() => {
-                            //     newdo("editStory", {
-                            //         tags: story.tags.filter(tag => tag !== val),
-                            //     });
-                            // }}
-                            >
-                                <DeleteIcon />
+                            <IconButton onClick={() => setSelection!(index)}>
+                                <EditIcon></EditIcon>
                             </IconButton>
+                            {index === 0 ? (
+                                <></>
+                            ) : (
+                                <IconButton
+                                    onClick={() => {
+                                        console.log(index);
+                                        newdo("deleteChapter", { index: index });
+                                        setSelection!(index - 1);
+                                    }}
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
+                            )}
                         </ListItemAvatar>
                     </ListItem>
                 ))}
+                <ListItem>
+                    <Button
+                        variant="outlined"
+                        fullWidth
+                        onClick={() => {
+                            newdo("addChapter", {
+                                chapter: { chapterName: "Untitled Chapter", text: "" },
+                            });
+                            setSelection!(lastIndex);
+                            // setSelection!(selection + 1);
+                        }}
+                    >
+                        Add New Chapter
+                    </Button>
+                </ListItem>
             </List>
         </div>
     );

@@ -6,7 +6,7 @@ export interface Op {
 }
 
 interface AddChapterOpArgs {
-    story: IChapter;
+    chapter: IChapter;
 }
 
 interface DeleteChapterOpArgs {
@@ -35,6 +35,35 @@ const replaced = (chapters: IChapter[], index: number, replacement: IChapter) =>
         .slice(0, index)
         .concat(replacement)
         .concat(chapters.slice(index + 1));
+};
+
+// op for adding a new chapter
+export const addChapterOp = (args: OpArgs, setChapters: any): Op => {
+    const chapter = (args as AddChapterOpArgs).chapter;
+    return {
+        redo: () => {
+            setChapters((cs: IChapter[]) => cs.concat(chapter));
+        },
+        undo: () => {
+            setChapters((cs: IChapter[]) => cs.slice(0, -1));
+        },
+    };
+};
+
+// op for deleting a chapter
+export const deleteChapterOp = (args: OpArgs, setChapters: any, chapter: IChapter): Op => {
+    const index = (args as DeleteChapterOpArgs).index;
+
+    return {
+        redo: () => {
+            setChapters((cs: IChapter[]) => cs.filter((val, i) => i !== index));
+        },
+        undo: () => {
+            setChapters((cs: IChapter[]) =>
+                cs.slice(0, index).concat(chapter).concat(cs.slice(index))
+            );
+        },
+    };
 };
 
 // op for editing chapter

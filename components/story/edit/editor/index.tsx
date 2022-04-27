@@ -19,39 +19,6 @@ const Editor: React.FC = () => {
     const { saveStory, publishStory, selection } = useEditContext();
     const [textbox, showTextbox] = useState<boolean>(false);
     const { chapters, undo, redo, newdo, canUndo, canRedo, canSave } = useStoryContext();
-    const [text, setText] = useState<string>(chapters[selection].text);
-    const [chaptername, setChapterName] = useState<string>(chapters[selection].chapterName);
-    useEffect(() => {
-        const handleKeyPress = (e: KeyboardEvent) => {
-            const commandKey = e.ctrlKey || e.metaKey; // Ctrl OR Cmd
-            if (!commandKey) return;
-            // Ctrl/Cmd + z (undo)
-            if (e.key === "z") {
-                e.preventDefault();
-                undo();
-                console.log("UNDO");
-            }
-            // Ctrl/Cmd + y (redo)
-            else if (e.key === "y") {
-                e.preventDefault();
-                console.log("REDO");
-                redo();
-            }
-
-            // Ctrl/Cmd + s (save)
-            else if (e.key === "s") {
-                e.preventDefault();
-                if (canSave) {
-                    saveStory!();
-                }
-                console.log("SAVE");
-            }
-        };
-        document.addEventListener("keydown", handleKeyPress);
-        return () => {
-            document.removeEventListener("keydown", handleKeyPress);
-        };
-    }, [undo, redo, newdo]);
 
     const handlePublishClick = async () => {
         publishStory!();
@@ -81,7 +48,7 @@ const Editor: React.FC = () => {
                     <Styled.ChapterContainer>
                         {!textbox ? (
                             <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-                                {chaptername}
+                                {chapters[selection].chapterName}
                                 <IconButton
                                     onClick={e => {
                                         showTextbox(true);
@@ -100,17 +67,15 @@ const Editor: React.FC = () => {
                                     newdo("editChapter", {
                                         index: selection,
                                         chapterName: e.target.value,
-                                        text: text,
+                                        text: chapters[selection].text,
                                     });
-                                    setChapterName(e.target.value);
                                 }}
                                 onBlur={e => {
                                     newdo("editChapter", {
                                         index: selection,
                                         chapterName: e.target.value,
-                                        text: text,
+                                        text: chapters[selection].text,
                                     });
-                                    setChapterName(e.target.value);
                                     showTextbox(false);
                                 }}
                             />
@@ -126,17 +91,16 @@ const Editor: React.FC = () => {
                     </Button>
                 </Styled.TitleContainer>
                 <ReactQuill
-                    defaultValue={text}
+                    value={chapters[selection].text}
                     placeholder="Start Typing..."
                     style={{ marginLeft: "10px", width: "98%" }}
                     onChange={(_, __, source, editor) => {
                         if (source === "user") {
                             newdo("editChapter", {
                                 index: selection,
-                                chapterName: chaptername,
+                                chapterName: chapters[selection].chapterName,
                                 text: editor.getHTML(),
                             });
-                            setText(editor.getHTML());
                             showTextbox(false);
                         }
                     }}
