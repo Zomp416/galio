@@ -3,6 +3,13 @@ import { Divider, Typography } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import * as Styled from "./styles";
+import dynamic from "next/dynamic";
+import "react-quill/dist/quill.snow.css";
+
+const ReactQuill = dynamic(import("react-quill"), {
+    ssr: false,
+    loading: () => <div>Loading Text Editor...</div>,
+});
 
 const Chapter: React.FC<{ story?: any }> = ({ story }) => {
     const [chapter, setChapter] = useState(0);
@@ -35,8 +42,7 @@ const Chapter: React.FC<{ story?: any }> = ({ story }) => {
                     <div></div>
                 )}
             </Styled.ButtonsContainer>
-            <Typography> {story[chapter].text} </Typography>
-
+            <ReactQuill value={story[chapter].text} readOnly={true} modules={{ toolbar: false }} />
             <Divider
                 sx={{
                     marginTop: "15px",
