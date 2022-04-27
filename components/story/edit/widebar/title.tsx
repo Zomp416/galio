@@ -10,6 +10,8 @@ const title = (tool: string) => {
             return "Manage Tags";
         case "coverart":
             return "Change Cover Art";
+        case "editchapters":
+            return "Edit Chapters";
         default:
             return "";
     }

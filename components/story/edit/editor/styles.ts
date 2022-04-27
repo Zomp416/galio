@@ -11,15 +11,15 @@ export const TitleContainer = styled.div`
 export const ButtonContainer = styled.div`
     display: flex;
     flex-direction: row;
-    width: 16%;
+    width: 30%;
     margin-left: 10px;
-    margin-right: 300px;
 `;
 
 export const ChapterContainer = styled.div`
     display: flex;
     flex-direction: row;
-    width: 17%;
+    justify-content: center;
+    width: 100%;
 `;
 
 export const Story = styled.div`

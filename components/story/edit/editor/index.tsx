@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Typography, IconButton } from "@mui/material";
+import { Button, Typography, IconButton, TextField } from "@mui/material";
 import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
 import EditIcon from "@mui/icons-material/Edit";
@@ -16,10 +16,11 @@ const ReactQuill = dynamic(import("react-quill"), {
 });
 
 const Editor: React.FC = () => {
-    const [changed, setChanged] = useState<boolean>(false);
-    const { saveStory, publishStory } = useEditContext();
-    const { story, undo, redo, newdo, canUndo, canRedo, canSave } = useStoryContext();
-
+    const { saveStory, publishStory, selection } = useEditContext();
+    const [textbox, showTextbox] = useState<boolean>(false);
+    const { chapters, undo, redo, newdo, canUndo, canRedo, canSave } = useStoryContext();
+    const [text, setText] = useState<string>(chapters[selection].text);
+    const [chaptername, setChapterName] = useState<string>(chapters[selection].chapterName);
     useEffect(() => {
         const handleKeyPress = (e: KeyboardEvent) => {
             const commandKey = e.ctrlKey || e.metaKey; // Ctrl OR Cmd
@@ -52,13 +53,9 @@ const Editor: React.FC = () => {
         };
     }, [undo, redo, newdo]);
 
-    // const handlePublishClick = async () => {
-    //     const editor = document.getElementById("canvas");
-    //     if (!editor) return;
-    //     const rendered = await domtoimage.toBlob(editor);
-    //     const f = new File([rendered], "filename");
-    //     publishComic!(f);
-    // };
+    const handlePublishClick = async () => {
+        publishStory!();
+    };
 
     return (
         <>
@@ -82,24 +79,65 @@ const Editor: React.FC = () => {
                         </IconButton>
                     </Styled.ButtonContainer>
                     <Styled.ChapterContainer>
-                        <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-                            Chapter 1
-                            <IconButton>
-                                <EditIcon color="primary" />
-                            </IconButton>
-                        </Typography>
+                        {!textbox ? (
+                            <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+                                {chaptername}
+                                <IconButton
+                                    onClick={e => {
+                                        showTextbox(true);
+                                    }}
+                                >
+                                    <EditIcon color="primary" />
+                                </IconButton>
+                            </Typography>
+                        ) : (
+                            <TextField
+                                name="chaptername"
+                                type="text"
+                                variant="outlined"
+                                defaultValue={chapters[selection].chapterName}
+                                onChange={e => {
+                                    newdo("editChapter", {
+                                        index: selection,
+                                        chapterName: e.target.value,
+                                        text: text,
+                                    });
+                                    setChapterName(e.target.value);
+                                }}
+                                onBlur={e => {
+                                    newdo("editChapter", {
+                                        index: selection,
+                                        chapterName: e.target.value,
+                                        text: text,
+                                    });
+                                    setChapterName(e.target.value);
+                                    showTextbox(false);
+                                }}
+                            />
+                        )}
                     </Styled.ChapterContainer>
-                    <Button variant="contained" color="primary" style={{ marginLeft: "370px" }}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        style={{ marginRight: "13px" }}
+                        onClick={handlePublishClick}
+                    >
                         Publish
                     </Button>
                 </Styled.TitleContainer>
                 <ReactQuill
-                    defaultValue={"asd"}
+                    defaultValue={text}
                     placeholder="Start Typing..."
                     style={{ marginLeft: "10px", width: "98%" }}
-                    onChange={(_, __, source) => {
-                        if (!changed && source === "user") {
-                            setChanged(true);
+                    onChange={(_, __, source, editor) => {
+                        if (source === "user") {
+                            newdo("editChapter", {
+                                index: selection,
+                                chapterName: chaptername,
+                                text: editor.getHTML(),
+                            });
+                            setText(editor.getHTML());
+                            showTextbox(false);
                         }
                     }}
                 />

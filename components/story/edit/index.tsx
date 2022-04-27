@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext } from "react";
+import { useRouter } from "next/router";
 import * as Styled from "./styles";
 import "react-quill/dist/quill.snow.css";
 import { Snackbar, Alert, Typography } from "@mui/material";
@@ -6,26 +7,34 @@ import Editor from "./editor";
 import Toolbar from "./toolbar";
 import Widebar from "./widebar";
 import { useStoryContext } from "../../../context/storycontext";
-import { saveStory as saveStoryZilean } from "../../../util/zilean";
+import {
+    saveStory as saveStoryZilean,
+    publishStory as publishStoryZilean,
+} from "../../../util/zilean";
 
 interface IEditContext {
     tool: string;
     setTool?: React.Dispatch<React.SetStateAction<string>>;
+    selection: number;
+    setSelection?: React.Dispatch<React.SetStateAction<number>>;
     saveStory?: () => Promise<void>;
-    publishStory?: (file: File) => Promise<void>;
+    publishStory?: () => Promise<void>;
 }
 
-const EditContext = createContext<IEditContext>({ tool: "" });
+const EditContext = createContext<IEditContext>({ tool: "", selection: 0 });
 
 const EditStory: React.FC = () => {
+    const router = useRouter();
     const [tool, setTool] = useState("");
     const [open, setOpen] = useState<boolean>(false);
-    const { story, clearHistory } = useStoryContext();
+    const [selection, setSelection] = useState(0);
+    const { story, chapters, clearHistory } = useStoryContext();
 
     const saveStory = async () => {
-        if (!story) return;
+        if (!story || !chapters) return;
 
         const updatedStory = { ...story };
+        updatedStory.story = chapters;
         const res = await saveStoryZilean(updatedStory);
         if (!res.error && res.data) {
             showSaveToast();
@@ -35,7 +44,11 @@ const EditStory: React.FC = () => {
             console.log(res);
         }
     };
-    const publishStory = async () => {};
+    const publishStory = async () => {
+        if (!story) return;
+        await publishStoryZilean(story._id);
+        router.push("/story/my");
+    };
 
     const showSaveToast = () => {
         setOpen(true);
@@ -51,7 +64,9 @@ const EditStory: React.FC = () => {
 
     return (
         <>
-            <EditContext.Provider value={{ tool, setTool, saveStory, publishStory }}>
+            <EditContext.Provider
+                value={{ tool, setTool, selection, setSelection, saveStory, publishStory }}
+            >
                 <Styled.EditorOuter>
                     <Styled.EditorInner>
                         <Toolbar />

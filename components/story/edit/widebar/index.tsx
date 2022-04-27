@@ -4,7 +4,7 @@ import Title from "./title";
 import TitleProperties from "./properties/title";
 import TagProperties from "./properties/tags";
 import CoverArtProperties from "./properties/coverart";
-
+import EditChaptersProperties from "./properties/editchapter";
 import { useEditContext } from "..";
 
 const Actions: React.FC = () => {
@@ -16,6 +16,7 @@ const Actions: React.FC = () => {
             {tool === "title" && <TitleProperties />}
             {tool === "tags" && <TagProperties />}
             {tool === "coverart" && <CoverArtProperties />}
+            {tool === "editchapters" && <EditChaptersProperties />}
         </Styled.Widebar>
     );
 };

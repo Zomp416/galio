@@ -12,8 +12,9 @@ const CoverArtProperties: React.FC = () => {
     useEffect(() => {
         async function getCoverArt() {
             if (story!.coverart !== undefined) {
-                const { data } = await getImage(story!.coverart.toString());
-                setCoverArt("https://zomp-media.s3.us-east-1.amazonaws.com/" + data.imageURL);
+                const { data, error } = await getImage(story!.coverart.toString());
+                if (error) alert(error);
+                else setCoverArt("https://zomp-media.s3.us-east-1.amazonaws.com/" + data.imageURL);
             }
         }
         getCoverArt();

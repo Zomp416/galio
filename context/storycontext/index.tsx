@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Op, OpArgs, editStoryOp } from "./ops";
+import { Op, OpArgs, editStoryOp, editChapterOp } from "./ops";
 import { IChapter, IStory } from "./model";
 
 interface IStoryContext {
@@ -27,13 +27,15 @@ const StoryContext = createContext<IStoryContext>({
 
 export const StoryProvider: React.FC<{ storyText?: IStory }> = ({ children, storyText }) => {
     const [story, setStory] = useState(storyText);
-    const [chapters, setLayers] = useState(story?.story || []);
+    const [chapters, setChapters] = useState(story?.story || []);
     const [history, setHistory] = useState<Op[]>([]);
     const [pos, setPos] = useState(0);
 
     //add a new op
     const newdo = (type: string, args: OpArgs) => {
         let op: Op | undefined;
+        let chapter = "index" in args ? chapters[args.index] : undefined;
+
         if (type === "editStory") {
             op = editStoryOp(args, setStory, story!);
             if (pos > 0) {
@@ -47,6 +49,13 @@ export const StoryProvider: React.FC<{ storyText?: IStory }> = ({ children, stor
                 setPos(pos => pos + 1);
             }
             op = undefined;
+        }
+        if (type === "editChapter") op = editChapterOp(args, setChapters, chapter!);
+
+        if (op) {
+            setHistory(history.slice(0, pos).concat(op));
+            op.redo();
+            setPos(pos => pos + 1);
         }
     };
 
