@@ -28,6 +28,7 @@ const EditTable: React.FC<Comic> = props => {
         else setSelection!(props.index);
     };
 
+    //TODO update publish so it sends the image as well
     const handlePublish = async (event: React.FormEvent) => {
         event.preventDefault();
         const data = await publishComic(props._id);
