@@ -20,11 +20,11 @@ const EditChaptersProperties: React.FC = () => {
             <List>
                 {chapters.map((val: any, index: any) => (
                     <ListItem key={`${index}-modal-tag`}>
-                        <ListItemText primary={val.chapterName} />
+                        <ListItemText
+                            primary={val.chapterName}
+                            onClick={() => setSelection!(index)}
+                        />
                         <ListItemAvatar>
-                            <IconButton onClick={() => setSelection!(index)}>
-                                <EditIcon></EditIcon>
-                            </IconButton>
                             {index === 0 ? (
                                 <></>
                             ) : (
@@ -50,7 +50,6 @@ const EditChaptersProperties: React.FC = () => {
                                 chapter: { chapterName: "Untitled Chapter", text: "" },
                             });
                             setSelection!(lastIndex);
-                            // setSelection!(selection + 1);
                         }}
                     >
                         Add New Chapter

@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Typography, IconButton, TextField } from "@mui/material";
-import UndoIcon from "@mui/icons-material/Undo";
-import RedoIcon from "@mui/icons-material/Redo";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import * as Styled from "./styles";
@@ -18,8 +16,13 @@ const ReactQuill = dynamic(import("react-quill"), {
 const Editor: React.FC = () => {
     const { saveStory, publishStory, selection } = useEditContext();
     const [textbox, showTextbox] = useState<boolean>(false);
-    const { chapters, undo, redo, newdo, canUndo, canRedo, canSave } = useStoryContext();
+    const { chapters, newdo, canSave } = useStoryContext();
+    const [changed, setChanged] = useState<boolean>(false);
 
+    const handleSave = async () => {
+        setChanged(false);
+        saveStory!();
+    };
     const handlePublishClick = async () => {
         publishStory!();
     };
@@ -33,17 +36,11 @@ const Editor: React.FC = () => {
                             variant="contained"
                             color="primary"
                             startIcon={<SaveIcon />}
-                            disabled={!canSave}
-                            onClick={saveStory}
+                            disabled={!canSave && !changed}
+                            onClick={handleSave}
                         >
-                            Save {canSave && "*"}
+                            Save {canSave || (changed && "*")}
                         </Button>
-                        <IconButton onClick={undo} color="inherit" disabled={!canUndo}>
-                            <UndoIcon />
-                        </IconButton>
-                        <IconButton onClick={redo} color="inherit" disabled={!canRedo}>
-                            <RedoIcon />
-                        </IconButton>
                     </Styled.ButtonContainer>
                     <Styled.ChapterContainer>
                         {!textbox ? (
@@ -90,18 +87,15 @@ const Editor: React.FC = () => {
                         Publish
                     </Button>
                 </Styled.TitleContainer>
+                {/* vvvvv FIX vvvvv */}
                 <ReactQuill
                     value={chapters[selection].text}
                     placeholder="Start Typing..."
-                    style={{ marginLeft: "10px", width: "98%" }}
-                    onChange={(_, __, source, editor) => {
+                    style={{ marginLeft: "10px", width: "98%", maxWidth: "98%" }}
+                    onChange={(content, delta, source, editor) => {
                         if (source === "user") {
-                            newdo("editChapter", {
-                                index: selection,
-                                chapterName: chapters[selection].chapterName,
-                                text: editor.getHTML(),
-                            });
-                            showTextbox(false);
+                            chapters[selection].text = content;
+                            setChanged(true);
                         }
                     }}
                 />
