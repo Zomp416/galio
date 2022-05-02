@@ -50,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
         // No data means that the backend was not able to find a user from the session cookie.
         return {
             redirect: {
-                destination: "/login",
+                destination: "/",
                 permanent: false,
             },
         };
