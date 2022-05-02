@@ -1,7 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { List, ListItem, ListItemText, ListItemAvatar, IconButton, Button } from "@mui/material";
+import React, { useState } from "react";
+import {
+    List,
+    ListItem,
+    ListItemText,
+    ListItemAvatar,
+    IconButton,
+    Button,
+    Menu,
+    MenuItem,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import { useStoryContext } from "../../../../../context/storycontext";
 import { useEditContext } from "../..";
 import { IChapter } from "../../../../../context/storycontext/model";
@@ -9,6 +17,7 @@ import { IChapter } from "../../../../../context/storycontext/model";
 const EditChaptersProperties: React.FC = () => {
     const { chapters, newdo } = useStoryContext();
     const { selection, setSelection } = useEditContext();
+    const [hovered, setHovered] = useState(false);
     let lastIndex = chapters.length;
 
     if (!chapters) {
@@ -20,10 +29,10 @@ const EditChaptersProperties: React.FC = () => {
             <List>
                 {chapters.map((val: any, index: any) => (
                     <ListItem key={`${index}-modal-tag`}>
-                        <ListItemText
-                            primary={val.chapterName}
-                            onClick={() => setSelection!(index)}
-                        />
+                        <Button variant="outlined" onClick={() => setSelection!(index)}>
+                            {val.chapterName}
+                        </Button>
+
                         <ListItemAvatar>
                             {index === 0 ? (
                                 <></>
