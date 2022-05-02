@@ -75,6 +75,11 @@ const Editor: React.FC = () => {
                                     });
                                     showTextbox(false);
                                 }}
+                                onKeyPress={e => {
+                                    if (e.key === "Enter") {
+                                        showTextbox(false);
+                                    }
+                                }}
                             />
                         )}
                     </Styled.ChapterContainer>
