@@ -105,7 +105,8 @@ const Editor: React.FC = () => {
         return () => {
             document.removeEventListener("keydown", handleKeyPress);
         };
-    }, [undo, redo, newdo, selection, layers, canSave, saveComic]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [undo, redo, newdo, selection]);
 
     const handleContextMenu = (event: React.MouseEvent) => {
         event.preventDefault();
