@@ -16,7 +16,6 @@ import { useImageContext } from "../../context/imagecontext";
 import { update, deleteAccount } from "../../util/zileanUser";
 import { createImage } from "../../util/zilean";
 
-//TODO import default values from context
 const Form: React.FC = () => {
     const router = useRouter();
     const { user } = useAuthContext();

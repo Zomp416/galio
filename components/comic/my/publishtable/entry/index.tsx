@@ -63,7 +63,6 @@ const PublishTable: React.FC<Props> = props => {
                                 </Button>
                             </Tooltip>
                             <Tooltip title="Unpublish">
-                                {/* TODO: unpublish comic */}
                                 <Button
                                     onClick={e => {
                                         handleUnpublish(e);

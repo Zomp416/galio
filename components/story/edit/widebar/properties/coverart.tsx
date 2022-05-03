@@ -1,3 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable no-unused-vars */
+//TODO remove warnings for this page
 import { List, ListItem, Input, Button } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useStoryContext } from "../../../../../context/storycontext";
@@ -52,6 +55,7 @@ const CoverArtProperties: React.FC = () => {
                     ) : (
                         <img
                             src={coverArt}
+                            alt=""
                             onLoad={e =>
                                 setUploadDims({
                                     width: e.currentTarget.width,
@@ -64,6 +68,7 @@ const CoverArtProperties: React.FC = () => {
                 ) : (
                     <img
                         src={imagePreview}
+                        alt=""
                         onLoad={e =>
                             setUploadDims({
                                 width: e.currentTarget.width,

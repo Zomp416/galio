@@ -17,7 +17,6 @@ const StoryCard: React.FC<{ story?: any; user?: any }> = ({ story, user }) => {
     const [coverArt, setCoverArt] = useState("");
     useEffect(() => {
         async function getDisplayedComic() {
-            console.log(story);
             const data = await getStory(story);
             if (data.error) alert(data.error);
             else setStory(data.data);
@@ -32,7 +31,7 @@ const StoryCard: React.FC<{ story?: any; user?: any }> = ({ story, user }) => {
             }
         }
         getDisplayedComic();
-    }, []);
+    }, [displayedStory?.publishedAt, story]);
 
     return (
         <>

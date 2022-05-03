@@ -1,8 +1,8 @@
 type objectId = string;
 
-interface IImageProperties {
-    imageURL: objectId;
-}
+// interface IImageProperties {
+//     imageURL: objectId;
+// }
 
 export interface ITextProperties {
     text: string;

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Divider, Select, MenuItem, Pagination, Stack, Tab, Tabs } from "@mui/material";
 import * as Styled from "./styles";
-import { useAuthContext } from "../../../context/authcontext";
 import ComicCard from "./comiccard";
 import StoryCard from "./storycard";
 import ProfileCard from "./profilecard";
@@ -10,7 +9,7 @@ const Hero: React.FC<{ user2?: any; userSubs?: any }> = ({ user2, userSubs }) =>
     const [category, setCategory] = useState<string>("comics");
     const [time, setTime] = useState<string>("Today");
     const [sort, setSort] = useState<string>("alpha");
-    const { user } = useAuthContext();
+    //TODO test replacing user2 with finaluser
     const finalUser = user2;
 
     const onSetCategory = (_: any, val: any) => {

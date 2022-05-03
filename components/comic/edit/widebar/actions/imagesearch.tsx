@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+//TODO remove that with no warning ^^
 import React, { useState } from "react";
 import { TextField, Typography, List, ListItem, Accordion, AccordionSummary } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -58,6 +60,7 @@ const ImageSearchProperties: React.FC = () => {
                         <img
                             src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + url}
                             style={{ maxWidth: "100%" }}
+                            alt=""
                             onClick={e =>
                                 doInsertFromSearch(
                                     url,

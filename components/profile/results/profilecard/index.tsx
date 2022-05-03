@@ -23,7 +23,7 @@ const ProfileCard: React.FC<{ user2?: any }> = ({ user2 }) => {
             }
         }
         getUser();
-    }, []);
+    }, [user2]);
 
     return (
         <Card

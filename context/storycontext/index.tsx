@@ -5,6 +5,7 @@ import { IChapter, IStory } from "./model";
 interface IStoryContext {
     story: IStory | undefined;
     chapters: IChapter[];
+    // eslint-disable-next-line no-unused-vars
     newdo: (...args: any) => void;
     undo: () => void;
     redo: () => void;

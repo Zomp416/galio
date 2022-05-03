@@ -25,7 +25,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any; coverArt?: any }> = 
 }) => {
     const [comment, setComment] = useState<string>("");
     const [rating, setRating] = useState<number | null>(3.5);
-    const [tags, setTags] = useState<string[]>(story.tags);
+    const [tags] = useState<string[]>(story.tags);
     const { user } = useAuthContext();
 
     let initialSubscribe = false;

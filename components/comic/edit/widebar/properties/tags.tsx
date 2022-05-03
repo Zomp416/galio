@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-    TextField,
-    Typography,
-    List,
-    ListItem,
-    ListItemText,
-    ListItemAvatar,
-    IconButton,
-} from "@mui/material";
+import { TextField, List, ListItem, ListItemText, ListItemAvatar, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useComicContext } from "../../../../../context/comiccontext";

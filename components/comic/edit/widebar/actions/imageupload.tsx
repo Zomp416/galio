@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+//TODO remove that^^ with no warning
 import React, { useState } from "react";
 import {
     Button,
@@ -54,6 +56,7 @@ const ImageUploadProperties: React.FC = () => {
                         <ListItem>
                             <img
                                 src={URL.createObjectURL(upload)}
+                                alt=""
                                 onLoad={e =>
                                     setUploadDims({
                                         width: e.currentTarget.width,

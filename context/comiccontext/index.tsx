@@ -16,6 +16,7 @@ import {
 interface IComicContext {
     comic: IComic | undefined;
     layers: ILayer[];
+    // eslint-disable-next-line no-unused-vars
     newdo: (...args: any) => void;
     undo: () => void;
     redo: () => void;
