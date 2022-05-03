@@ -26,6 +26,7 @@ const Navbar: React.FC<NavbarProps> = props => {
 
     //Used to enable the menu on the user icon
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+    const [search, setSearch] = React.useState("");
     const router = useRouter();
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -43,11 +44,8 @@ const Navbar: React.FC<NavbarProps> = props => {
     };
 
     //Used to retrieve the search field
-    const handleSubmit = () => {
-        var searchBy = (document.getElementById("search") as HTMLInputElement).value;
-        router.push("/search");
-        //Send searchBy to page
-        console.log(searchBy);
+    const handleSearch = () => {
+        router.push(`/search?q=${search}`);
     };
 
     //Used to create comics
@@ -123,95 +121,104 @@ const Navbar: React.FC<NavbarProps> = props => {
             position="fixed"
             color="secondary"
             // NAVBAR HEIGHT IS CORRELATED TO MARGIN ON INDIVIDUAL PAGES
-            sx={{ height: "50px", padding: "0", zIndex: theme => theme.zIndex.drawer + 1 }}
+            sx={{
+                height: "50px",
+                display: "flex",
+                flexDirection: "row",
+                padding: "10px",
+                justifyContent: "space-around",
+                alignItems: "center",
+            }}
         >
-            <Toolbar
-                disableGutters
-                style={{
-                    minHeight: "50px",
-                }}
+            <IconButton
+                href={"/" + link}
+                component="a"
+                sx={{ flexGrow: 1, justifyContent: "left" }}
+            >
+                <Image src="/zomplight.svg" alt="Zomp Icon" width={100} height={40} />
+                {logo}
+            </IconButton>
+            <Box
                 sx={{
-                    height: "50px",
                     display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    padding: "0 15px",
+                    flexGrow: 3,
+                    justifyContent: "center",
                 }}
             >
-                <IconButton href={"/" + link} component="a" sx={{ padding: "0" }}>
-                    <Image src="/zomplight.svg" alt="Zomp Icon" width={100} height={40} />
-                    {logo}
-                </IconButton>
-                <Box
-                    sx={{
-                        display: "flex",
-                        width: "25%",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                    }}
-                >
+                <Box sx={{ position: "relative" }}>
                     <InputBase
                         id="search"
                         placeholder="Search"
-                        inputProps={{ "aria-label": "search" }}
-                        sx={{ color: "white" }}
+                        sx={{
+                            paddingLeft: "10px",
+                            border: "1px solid gray",
+                            color: "white",
+                            width: "400px",
+                        }}
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
                     />
                     <IconButton
-                        onClick={handleSubmit}
-                        sx={{ p: "10px" }}
+                        onClick={handleSearch}
+                        sx={{ position: "absolute", right: "0px", padding: "6px", zIndex: 100 }}
                         aria-label="search"
-                        //href="/search"
                     >
                         <SearchIcon color="primary" />
                     </IconButton>
-                    <Box>
-                        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                            <Avatar src={`${IMAGE_URI}${user?.profilePicture || ""}`} />
-                        </IconButton>
-                        <Menu
-                            sx={{ mt: "40px" }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            {settings.map(setting => {
-                                if (setting.url) {
-                                    return (
-                                        <MenuItem
-                                            key={setting.display}
-                                            component="a"
-                                            href={setting.url}
-                                            onClick={handleCloseUserMenu}
-                                        >
-                                            {setting.display}
-                                        </MenuItem>
-                                    );
-                                } else if (setting.onClick) {
-                                    return (
-                                        <MenuItem
-                                            key={setting.display}
-                                            component="a"
-                                            onClick={setting.onClick}
-                                        >
-                                            {setting.display}
-                                        </MenuItem>
-                                    );
-                                }
-                            })}
-                        </Menu>
-                    </Box>
                 </Box>
-            </Toolbar>
+            </Box>
+            <Box
+                sx={{
+                    display: "flex",
+                    flexGrow: 1,
+                    justifyContent: "right",
+                }}
+            >
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar />
+                </IconButton>
+                <Menu
+                    sx={{ mt: "40px" }}
+                    id="menu-appbar"
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
+                >
+                    {settings.map(setting => {
+                        if (setting.url) {
+                            return (
+                                <MenuItem
+                                    key={setting.display}
+                                    component="a"
+                                    href={setting.url}
+                                    onClick={handleCloseUserMenu}
+                                >
+                                    {setting.display}
+                                </MenuItem>
+                            );
+                        } else if (setting.onClick) {
+                            return (
+                                <MenuItem
+                                    key={setting.display}
+                                    component="a"
+                                    onClick={setting.onClick}
+                                >
+                                    {setting.display}
+                                </MenuItem>
+                            );
+                        }
+                    })}
+                </Menu>
+            </Box>
         </AppBar>
     );
 };
