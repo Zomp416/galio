@@ -57,5 +57,6 @@ export const CardsContainer = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    gap: 5px;
     margin-bottom: 40px;
 `;

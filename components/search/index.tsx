@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useRouter } from "next/router";
+
+// import Link from "next/link";
 import {
     Typography,
     Dialog,
@@ -20,40 +23,8 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import * as Styled from "./styles";
-
-const ResultCard: React.FC = () => {
-    return (
-        <Card
-            sx={{
-                backgroundColor: "transparent",
-                textAlign: "center",
-                boxShadow: "none",
-                width: "17.5%",
-                borderRadius: "0",
-            }}
-        >
-            <CardMedia
-                component="img"
-                height="200px"
-                width="200px"
-                image=""
-                alt="Image"
-                style={{ backgroundColor: "grey" }}
-            />
-            <CardContent>
-                <Typography variant="h5" component="div" fontWeight="bold">
-                    Comic Title
-                </Typography>
-                <Typography variant="body1" color="text.secondary" fontWeight="bold">
-                    MasonMa37
-                </Typography>
-                <Typography variant="body1" color="text.secondary">
-                    100 Views
-                </Typography>
-            </CardContent>
-        </Card>
-    );
-};
+import ResultCard from "./resultcard";
+import debounce from "lodash.debounce";
 
 const Search: React.FC = () => {
     const [tags, setTags] = useState<string[]>(["Comedy", "College"]);
@@ -62,6 +33,13 @@ const Search: React.FC = () => {
     const [category, setCategory] = useState<string>("Comics");
     const [time, setTime] = useState<string>("Today");
     const [sort, setSort] = useState<string>("alpha");
+
+    const router = useRouter();
+    const { search } = router.query;
+
+    const doDebouncedSearch = debounce(async query => {
+        console.log("triggered search ", query);
+    }, 800);
 
     return (
         <Styled.SearchContainer>
@@ -125,7 +103,19 @@ const Search: React.FC = () => {
                 </List>
             </Dialog>
             <Typography gutterBottom variant="h3" width={"100%"} sx={{ fontWeight: "bold" }}>
-                Results for &quot;Mason&quot;
+                Results for &quot;
+                <Typography
+                    display="inline"
+                    contentEditable
+                    variant="h3"
+                    sx={{ fontWeight: "bold", outline: "none" }}
+                    onInput={e => {
+                        doDebouncedSearch(e.currentTarget.textContent);
+                    }}
+                >
+                    {search}
+                </Typography>
+                &quot;
             </Typography>
             <Styled.FilterContainer>
                 <Typography variant="h4" sx={{ fontWeight: "bold", marginRight: "20px" }}>
@@ -207,10 +197,38 @@ const Search: React.FC = () => {
             </Styled.ResultsContainer>
             <Divider sx={{ width: "100%", marginBottom: "20px" }} />
             <Styled.CardsContainer>
-                <ResultCard />
-                <ResultCard />
-                <ResultCard />
-                <ResultCard />
+                <ResultCard
+                    _id="id"
+                    title="Comic Title"
+                    author="MasonMa37"
+                    splashURL="src"
+                    rating={3.5}
+                    views={101}
+                />
+                <ResultCard
+                    _id="id"
+                    title="Comic Title"
+                    author="MasonMa37"
+                    splashURL="src"
+                    rating={3.5}
+                    views={101}
+                />
+                <ResultCard
+                    _id="id"
+                    title="Comic Title"
+                    author="MasonMa37"
+                    splashURL="src"
+                    rating={3.5}
+                    views={101}
+                />
+                <ResultCard
+                    _id="id"
+                    title="Comic Title"
+                    author="MasonMa37"
+                    splashURL="src"
+                    rating={3.5}
+                    views={101}
+                />
             </Styled.CardsContainer>
             <Pagination />
             <Typography variant="h6" component="div" sx={{ marginTop: "10px" }}>
