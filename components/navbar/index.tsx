@@ -1,6 +1,15 @@
 import React from "react";
 import Image from "next/image";
-import { AppBar, Avatar, Box, IconButton, Menu, MenuItem, InputBase, Toolbar } from "@mui/material";
+import {
+    AppBar,
+    Avatar,
+    Box,
+    IconButton,
+    Menu,
+    MenuItem,
+    InputBase,
+    FormControl,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useRouter } from "next/router";
 import { useAuthContext } from "../../context/authcontext";
@@ -44,8 +53,8 @@ const Navbar: React.FC<NavbarProps> = props => {
     };
 
     //Used to retrieve the search field
-    const handleSearch = () => {
-        router.push(`/search?q=${search}`);
+    const handleSearch = (e: any) => {
+        router.push(`/search?${search}`);
     };
 
     //Used to create comics
@@ -126,7 +135,7 @@ const Navbar: React.FC<NavbarProps> = props => {
                 display: "flex",
                 flexDirection: "row",
                 padding: "10px",
-                justifyContent: "space-around",
+                gap: "10px",
                 alignItems: "center",
             }}
         >
@@ -141,11 +150,10 @@ const Navbar: React.FC<NavbarProps> = props => {
             <Box
                 sx={{
                     display: "flex",
-                    flexGrow: 3,
                     justifyContent: "center",
                 }}
             >
-                <Box sx={{ position: "relative" }}>
+                <FormControl component="form" sx={{ position: "relative" }} onSubmit={handleSearch}>
                     <InputBase
                         id="search"
                         placeholder="Search"
@@ -155,22 +163,24 @@ const Navbar: React.FC<NavbarProps> = props => {
                             color: "white",
                             width: "400px",
                         }}
+                        name="search"
                         value={search}
                         onChange={e => setSearch(e.target.value)}
                     />
                     <IconButton
-                        onClick={handleSearch}
+                        component="button"
+                        type="submit"
                         sx={{ position: "absolute", right: "0px", padding: "6px", zIndex: 100 }}
                         aria-label="search"
+                        onClick={handleSearch}
                     >
                         <SearchIcon color="primary" />
                     </IconButton>
-                </Box>
+                </FormControl>
             </Box>
             <Box
                 sx={{
                     display: "flex",
-                    flexGrow: 1,
                     justifyContent: "right",
                 }}
             >
