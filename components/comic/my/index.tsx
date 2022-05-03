@@ -6,7 +6,7 @@ import * as Styled from "./styles";
 import EditTable from "./edittable";
 import PublishTable from "./publishtable";
 import AddIcon from "@mui/icons-material/Add";
-import { createComic } from "../../../util/zilean";
+import { createComic } from "../../../util/zileanComic";
 
 interface ComicProps {
     published: any[];

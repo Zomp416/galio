@@ -3,9 +3,10 @@ import Image from "next/image";
 import { AppBar, Avatar, Box, IconButton, Menu, MenuItem, InputBase, Toolbar } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useRouter } from "next/router";
-import { logout } from "../../util/zilean";
 import { useAuthContext } from "../../context/authcontext";
-import { createComic, createStory } from "../../util/zilean";
+import { logout } from "../../util/zileanUser";
+import { createComic } from "../../util/zileanComic";
+import { createStory } from "../../util/zileanStory";
 
 interface NavbarProps {
     domain: string;

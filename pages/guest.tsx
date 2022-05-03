@@ -4,7 +4,7 @@ import Head from "next/head";
 import PostLoginPage from "../components/postlogin";
 import Navbar from "../components/navbar";
 import { AuthProvider } from "../context/authcontext";
-import { getUserFromSession } from "../util/zilean";
+import { getUserFromSession } from "../util/zileanUser";
 
 interface Props {
     user: any;

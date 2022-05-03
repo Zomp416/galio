@@ -1,7 +1,7 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import Login from "../components/login";
-import { getUserFromSession } from "../util/zilean";
+import { getUserFromSession } from "../util/zileanUser";
 
 const LoginPage: NextPage = () => {
     return (

@@ -4,8 +4,9 @@ import ViewComic from "../../../components/comic/view";
 import Navbar from "../../../components/navbar";
 import { AuthProvider } from "../../../context/authcontext";
 import { ImageProvider } from "../../../context/imagecontext";
-import { getUserFromSession, getComic, getUserFromID, getImage } from "../../../util/zilean";
-import { useRouter } from "next/router";
+import { getImage } from "../../../util/zilean";
+import { getUserFromSession } from "../../../util/zileanUser";
+import { getComic } from "../../../util/zileanComic";
 
 interface Props {
     user: any;

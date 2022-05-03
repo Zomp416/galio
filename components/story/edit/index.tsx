@@ -10,7 +10,7 @@ import { useStoryContext } from "../../../context/storycontext";
 import {
     saveStory as saveStoryZilean,
     publishStory as publishStoryZilean,
-} from "../../../util/zilean";
+} from "../../../util/zileanStory";
 
 interface IEditContext {
     tool: string;

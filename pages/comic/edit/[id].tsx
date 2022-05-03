@@ -5,7 +5,8 @@ import Navbar from "../../../components/navbar";
 import { AuthProvider } from "../../../context/authcontext";
 import { ComicProvider } from "../../../context/comiccontext";
 import { IComic } from "../../../context/comiccontext/model";
-import { getUserFromSession, getEditComic } from "../../../util/zilean";
+import { getUserFromSession } from "../../../util/zileanUser";
+import { getEditComic } from "../../../util/zileanComic";
 
 interface Props {
     user: any;

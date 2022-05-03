@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Typography, CardContent } from "@mui/material";
 import * as Styled from "./styles";
-import { getStory, getImage } from "../../../../util/zilean";
+import { getImage } from "../../../../util/zilean";
+import { getStory } from "../../../../util/zileanStory";
 
 interface Story {
     _id: string;

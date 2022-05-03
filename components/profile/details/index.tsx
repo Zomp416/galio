@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { Typography, Button } from "@mui/material";
 import * as Styled from "./styles";
 import { useAuthContext } from "../../../context/authcontext";
-import { unsubscribe, subscribe } from "../../../util/zilean";
+import { unsubscribe, subscribe } from "../../../util/zileanUser";
 
 const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile }) => {
     const { user } = useAuthContext();

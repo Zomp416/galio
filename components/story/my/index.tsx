@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { Typography } from "@mui/material";
-import { createStory } from "../../../util/zilean";
+import { createStory } from "../../../util/zileanStory";
 import { useRouter } from "next/router";
 import * as Styled from "./styles";
 import EditTable from "./edittable";

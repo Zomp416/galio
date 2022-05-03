@@ -14,7 +14,7 @@ import {
 import ShareIcon from "@mui/icons-material/Share";
 import Chapter from "./chapter";
 import { useAuthContext } from "../../../context/authcontext";
-import { unsubscribe, subscribe } from "../../../util/zilean";
+import { unsubscribe, subscribe } from "../../../util/zileanUser";
 
 import * as Styled from "./styles";
 

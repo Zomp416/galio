@@ -3,7 +3,7 @@ import Head from "next/head";
 import Navbar from "../components/navbar";
 import Search from "../components/search";
 import { AuthProvider } from "../context/authcontext";
-import { getUserFromSession } from "../util/zilean";
+import { getUserFromSession } from "../util/zileanUser";
 
 interface Props {
     user: any;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { Button, TextField, Typography } from "@mui/material";
 import { StyledForm } from "./styles";
-import { register } from "../../util/zilean";
+import { register } from "../../util/zileanUser";
 
 const defaultValues = {
     email: "",

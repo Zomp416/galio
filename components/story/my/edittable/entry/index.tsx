@@ -6,7 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Tooltip from "@mui/material/Tooltip";
-import { publishStory, deleteStory } from "../../../../../util/zilean";
+import { publishStory, deleteStory } from "../../../../../util/zileanStory";
 
 import { useSelectionContext } from "../..";
 import * as Styled from "./styles";

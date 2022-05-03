@@ -6,7 +6,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import UnpublishedIcon from "@mui/icons-material/Unpublished";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Tooltip from "@mui/material/Tooltip";
-import { unpublishComic, deleteComic } from "../../../../../util/zilean";
+import { unpublishComic, deleteComic } from "../../../../../util/zileanComic";
 
 import { useSelectionContext } from "../..";
 import * as Styled from "./styles";

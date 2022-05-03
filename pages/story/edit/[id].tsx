@@ -5,7 +5,8 @@ import Navbar from "../../../components/navbar";
 import { AuthProvider } from "../../../context/authcontext";
 import { StoryProvider } from "../../../context/storycontext";
 import { IStory } from "../../../context/storycontext/model";
-import { getUserFromSession, getStory } from "../../../util/zilean";
+import { getUserFromSession, } from "../../../util/zileanUser";
+import { getStory } from "../../../util/zileanStory";
 
 interface Props {
     user: any;
