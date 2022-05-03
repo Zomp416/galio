@@ -12,72 +12,6 @@ interface Props {
     comic: IComic;
 }
 
-const myComic: IComic = {
-    _id: "TEST",
-    title: "taquito",
-    description: "im on a ta-'quito diet'",
-    tags: [],
-    layers: [
-        {
-            type: "panel",
-            name: "Layer 01",
-            visible: true,
-            x: 200,
-            y: 100,
-            width: 500,
-            height: 500,
-            rotation: 0,
-            xFlip: false,
-            yFlip: false,
-            properties: {
-                backgroundColor: "white",
-                borderStyle: "solid",
-                borderWidth: "1px",
-                borderColor: "black",
-                borderRadius: "0px",
-            },
-        },
-        {
-            type: "image",
-            name: "Layer 02",
-            visible: true,
-            x: 250,
-            y: 150,
-            width: 300,
-            height: 300,
-            rotation: 0,
-            xFlip: false,
-            yFlip: false,
-            properties: {
-                imageURL:
-                    "https://gimmedelicious.com/wp-content/uploads/2019/11/chicken-taquitos-feature-1.jpg",
-            },
-        },
-        {
-            type: "text",
-            name: "Layer 03",
-            visible: true,
-            x: 250,
-            y: 100,
-            width: 150,
-            height: 30,
-            rotation: 0,
-            xFlip: false,
-            yFlip: false,
-            properties: {
-                text: "I Hate Taquitos",
-                color: "black",
-                fontSize: "16px",
-                fontWeight: "normal",
-                fontStyle: "normal",
-                textDecoration: "none",
-                justifyContent: "center",
-                alignItems: "center",
-            },
-        },
-    ],
-};
-
 const EditComicPage: NextPage<Props> = props => {
     return (
         <>
@@ -101,17 +35,27 @@ export const getServerSideProps: GetServerSideProps = async context => {
         (context.params?.id as string) || "yikes"
     );
 
-    // TODO REDIRECT IF NO COMIC WITH ID
-    let comic = myComic;
-    if (!comicRes.error && comicRes.data) {
+    let comic = comicRes.data;
+    if (!comicRes.error) {
         comic = comicRes.data;
     }
 
-    //TODO confirm proper author
+    //Prevents editing of published
+    if (comic?.publishedAt == null) {
+        //Confirms proper author
+        if (comic?.author == result.data?._id) {
+            return {
+                props: {
+                    comic,
+                    user: result.data || null,
+                },
+            };
+        }
+    }
     return {
-        props: {
-            comic,
-            user: result.data || null,
+        redirect: {
+            destination: "/",
+            permanent: false,
         },
     };
 };

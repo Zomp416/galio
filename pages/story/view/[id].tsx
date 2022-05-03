@@ -34,26 +34,35 @@ export const getServerSideProps: GetServerSideProps = async context => {
     const story = await getStory(context.params!.id!.toString());
     const result = await getUserFromSession(context.req.headers.cookie || "");
     const author = await getUserFromID(story.data?.author);
-    if (story.data?.coverart) {
-        const art = await getImage(story.data?.coverart);
-        return {
-            props: {
-                story: story.data || null,
-                user: result.data || null,
-                storyAuthor: author.data || null,
-                coverArt: art.data?.imageURL || null,
-            },
-        };
-    } else {
-        return {
-            props: {
-                story: story.data || null,
-                user: result.data || null,
-                storyAuthor: author.data || null,
-                coverArt: null,
-            },
-        };
+
+    if (story.data?.publishedAt) {
+        if (story.data?.coverart) {
+            const art = await getImage(story.data?.coverart);
+            return {
+                props: {
+                    story: story.data || null,
+                    user: result.data || null,
+                    storyAuthor: author.data || null,
+                    coverArt: art.data?.imageURL || null,
+                },
+            };
+        } else {
+            return {
+                props: {
+                    story: story.data || null,
+                    user: result.data || null,
+                    storyAuthor: author.data || null,
+                    coverArt: null,
+                },
+            };
+        }
     }
+    return {
+        redirect: {
+            destination: "/",
+            permanent: false,
+        },
+    };
 };
 
 export default LoginPage;

@@ -34,12 +34,20 @@ export const getServerSideProps: GetServerSideProps = async context => {
     const comic = await getComic(context.params!.id!.toString());
     const result = await getUserFromSession(context.req.headers.cookie || "");
 
+    if (comic.data?.publishedAt) {
+        return {
+            props: {
+                comic: comic.data,
+                user: result.data || null,
+                comicAuthor: comic.data?.author || null,
+                comicImage: comic.data?.renderedImage || null,
+            },
+        };
+    }
     return {
-        props: {
-            comic: comic.data,
-            user: result.data || null,
-            comicAuthor: comic.data?.author || null,
-            comicImage: comic.data?.renderedImage || null,
+        redirect: {
+            destination: "/",
+            permanent: false,
         },
     };
 };
