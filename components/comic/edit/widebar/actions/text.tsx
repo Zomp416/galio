@@ -1,6 +1,5 @@
 import React from "react";
 import { Button } from "@mui/material";
-import AbcIcon from "@mui/icons-material/Abc";
 import { useComicContext } from "../../../../../context/comiccontext";
 
 const TextActions: React.FC = () => {

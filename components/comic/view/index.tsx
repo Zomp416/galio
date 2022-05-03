@@ -19,7 +19,7 @@ import { unsubscribe, subscribe } from "../../../util/zileanUser";
 
 const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicAuthor }) => {
     const [comment, setComment] = useState<string>("");
-    const [tags, setTags] = useState<string[]>(comic.tags);
+    const [tags] = useState<string[]>(comic.tags);
     const [rating, setRating] = useState<number | null>(4.5);
     const { image } = useImageContext();
     const { user } = useAuthContext();

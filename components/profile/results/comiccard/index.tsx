@@ -31,7 +31,7 @@ const ComicCard: React.FC<{ comic?: any; user?: any }> = ({ comic, user }) => {
             }
         }
         getDisplayedComic();
-    }, []);
+    }, [comic, displayedComic?.publishedAt]);
 
     return (
         <>

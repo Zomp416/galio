@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+//TODO fix File being unused or remove
 import React, { createContext, useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { Snackbar, Alert, Typography } from "@mui/material";

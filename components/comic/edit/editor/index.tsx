@@ -12,6 +12,8 @@ import { useEditContext } from "..";
 import domtoimage from "dom-to-image";
 
 const Editor: React.FC = () => {
+    //TOOD use setzoom or remove it
+    // eslint-disable-next-line no-unused-vars
     const [zoom, setZoom] = useState<number>(1);
     const [contextMenu, setContextMenu] = React.useState<{
         mouseX: number;
@@ -103,6 +105,7 @@ const Editor: React.FC = () => {
         return () => {
             document.removeEventListener("keydown", handleKeyPress);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [undo, redo, newdo, selection]);
 
     const handleContextMenu = (event: React.MouseEvent) => {
@@ -167,6 +170,7 @@ const Editor: React.FC = () => {
             );
         } else if (layer.type === "image") {
             return (
+                //TODO remove warning
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                     src={layer.properties.imageURL!}
