@@ -8,9 +8,9 @@ import { useComicContext } from "../../../context/comiccontext";
 import * as Styled from "./styles";
 import {
     saveComic as saveComicZilean,
-    createImage,
     publishComic as publishComicZilean,
-} from "../../../util/zilean";
+} from "../../../util/zileanComic";
+import { createImage } from "../../../util/zilean";
 
 interface IEditContext {
     tool: string;

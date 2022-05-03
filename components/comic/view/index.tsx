@@ -15,7 +15,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import * as Styled from "./styles";
 import { useImageContext } from "../../../context/imagecontext";
 import { useAuthContext } from "../../../context/authcontext";
-import { unsubscribe, subscribe } from "../../../util/zilean";
+import { unsubscribe, subscribe } from "../../../util/zileanUser";
 
 const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicAuthor }) => {
     const [comment, setComment] = useState<string>("");

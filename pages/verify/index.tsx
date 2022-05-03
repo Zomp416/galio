@@ -1,7 +1,7 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import SendVerify from "../../components/verify/send-verify";
-import { getUserFromSession } from "../../util/zilean";
+import { getUserFromSession } from "../../util/zileanUser";
 
 const SendVerifyPage: NextPage = () => {
     return (

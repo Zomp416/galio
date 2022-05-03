@@ -3,7 +3,8 @@ import Head from "next/head";
 import MyStories from "../../components/story/my";
 import Navbar from "../../components/navbar";
 import { AuthProvider } from "../../context/authcontext";
-import { getUserFromSession, getStory } from "../../util/zilean";
+import { getUserFromSession } from "../../util/zileanUser";
+import { getStory } from "../../util/zileanStory";
 
 interface Props {
     user: any;

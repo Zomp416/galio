@@ -4,8 +4,9 @@ import ViewComic from "../../../components/comic/view";
 import Navbar from "../../../components/navbar";
 import { AuthProvider } from "../../../context/authcontext";
 import { ImageProvider } from "../../../context/imagecontext";
-import { getUserFromSession, getComic, getUserFromID, getImage } from "../../../util/zilean";
-import { useRouter } from "next/router";
+import { getImage } from "../../../util/zilean";
+import { getUserFromSession } from "../../../util/zileanUser";
+import { getComic } from "../../../util/zileanComic";
 
 interface Props {
     user: any;
@@ -34,12 +35,20 @@ export const getServerSideProps: GetServerSideProps = async context => {
     const comic = await getComic(context.params!.id!.toString());
     const result = await getUserFromSession(context.req.headers.cookie || "");
 
+    if (comic.data?.publishedAt) {
+        return {
+            props: {
+                comic: comic.data,
+                user: result.data || null,
+                comicAuthor: comic.data?.author || null,
+                comicImage: comic.data?.renderedImage || null,
+            },
+        };
+    }
     return {
-        props: {
-            comic: comic.data,
-            user: result.data || null,
-            comicAuthor: comic.data?.author || null,
-            comicImage: comic.data?.renderedImage || null,
+        redirect: {
+            destination: "/",
+            permanent: false,
         },
     };
 };

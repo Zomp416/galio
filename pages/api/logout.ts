@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { logout } from "../../util/zilean";
+import { logout } from "../../util/zileanUser";
 
 type Data = {
     data?: Record<any, any>;

@@ -1,7 +1,7 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import ForgotPassword from "../components/forgot-password";
-import { getUserFromSession } from "../util/zilean";
+import { getUserFromSession } from "../util/zileanUser";
 
 const ForgotPasswordPage: NextPage = () => {
     return (

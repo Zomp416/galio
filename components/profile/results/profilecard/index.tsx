@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Typography, Card, CardMedia, CardContent } from "@mui/material";
-import { getUserFromID, getUserProfilePicture } from "../../../../util/zilean";
+import { getUserFromID, getUserProfilePicture } from "../../../../util/zileanUser";
 
 interface User {
     username: string;

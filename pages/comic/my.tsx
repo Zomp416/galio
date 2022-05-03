@@ -3,7 +3,9 @@ import Head from "next/head";
 import MyComics from "../../components/comic/my";
 import Navbar from "../../components/navbar";
 import { AuthProvider } from "../../context/authcontext";
-import { getUserFromSession, getComic, getImage } from "../../util/zilean";
+import { getImage } from "../../util/zilean";
+import { getUserFromSession } from "../../util/zileanUser";
+import { getComic } from "../../util/zileanComic";
 
 interface Props {
     user: any;

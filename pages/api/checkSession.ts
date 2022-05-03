@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getUserFromSession } from "../../util/zilean";
+import { getUserFromSession } from "../../util/zileanUser";
 
 type Data = {
     data?: Record<any, any>;

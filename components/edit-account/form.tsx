@@ -13,8 +13,8 @@ import {
 } from "@mui/material";
 import { useAuthContext } from "../../context/authcontext";
 import { useImageContext } from "../../context/imagecontext";
-import { update } from "../../util/zilean";
-import { deleteAccount, createImage } from "../../util/zilean";
+import { update, deleteAccount } from "../../util/zileanUser";
+import { createImage } from "../../util/zilean";
 
 //TODO import default values from context
 const Form: React.FC = () => {

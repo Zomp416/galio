@@ -4,7 +4,7 @@ import Navbar from "../components/navbar";
 import EditAccount from "../components/edit-account";
 import { AuthProvider } from "../context/authcontext";
 import { ImageProvider } from "../context/imagecontext";
-import { getUserFromSession, getUserProfilePicture } from "../util/zilean";
+import { getUserFromSession, getUserProfilePicture } from "../util/zileanUser";
 
 interface Props {
     user: any;
