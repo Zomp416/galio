@@ -18,17 +18,8 @@ const ComicCard: React.FC<{ comic?: any; user?: any }> = ({ comic, user }) => {
     useEffect(() => {
         async function getDisplayedComic() {
             const data = await getComic(comic);
-            if (data.error) alert(data.error);
-            else setComic(data.data);
-
-            if (displayedComic?.publishedAt) {
-                //TODO renderedimage doesnt show like in mycomics
-                if (data.data?.renderedImage) {
-                    const profile = await getImage(data.data?.renderedImage);
-                    if (profile.error) alert(profile.error);
-                    else setComicImage(profile.data?.renderedImage.imageURL);
-                }
-            }
+            setComic(data.data);
+            setComicImage(data.data?.renderedImage);
         }
         getDisplayedComic();
     }, [comic, displayedComic?.publishedAt]);
@@ -40,10 +31,17 @@ const ComicCard: React.FC<{ comic?: any; user?: any }> = ({ comic, user }) => {
                     {displayedComic?.publishedAt ? (
                         <Styled.ResultCard>
                             <Styled.CardThumbnailContainer>
-                                {comicImage === "" ? (
-                                    <Styled.CardNoThumbnail></Styled.CardNoThumbnail>
+                                {comicImage ? (
+                                    <Styled.CardThumbnail
+                                        src={
+                                            comicImage
+                                                ? "https://zomp-media.s3.us-east-1.amazonaws.com/" +
+                                                  comicImage
+                                                : ""
+                                        }
+                                    />
                                 ) : (
-                                    <Styled.CardThumbnail src={comicImage} />
+                                    <Styled.CardNoThumbnail></Styled.CardNoThumbnail>
                                 )}
                             </Styled.CardThumbnailContainer>
                             <CardContent>
