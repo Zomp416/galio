@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable no-unused-vars */
-//TODO remove warnings for this page
 import { List, ListItem, Input, Button } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useStoryContext } from "../../../../../context/storycontext";

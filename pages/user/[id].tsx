@@ -34,23 +34,32 @@ const ProfilePage: NextPage<Props> = props => {
 export const getServerSideProps: GetServerSideProps = async context => {
     const result = await getUserFromSession(context.req.headers.cookie || "");
     const result2 = await getUserFromUsername(context.params!.id!.toString());
-    if (result2.data?.profilePicture) {
-        const result3 = await getImage(result2.data?.profilePicture);
-        return {
-            props: {
-                user: result.data || null,
-                user2: result2.data || null,
-                userSubs: result2.data.subscriptions,
-                userProfile: result3.data?.imageURL || null,
-            },
-        };
+    if (result2.data) {
+        if (result2.data?.profilePicture) {
+            const result3 = await getImage(result2.data?.profilePicture);
+            return {
+                props: {
+                    user: result.data || null,
+                    user2: result2.data || null,
+                    userSubs: result2.data.subscriptions,
+                    userProfile: result3.data?.imageURL || null,
+                },
+            };
+        } else {
+            return {
+                props: {
+                    user: result.data || null,
+                    user2: result2.data || null,
+                    userSubs: result2.data.subscriptions,
+                    userProfile: null,
+                },
+            };
+        }
     } else {
         return {
-            props: {
-                user: result.data || null,
-                user2: result2.data || null,
-                userSubs: result2.data.subscriptions,
-                userProfile: null,
+            redirect: {
+                destination: "/",
+                permanent: false,
             },
         };
     }

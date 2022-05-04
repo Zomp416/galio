@@ -30,19 +30,21 @@ const LoginPage: NextPage<Props> = props => {
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-    const result = await getUserFromSession(context.req.headers.cookie || "");
-    const storyRes = await getStory(context.params?.id as string);
-
-    //Prevents editing of published
-    if (storyRes.data?.publishedAt == null) {
-        //Confirms proper author
-        if (storyRes.data?.author == result.data?._id) {
-            return {
-                props: {
-                    story: storyRes.data,
-                    user: result.data || null,
-                },
-            };
+    //The _id will always be 24 characters long by MongoDB
+    if (context.params!.id!.toString().length == 24) {
+        const result = await getUserFromSession(context.req.headers.cookie || "");
+        const storyRes = await getStory(context.params!.id!.toString());
+        //Prevents editing of published
+        if (storyRes.data?.publishedAt == null) {
+            //Confirms proper author
+            if (storyRes.data?.author == result.data?._id) {
+                return {
+                    props: {
+                        story: storyRes.data,
+                        user: result.data || null,
+                    },
+                };
+            }
         }
     }
     return {

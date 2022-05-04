@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-//TODO remove that with no warning ^^
 import React, { useState } from "react";
 import { TextField, Typography, List, ListItem, Accordion, AccordionSummary } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";

@@ -35,35 +35,38 @@ const ComicCard: React.FC<{ comic?: any; user?: any }> = ({ comic, user }) => {
 
     return (
         <>
-            {displayedComic?.publishedAt ? (
-                <Styled.ResultCard>
-                    <Styled.CardThumbnailContainer>
-                        {/* TODO make everything clickable */}
-                        <Link href={`/comic/view/` + displayedComic?._id}>
-                            <a>
+            <Link href={`/comic/view/` + displayedComic?._id}>
+                <a>
+                    {displayedComic?.publishedAt ? (
+                        <Styled.ResultCard>
+                            <Styled.CardThumbnailContainer>
                                 {comicImage === "" ? (
                                     <Styled.CardNoThumbnail></Styled.CardNoThumbnail>
                                 ) : (
                                     <Styled.CardThumbnail src={comicImage} />
                                 )}
-                            </a>
-                        </Link>
-                    </Styled.CardThumbnailContainer>
-                    <CardContent>
-                        <Typography variant="h5" component="div" fontWeight="bold">
-                            {displayedComic?.title}
-                        </Typography>
-                        <Typography variant="body1" color="text.secondary" fontWeight="bold">
-                            {user.username}
-                        </Typography>
-                        <Typography variant="body1" color="text.secondary">
-                            {displayedComic?.views + " views"}
-                        </Typography>
-                    </CardContent>
-                </Styled.ResultCard>
-            ) : (
-                <></>
-            )}{" "}
+                            </Styled.CardThumbnailContainer>
+                            <CardContent>
+                                <Typography variant="h5" component="div" fontWeight="bold">
+                                    {displayedComic?.title}
+                                </Typography>
+                                <Typography
+                                    variant="body1"
+                                    color="text.secondary"
+                                    fontWeight="bold"
+                                >
+                                    {user.username}
+                                </Typography>
+                                <Typography variant="body1" color="text.secondary">
+                                    {displayedComic?.views + " views"}
+                                </Typography>
+                            </CardContent>
+                        </Styled.ResultCard>
+                    ) : (
+                        <></>
+                    )}{" "}
+                </a>
+            </Link>
         </>
     );
 };

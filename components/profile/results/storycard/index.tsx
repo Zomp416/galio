@@ -35,12 +35,11 @@ const StoryCard: React.FC<{ story?: any; user?: any }> = ({ story, user }) => {
 
     return (
         <>
-            {displayedStory?.publishedAt ? (
-                <Styled.ResultCard>
-                    <Styled.CardThumbnailContainer>
-                        {/* TODO make everything clickable */}
-                        <Link href={`/story/view/` + displayedStory?._id}>
-                            <a>
+            <Link href={`/story/view/` + displayedStory?._id}>
+                <a>
+                    {displayedStory?.publishedAt ? (
+                        <Styled.ResultCard>
+                            <Styled.CardThumbnailContainer>
                                 {coverArt === "" ? (
                                     <Styled.CardNoThumbnail></Styled.CardNoThumbnail>
                                 ) : (
@@ -53,24 +52,28 @@ const StoryCard: React.FC<{ story?: any; user?: any }> = ({ story, user }) => {
                                         }
                                     />
                                 )}
-                            </a>
-                        </Link>
-                    </Styled.CardThumbnailContainer>
-                    <CardContent>
-                        <Typography variant="h5" component="div" fontWeight="bold">
-                            {displayedStory?.title}
-                        </Typography>
-                        <Typography variant="body1" color="text.secondary" fontWeight="bold">
-                            {user.username}
-                        </Typography>
-                        <Typography variant="body1" color="text.secondary">
-                            {displayedStory?.views + " views"}
-                        </Typography>
-                    </CardContent>
-                </Styled.ResultCard>
-            ) : (
-                <></>
-            )}{" "}
+                            </Styled.CardThumbnailContainer>
+                            <CardContent>
+                                <Typography variant="h5" component="div" fontWeight="bold">
+                                    {displayedStory?.title}
+                                </Typography>
+                                <Typography
+                                    variant="body1"
+                                    color="text.secondary"
+                                    fontWeight="bold"
+                                >
+                                    {user.username}
+                                </Typography>
+                                <Typography variant="body1" color="text.secondary">
+                                    {displayedStory?.views + " views"}
+                                </Typography>
+                            </CardContent>
+                        </Styled.ResultCard>
+                    ) : (
+                        <></>
+                    )}{" "}
+                </a>
+            </Link>
         </>
     );
 };

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect } from "react";
 import { Toolbar, IconButton, Menu, MenuItem } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
@@ -170,8 +171,6 @@ const Editor: React.FC = () => {
             );
         } else if (layer.type === "image") {
             return (
-                //TODO remove warning
-                // eslint-disable-next-line @next/next/no-img-element
                 <img
                     src={layer.properties.imageURL!}
                     alt="Image Layer"
@@ -216,7 +215,7 @@ const Editor: React.FC = () => {
         );
     };
 
-    // TODO MAKE THESE STYLED COMPONENTS, IM LAZY RN
+    //Styled components are made but doesn't translate 1:1 and you can't used styled component as outer; so just leave it
     return (
         <div
             style={{

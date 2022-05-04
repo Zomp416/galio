@@ -35,6 +35,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
         for (var i = 0; i < stories!.length; i++) {
             const result2 = await getStory(stories![i]);
             if (result2.data) {
+                // TODO: display proper URL; look at comic
                 if (result2.data.publishedAt) {
                     published.push(result2.data);
                 } else {
@@ -42,21 +43,19 @@ export const getServerSideProps: GetServerSideProps = async context => {
                 }
             }
         }
-    } else {
-        // No data means that the backend was not able to find a user from the session cookie.
         return {
-            redirect: {
-                destination: "/",
-                permanent: false,
+            props: {
+                user: result.data || null,
+                published: published,
+                unpublished: unpublished,
             },
         };
     }
-
+    // No data means that the backend was not able to find a user from the session cookie.
     return {
-        props: {
-            user: result.data || null,
-            published: published,
-            unpublished: unpublished,
+        redirect: {
+            destination: "/",
+            permanent: false,
         },
     };
 };

@@ -32,18 +32,21 @@ const ViewComicPage: NextPage<Props> = props => {
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-    const comic = await getComic(context.params!.id!.toString());
-    const result = await getUserFromSession(context.req.headers.cookie || "");
+    //The _id will always be 24 characters long by MongoDB
+    if (context.params!.id!.toString().length == 24) {
+        const comic = await getComic(context.params!.id!.toString());
+        const result = await getUserFromSession(context.req.headers.cookie || "");
 
-    if (comic.data?.publishedAt) {
-        return {
-            props: {
-                comic: comic.data,
-                user: result.data || null,
-                comicAuthor: comic.data?.author || null,
-                comicImage: comic.data?.renderedImage || null,
-            },
-        };
+        if (comic.data?.publishedAt) {
+            return {
+                props: {
+                    comic: comic.data,
+                    user: result.data || null,
+                    comicAuthor: comic.data?.author || null,
+                    comicImage: comic.data?.renderedImage || null,
+                },
+            };
+        }
     }
     return {
         redirect: {

@@ -33,7 +33,6 @@ const PublishTable: React.FC<Props> = props => {
         event.preventDefault();
         const data = await unpublishStory(props._id);
         if (!data.error) {
-            //TODO swap to edit table or unpublished comic
             router.push({ pathname: "/story/my/" });
         }
     };

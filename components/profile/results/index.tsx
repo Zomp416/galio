@@ -9,8 +9,6 @@ const Hero: React.FC<{ user2?: any; userSubs?: any }> = ({ user2, userSubs }) =>
     const [category, setCategory] = useState<string>("comics");
     const [time, setTime] = useState<string>("Today");
     const [sort, setSort] = useState<string>("alpha");
-    //TODO test replacing user2 with finaluser
-    const finalUser = user2;
 
     const onSetCategory = (_: any, val: any) => {
         setCategory(val);
@@ -50,13 +48,13 @@ const Hero: React.FC<{ user2?: any; userSubs?: any }> = ({ user2, userSubs }) =>
 
             {category === "comics" ? (
                 <Stack>
-                    {finalUser.comics.map(function (comic: any, index: any) {
+                    {user2.comics.map(function (comic: any, index: any) {
                         return <ComicCard key={index} comic={comic} user={user2} />;
                     })}
                 </Stack>
             ) : category === "stories" ? (
                 <Stack>
-                    {finalUser.stories.map(function (story: any, index: any) {
+                    {user2.stories.map(function (story: any, index: any) {
                         return <StoryCard key={index} story={story} user={user2} />;
                     })}
                 </Stack>
