@@ -1,6 +1,6 @@
 {
     "extends": ["next/core-web-vitals", "eslint:recommended", "plugin:prettier/recommended"],
     "rules": {
-        "no-unused-vars": "warn" // Temporarily setting as a warning until we connect galio and zilean
+        "no-unused-vars": ["warn", {"argsIgnorePattern": "^__"}] // Temporarily setting as a warning until we connect galio and zilean
     }
 }

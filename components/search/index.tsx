@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "next/router";
 
 // import Link from "next/link";
@@ -23,16 +23,27 @@ import * as Styled from "./styles";
 import ResultCard from "./resultcard";
 import debounce from "lodash.debounce";
 import { searchComic } from "../../util/zileanComic";
+import { useSearchContext } from "../../context/searchcontext";
 
 const Search: React.FC = () => {
-    const [tags, setTags] = useState<string[]>(["Comedy", "College"]);
-    const [addTag, setAddTag] = useState<string>("");
-    const [modalOpen, setModalOpen] = useState<boolean>(false);
-    const [category, setCategory] = useState<string>("Comics");
-    const [time, setTime] = useState<string>("Today");
-    const [sort, setSort] = useState<string>("alpha");
-    const [page, setPage] = useState(0);
-    const [results, setResults] = useState<any[]>([]);
+    const {
+        tags,
+        newTag,
+        modalOpen,
+        category,
+        time,
+        sort,
+        page,
+        results,
+        setTags,
+        setNewTag,
+        setModalOpen,
+        setCategory,
+        setTime,
+        setSort,
+        setPage,
+        setResults,
+    } = useSearchContext();
 
     const router = useRouter();
     const { q } = router.query;
@@ -84,19 +95,19 @@ const Search: React.FC = () => {
                                     type="text"
                                     fullWidth
                                     variant="standard"
-                                    value={addTag}
+                                    value={newTag}
                                     onChange={e => {
-                                        setAddTag(e.target.value);
+                                        setNewTag(e.target.value);
                                     }}
                                 />
                             }
                         />
                         <ListItemAvatar>
                             <IconButton
-                                disabled={!addTag}
+                                disabled={!newTag}
                                 onClick={() => {
-                                    setTags([...tags, addTag]);
-                                    setAddTag("");
+                                    setTags([...tags, newTag]);
+                                    setNewTag("");
                                 }}
                             >
                                 <AddIcon />
@@ -216,6 +227,7 @@ const Search: React.FC = () => {
                 {results.map(comic => (
                     <ResultCard
                         _id="id"
+                        key="id"
                         title={comic.title}
                         author={comic.author}
                         splashURL={comic.splashURL}
