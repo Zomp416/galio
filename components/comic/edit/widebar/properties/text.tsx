@@ -37,7 +37,6 @@ const TextProperties: React.FC = () => {
 
     const onSetFontSize = (e: any) => {
         let size = parseInt(e.target.value);
-        console.log(e.target.value);
         if (isNaN(size)) size = 0;
         if (size > 1000) size = 999;
         setFontSize(size);
