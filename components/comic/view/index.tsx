@@ -13,15 +13,16 @@ import {
 } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 import * as Styled from "./styles";
-import { useImageContext } from "../../../context/imagecontext";
 import { useAuthContext } from "../../../context/authcontext";
 import { unsubscribe, subscribe } from "../../../util/zileanUser";
+import { IMAGE_URI } from "../../../util/config";
+
+const default_image = "assets/a8abb9ed-c384-408a-924e-d947df860a82.png";
 
 const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicAuthor }) => {
     const [comment, setComment] = useState<string>("");
     const [tags] = useState<string[]>(comic.tags);
     const [rating, setRating] = useState<number | null>(4.5);
-    const { image } = useImageContext();
     const { user } = useAuthContext();
 
     let initialSubscribe = false;
@@ -79,16 +80,14 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
                         <Typography variant="h6">{comic.views + " Views"}</Typography>
                     </Styled.ViewContainer>
                 </Styled.TVContainer>
-                {image?.imageURL === undefined ? (
-                    <Styled.NoComicImage></Styled.NoComicImage>
-                ) : (
-                    <Styled.ComicImage
-                        src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + image?.imageURL}
-                    ></Styled.ComicImage>
-                )}
+                <Styled.ComicImage
+                    src={`${IMAGE_URI}${comic?.renderedImage || default_image}`}
+                ></Styled.ComicImage>
                 <Styled.ASSContainer>
                     <Styled.AuthorContainer>
-                        <Styled.Avatar></Styled.Avatar>
+                        <Styled.Avatar
+                            src={`${IMAGE_URI}${comicAuthor.profilePicture}`}
+                        ></Styled.Avatar>
                         <div>
                             <Link href={"/user/" + comicAuthor.username} passHref>
                                 <Typography variant="h4" component="a" color="black">
@@ -144,7 +143,7 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
                             <div style={{ display: "flex", justifyContent: "right" }}>
                                 <Rating
                                     name="average-rating"
-                                    value={2.4}
+                                    value={comic.ratingTotal / (comic.ratingCount || 1)}
                                     precision={0.1}
                                     readOnly
                                     sx={{
@@ -153,7 +152,9 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
                                         },
                                     }}
                                 />
-                                <Typography variant="h6">(2.4)</Typography>
+                                <Typography variant="h6">
+                                    ({comic.ratingTotal / (comic.ratingCount || 1)})
+                                </Typography>
                             </div>
                         </Styled.Rating>
                         <Styled.Rating>
