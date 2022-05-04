@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
     Divider,
@@ -22,16 +22,21 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
     const [rating, setRating] = useState<number | null>(4.5);
     const { user } = useAuthContext();
 
-    let initialSubscribe = false;
-    if (user != null) {
-        for (let i = 0; i < user?.subscriptions?.length!; i++) {
-            if (user?.subscriptions![i] === comicAuthor._id) {
-                initialSubscribe = true;
+    const [subscribed, setSubscribed] = useState<boolean>(false);
+    const [subscribers, setSubscribers] = useState<number>(comicAuthor.subscriberCount);
+
+    useEffect(() => {
+        async function getSubscribedToUser() {
+            if (user != null) {
+                for (let i = 0; i < user?.subscriptions?.length!; i++) {
+                    if (user?.subscriptions![i] === comicAuthor._id) {
+                        setSubscribed(true);
+                    }
+                }
             }
         }
-    }
-    const [subscribed, setSubscribed] = useState<boolean>(initialSubscribe);
-    const [subscribers, setSubscribers] = useState<number>(comicAuthor.subscriberCount);
+        getSubscribedToUser();
+    }, [comicAuthor._id, user, user?.subscriptions]);
 
     const handleSubscribe = async (event: React.FormEvent, user2id: any) => {
         event.preventDefault();

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Box,
     Divider,
@@ -24,16 +24,21 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
     const [tags] = useState<string[]>(story.tags);
     const { user } = useAuthContext();
 
-    let initialSubscribe = false;
-    if (user != null) {
-        for (let i = 0; i < user?.subscriptions?.length!; i++) {
-            if (user?.subscriptions![i] === storyAuthor._id) {
-                initialSubscribe = true;
+    const [subscribed, setSubscribed] = useState<boolean>(false);
+    const [subscribers, setSubscribers] = useState<number>(storyAuthor.subscriberCount);
+
+    useEffect(() => {
+        async function getSubscribedToUser() {
+            if (user != null) {
+                for (let i = 0; i < user?.subscriptions?.length!; i++) {
+                    if (user?.subscriptions![i] === storyAuthor._id) {
+                        setSubscribed(true);
+                    }
+                }
             }
         }
-    }
-    const [subscribed, setSubscribed] = useState<boolean>(initialSubscribe);
-    const [subscribers, setSubscribers] = useState<number>(storyAuthor.subscriberCount);
+        getSubscribedToUser();
+    }, [comicAuthor._id, user, user?.subscriptions]);
 
     const handleSubscribe = async (event: React.FormEvent, user2id: any) => {
         event.preventDefault();

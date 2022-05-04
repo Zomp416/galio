@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Typography, Button } from "@mui/material";
 import * as Styled from "./styles";
@@ -9,14 +9,19 @@ const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile
     const { user } = useAuthContext();
     const router = useRouter();
 
-    let initialSubscribe = false;
-    for (let i = 0; i < user?.subscriptions?.length!; i++) {
-        if (user?.subscriptions![i] === user2._id) {
-            initialSubscribe = true;
-        }
-    }
-    const [subscribed, setSubscribed] = useState<boolean>(initialSubscribe);
+    const [subscribed, setSubscribed] = useState<boolean>(false);
     const [subscribers, setSubscribers] = useState<number>(user2.subscriberCount);
+
+    useEffect(() => {
+        async function getSubscribedToUser() {
+            for (let i = 0; i < user?.subscriptions?.length!; i++) {
+                if (user?.subscriptions![i] === user2._id) {
+                    setSubscribed(true);
+                }
+            }
+        }
+        getSubscribedToUser();
+    }, [user?.subscriptions, user2._id]);
 
     const handleSubscribe = async (event: React.FormEvent, user2id: any) => {
         event.preventDefault();
@@ -68,42 +73,44 @@ const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile
                 >
                     {subscribers} subscribers
                 </Typography>
-                {!user ? (
-                    <></>
-                ) : user?.username! !== user2.username! ? (
-                    subscribed ? (
-                        <Button
-                            variant="contained"
-                            style={{ width: "60%", backgroundColor: "red" }}
-                            onClick={e => {
-                                handleUnsubscribe(e, user2._id.toString());
-                            }}
-                        >
-                            Unsubscribe
-                        </Button>
+                {user ? (
+                    user?.username! !== user2.username! ? (
+                        subscribed ? (
+                            <Button
+                                variant="contained"
+                                style={{ width: "60%", backgroundColor: "red" }}
+                                onClick={e => {
+                                    handleUnsubscribe(e, user2._id.toString());
+                                }}
+                            >
+                                Unsubscribe
+                            </Button>
+                        ) : (
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                style={{ width: "60%" }}
+                                onClick={e => {
+                                    handleSubscribe(e, user2._id.toString());
+                                }}
+                            >
+                                Subscribe
+                            </Button>
+                        )
                     ) : (
                         <Button
                             variant="contained"
                             color="primary"
-                            style={{ width: "60%" }}
-                            onClick={e => {
-                                handleSubscribe(e, user2._id.toString());
+                            onClick={() => {
+                                router.push("/edit-account");
                             }}
+                            style={{ width: "60%" }}
                         >
-                            Subscribe
+                            Edit Profile
                         </Button>
                     )
                 ) : (
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                            router.push("/edit-account");
-                        }}
-                        style={{ width: "60%" }}
-                    >
-                        Edit Profile
-                    </Button>
+                    <></>
                 )}
             </Styled.TextContainer>
             <Styled.AboutContainer>
