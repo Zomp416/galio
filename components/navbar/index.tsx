@@ -54,7 +54,8 @@ const Navbar: React.FC<NavbarProps> = props => {
 
     //Used to retrieve the search field
     const handleSearch = (e: any) => {
-        router.push(`/search?${search}`);
+        e.preventDefault();
+        router.push(`/search?q=${search}`);
     };
 
     //Used to create comics

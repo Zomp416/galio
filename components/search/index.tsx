@@ -15,9 +15,6 @@ import {
     Divider,
     Select,
     MenuItem,
-    Card,
-    CardMedia,
-    CardContent,
     Pagination,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
@@ -25,6 +22,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import * as Styled from "./styles";
 import ResultCard from "./resultcard";
 import debounce from "lodash.debounce";
+import { searchComic } from "../../util/zileanComic";
 
 const Search: React.FC = () => {
     const [tags, setTags] = useState<string[]>(["Comedy", "College"]);
@@ -33,12 +31,17 @@ const Search: React.FC = () => {
     const [category, setCategory] = useState<string>("Comics");
     const [time, setTime] = useState<string>("Today");
     const [sort, setSort] = useState<string>("alpha");
+    const [page, setPage] = useState(0);
+    const [results, setResults] = useState<any[]>([]);
 
     const router = useRouter();
-    const { search } = router.query;
+    const { q } = router.query;
 
     const doDebouncedSearch = debounce(async query => {
         console.log("triggered search ", query);
+        const { data, error } = await searchComic({ value: query, page: page, limit: 4 });
+        if (error) alert(error);
+        if (data) setResults(data);
     }, 800);
 
     return (
@@ -102,20 +105,33 @@ const Search: React.FC = () => {
                     </ListItem>
                 </List>
             </Dialog>
-            <Typography gutterBottom variant="h3" width={"100%"} sx={{ fontWeight: "bold" }}>
-                Results for &quot;
+            <Typography
+                display="inline-block"
+                gutterBottom
+                variant="h3"
+                sx={{
+                    fontWeight: "bold",
+                }}
+            >
+                Results for
                 <Typography
-                    display="inline"
                     contentEditable
+                    suppressContentEditableWarning
+                    display="inline-block"
+                    gutterBottom
                     variant="h3"
-                    sx={{ fontWeight: "bold", outline: "none" }}
-                    onInput={e => {
-                        doDebouncedSearch(e.currentTarget.textContent);
+                    sx={{
+                        backgroundColor: "white",
+                        outline: "none",
+                        border: "2px solid gray",
+                        marginLeft: "15px",
+                        paddingLeft: "9px",
+                        paddingRight: "9px",
                     }}
+                    onInput={e => doDebouncedSearch(e.currentTarget.textContent)}
                 >
-                    {search}
+                    {router.query.q}
                 </Typography>
-                &quot;
             </Typography>
             <Styled.FilterContainer>
                 <Typography variant="h4" sx={{ fontWeight: "bold", marginRight: "20px" }}>
@@ -197,38 +213,16 @@ const Search: React.FC = () => {
             </Styled.ResultsContainer>
             <Divider sx={{ width: "100%", marginBottom: "20px" }} />
             <Styled.CardsContainer>
-                <ResultCard
-                    _id="id"
-                    title="Comic Title"
-                    author="MasonMa37"
-                    splashURL="src"
-                    rating={3.5}
-                    views={101}
-                />
-                <ResultCard
-                    _id="id"
-                    title="Comic Title"
-                    author="MasonMa37"
-                    splashURL="src"
-                    rating={3.5}
-                    views={101}
-                />
-                <ResultCard
-                    _id="id"
-                    title="Comic Title"
-                    author="MasonMa37"
-                    splashURL="src"
-                    rating={3.5}
-                    views={101}
-                />
-                <ResultCard
-                    _id="id"
-                    title="Comic Title"
-                    author="MasonMa37"
-                    splashURL="src"
-                    rating={3.5}
-                    views={101}
-                />
+                {results.map(comic => (
+                    <ResultCard
+                        _id="id"
+                        title={comic.title}
+                        author={comic.author}
+                        splashURL={comic.splashURL}
+                        rating={comic.rating}
+                        views={comic.views}
+                    />
+                ))}
             </Styled.CardsContainer>
             <Pagination />
             <Typography variant="h6" component="div" sx={{ marginTop: "10px" }}>
