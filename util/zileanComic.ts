@@ -6,6 +6,13 @@ interface ZileanResponse {
     error?: string;
 }
 
+export const viewComic = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/comic/view/${id}`, {
+        method: "GET",
+    });
+    return await result.json();
+};
+
 export const getComic = async (id: string): Promise<ZileanResponse> => {
     const result = await fetch(`${zileanOrigin}/comic/comicAuthor/` + id, {
         method: "GET",
