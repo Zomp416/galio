@@ -38,7 +38,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
             }
         }
         getSubscribedToUser();
-    }, [comicAuthor._id, user, user?.subscriptions]);
+    }, [storyAuthor._id, user, user?.subscriptions]);
 
     const handleSubscribe = async (event: React.FormEvent, user2id: any) => {
         event.preventDefault();
