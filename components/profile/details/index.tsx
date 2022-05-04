@@ -70,7 +70,9 @@ const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile
                 >
                     {finalUser?.subscriberCount!} subscribers
                 </Typography>
-                {user?.username! !== user2.username! ? (
+                {!user ? (
+                    <></>
+                ) : user?.username! !== user2.username! ? (
                     subscribed ? (
                         <Button
                             variant="contained"
