@@ -35,14 +35,15 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
         }
     }
     const [subscribed, setSubscribed] = useState<boolean>(initialSubscribe);
+    const [subscribers, setSubscribers] = useState<number>(storyAuthor.subscriberCount);
 
-    // TODO subscribe doesnt update subscriber count
     const handleSubscribe = async (event: React.FormEvent, user2id: any) => {
         event.preventDefault();
         const userid = { subscription: user2id };
         const data = await subscribe(userid);
         if (!data.error) {
             setSubscribed(true);
+            setSubscribers(subscribers + 1);
         }
     };
 
@@ -52,6 +53,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
         const data = await unsubscribe(userid);
         if (!data.error) {
             setSubscribed(false);
+            setSubscribers(subscribers - 1);
         }
     };
 
@@ -104,7 +106,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                                             href={"/user/" + storyAuthor.username}
                                             color="black"
                                         >
-                                            {storyAuthor.username}
+                                            {subscribers}
                                         </Typography>
                                     </div>
                                     {storyAuthor.subscriberCount + " Subscribers"}

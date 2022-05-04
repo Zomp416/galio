@@ -24,23 +24,22 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
 
     let initialSubscribe = false;
     if (user != null) {
-        if (comicAuthor.username === user!.username) {
-            for (let i = 0; i < user?.subscriptions?.length!; i++) {
-                if (user?.subscriptions![i] === comicAuthor._id) {
-                    initialSubscribe = true;
-                }
+        for (let i = 0; i < user?.subscriptions?.length!; i++) {
+            if (user?.subscriptions![i] === comicAuthor._id) {
+                initialSubscribe = true;
             }
         }
     }
     const [subscribed, setSubscribed] = useState<boolean>(initialSubscribe);
+    const [subscribers, setSubscribers] = useState<number>(comicAuthor.subscriberCount);
 
-    // TODO subscribe doesnt update subscriber count
     const handleSubscribe = async (event: React.FormEvent, user2id: any) => {
         event.preventDefault();
         const userid = { subscription: user2id };
         const data = await subscribe(userid);
         if (!data.error) {
             setSubscribed(true);
+            setSubscribers(subscribers + 1);
         }
     };
 
@@ -50,6 +49,7 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
         const data = await unsubscribe(userid);
         if (!data.error) {
             setSubscribed(false);
+            setSubscribers(subscribers - 1);
         }
     };
 
@@ -93,9 +93,7 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
                                     {comicAuthor.username}
                                 </Typography>
                             </Link>
-                            <Typography variant="h6">
-                                {comicAuthor.subscriberCount + " Subscribers"}
-                            </Typography>
+                            <Typography variant="h6">{subscribers + " Subscribers"}</Typography>
                         </div>
                     </Styled.AuthorContainer>
                     <Styled.SSContainer>

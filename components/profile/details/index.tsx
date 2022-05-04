@@ -7,26 +7,24 @@ import { unsubscribe, subscribe } from "../../../util/zileanUser";
 
 const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile }) => {
     const { user } = useAuthContext();
-    const finalUser = user2;
     const router = useRouter();
 
     let initialSubscribe = false;
-    if (finalUser.username === user2.username) {
-        for (let i = 0; i < user?.subscriptions?.length!; i++) {
-            if (user?.subscriptions![i] === user2._id) {
-                initialSubscribe = true;
-            }
+    for (let i = 0; i < user?.subscriptions?.length!; i++) {
+        if (user?.subscriptions![i] === user2._id) {
+            initialSubscribe = true;
         }
     }
     const [subscribed, setSubscribed] = useState<boolean>(initialSubscribe);
+    const [subscribers, setSubscribers] = useState<number>(user2.subscriberCount);
 
     const handleSubscribe = async (event: React.FormEvent, user2id: any) => {
         event.preventDefault();
         const userid = { subscription: user2id };
         const data = await subscribe(userid);
         if (!data.error) {
-            router.push({ pathname: "/user/" + finalUser.username });
             setSubscribed(true);
+            setSubscribers(subscribers + 1);
         }
     };
 
@@ -35,8 +33,8 @@ const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile
         const userid = { subscription: user2id };
         const data = await unsubscribe(userid);
         if (!data.error) {
-            router.push({ pathname: "/user/" + finalUser.username });
             setSubscribed(false);
+            setSubscribers(subscribers - 1);
         }
     };
 
@@ -58,7 +56,7 @@ const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile
                         color: "black",
                     }}
                 >
-                    {finalUser?.username!}
+                    {user2?.username!}
                 </Typography>
                 <Typography
                     variant="h4"
@@ -68,7 +66,7 @@ const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile
                         marginBottom: "10px",
                     }}
                 >
-                    {finalUser?.subscriberCount!} subscribers
+                    {subscribers} subscribers
                 </Typography>
                 {!user ? (
                     <></>
@@ -127,7 +125,7 @@ const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile
                         color: "black",
                     }}
                 >
-                    {finalUser?.about!}
+                    {user2?.about!}
                 </Typography>
             </Styled.AboutContainer>
         </Styled.DetailsContainer>
