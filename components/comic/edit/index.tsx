@@ -53,7 +53,7 @@ const EditComic: React.FC = () => {
         form.append("name", file.name.split(".")[0]);
         const res = await createImage(form);
         if (res.data && !res.error) {
-            await publishComicZilean(comic._id, res.data);
+            await publishComicZilean(comic._id, res.data.imageURL);
             router.push("/comic/my");
         }
     };

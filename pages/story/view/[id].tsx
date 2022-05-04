@@ -3,7 +3,6 @@ import Head from "next/head";
 import ViewStory from "../../../components/story/view";
 import Navbar from "../../../components/navbar";
 import { AuthProvider } from "../../../context/authcontext";
-import { getImage } from "../../../util/zilean";
 import { getUserFromSession, getUserFromID } from "../../../util/zileanUser";
 import { getStory } from "../../../util/zileanStory";
 
@@ -22,11 +21,7 @@ const LoginPage: NextPage<Props> = props => {
             </Head>
             <AuthProvider user={props.user}>
                 <Navbar domain="stories" />
-                <ViewStory
-                    story={props.story}
-                    storyAuthor={props.storyAuthor}
-                    coverArt={props.coverArt}
-                />
+                <ViewStory story={props.story} storyAuthor={props.storyAuthor} />
             </AuthProvider>
         </>
     );
@@ -42,26 +37,13 @@ export const getServerSideProps: GetServerSideProps = async context => {
             const author = await getUserFromID(story.data?.author);
             //Check if the story is published
             if (story.data?.publishedAt) {
-                if (story.data?.coverart) {
-                    const art = await getImage(story.data?.coverart);
-                    return {
-                        props: {
-                            story: story.data || null,
-                            user: result.data || null,
-                            storyAuthor: author.data || null,
-                            coverArt: art.data?.imageURL || null,
-                        },
-                    };
-                } else {
-                    return {
-                        props: {
-                            story: story.data || null,
-                            user: result.data || null,
-                            storyAuthor: author.data || null,
-                            coverArt: null,
-                        },
-                    };
-                }
+                return {
+                    props: {
+                        story: story.data || null,
+                        user: result.data || null,
+                        storyAuthor: author.data || null,
+                    },
+                };
             }
         }
     }

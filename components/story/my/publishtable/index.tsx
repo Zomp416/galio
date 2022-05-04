@@ -6,7 +6,7 @@ import Entry from "./entry";
 interface Story {
     _id: string;
     title: string;
-    splashURL: string;
+    coverart: string;
     publishedAt: Date;
     rating: number;
 }

@@ -14,7 +14,7 @@ import * as Styled from "./styles";
 interface Comic {
     _id: string;
     title: string;
-    splashURL: string;
+    renderedImage: string;
     updatedAt: Date;
     index: number;
 }
@@ -50,7 +50,16 @@ const EditTable: React.FC<Comic> = props => {
         <>
             <TableRow onClick={onSelect}>
                 <TableCell style={{ width: "1px" }}>
-                    <Styled.Image src={props.splashURL} />
+                    {props.renderedImage ? (
+                        <Styled.Image
+                            src={
+                                "https://zomp-media.s3.us-east-1.amazonaws.com/" +
+                                props.renderedImage
+                            }
+                        />
+                    ) : (
+                        <Styled.BlankImage></Styled.BlankImage>
+                    )}
                 </TableCell>
                 <TableCell>{props.title}</TableCell>
                 <TableCell style={{ width: "1px", whiteSpace: "nowrap" }}>

@@ -35,7 +35,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
         for (var i = 0; i < stories!.length; i++) {
             const result2 = await getStory(stories![i]);
             if (result2.data) {
-                // TODO: display proper URL; look at comic
                 if (result2.data.publishedAt) {
                     published.push(result2.data);
                 } else {

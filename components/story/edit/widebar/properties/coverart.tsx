@@ -29,7 +29,7 @@ const CoverArtProperties: React.FC = () => {
         form.append("name", finalImage!.name.split(".")[0]);
         const { data, error } = await createImage(form);
         if (error) alert(error);
-        newdo("editStory", { coverart: data._id });
+        newdo("editStory", { coverart: data.imageURL });
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

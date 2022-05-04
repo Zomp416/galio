@@ -14,7 +14,7 @@ import * as Styled from "./styles";
 interface Story {
     _id: string;
     title: string;
-    splashURL: string;
+    coverart: string;
     updatedAt: Date;
     index: number;
 }
@@ -49,7 +49,13 @@ const EditTable: React.FC<Story> = props => {
         <>
             <TableRow onClick={onSelect}>
                 <TableCell style={{ width: "1px" }}>
-                    <Styled.Image src={props.splashURL} />
+                    {props.coverart ? (
+                        <Styled.Image
+                            src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + props.coverart}
+                        />
+                    ) : (
+                        <Styled.BlankImage></Styled.BlankImage>
+                    )}
                 </TableCell>
                 <TableCell>{props.title}</TableCell>
                 <TableCell style={{ width: "1px", whiteSpace: "nowrap" }}>

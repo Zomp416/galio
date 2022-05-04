@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 import * as Styled from "./styles";
-import { useImageContext } from "../../../context/imagecontext";
 import { useAuthContext } from "../../../context/authcontext";
 import { unsubscribe, subscribe } from "../../../util/zileanUser";
 
@@ -21,7 +20,6 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
     const [comment, setComment] = useState<string>("");
     const [tags] = useState<string[]>(comic.tags);
     const [rating, setRating] = useState<number | null>(4.5);
-    const { image } = useImageContext();
     const { user } = useAuthContext();
 
     let initialSubscribe = false;
@@ -79,12 +77,12 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
                         <Typography variant="h6">{comic.views + " Views"}</Typography>
                     </Styled.ViewContainer>
                 </Styled.TVContainer>
-                {image?.imageURL === undefined ? (
-                    <Styled.NoComicImage></Styled.NoComicImage>
-                ) : (
+                {comic.renderedImage ? (
                     <Styled.ComicImage
-                        src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + image?.imageURL}
+                        src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + comic.renderedImage}
                     ></Styled.ComicImage>
+                ) : (
+                    <Styled.NoComicImage></Styled.NoComicImage>
                 )}
                 <Styled.ASSContainer>
                     <Styled.AuthorContainer>

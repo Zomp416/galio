@@ -36,17 +36,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
         for (var i = 0; i < comics!.length; i++) {
             const result2 = await getComic(comics![i]);
             if (result2.data) {
-                // // TODO: display proper URL; using getImage takes too long?!? optimize code so it doesnt idk
-                // if (result2.data?.renderedImage) {
-                //     const image = await getImage(result2.data?.renderedImage);
-                //     const splashURL =
-                //         "https://zomp-media.s3.us-east-1.amazonaws.com/" + image.data.imageURL;
-                //     result2.data.splashURL = splashURL;
-                // }
-                const splashURL =
-                    "https://zomp-media.s3.us-east-1.amazonaws.com/" +
-                    "assets/a8abb9ed-c384-408a-924e-d947df860a82.png";
-                result2.data.splashURL = splashURL;
                 if (result2.data.publishedAt) {
                     published.push(result2.data);
                 } else {

@@ -29,7 +29,7 @@ const Form: React.FC = () => {
         confirmpassword: "",
         about: user?.about!,
         password: user?.password!,
-        profilePicture: image?._id,
+        profilePicture: image?.imageURL,
     };
     const [formValues, setFormValues] = useState(defaultValues);
     const [error, setError] = useState(false);
@@ -59,7 +59,7 @@ const Form: React.FC = () => {
             formData.append("directory", "avatars");
             formData.append("name", finalImage!.name.split(".")[0]);
             const { data } = await createImage(formData);
-            formValues.profilePicture = data._id;
+            formValues.profilePicture = data.imageURL;
         }
         if (
             formValues.newpassword === "" &&
@@ -131,7 +131,7 @@ const Form: React.FC = () => {
                         <Styled.AddNewImage></Styled.AddNewImage>
                     ) : (
                         <Styled.Image
-                            src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + image?.imageURL}
+                            src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + image}
                         ></Styled.Image>
                     )
                 ) : (

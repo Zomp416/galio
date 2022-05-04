@@ -14,7 +14,7 @@ import * as Styled from "./styles";
 interface Props {
     _id: string;
     title: string;
-    splashURL: string;
+    renderedImage: string;
     publishedAt: Date;
     rating: number;
     index: number;
@@ -50,7 +50,16 @@ const PublishTable: React.FC<Props> = props => {
         <>
             <TableRow onClick={onSelect}>
                 <TableCell style={{ width: "1px" }}>
-                    <Styled.Image src={props.splashURL} />
+                    {props.renderedImage ? (
+                        <Styled.Image
+                            src={
+                                "https://zomp-media.s3.us-east-1.amazonaws.com/" +
+                                props.renderedImage
+                            }
+                        />
+                    ) : (
+                        <Styled.BlankImage></Styled.BlankImage>
+                    )}
                 </TableCell>
                 <TableCell>{props.title}</TableCell>
                 <TableCell style={{ width: "1px", whiteSpace: "nowrap" }}>

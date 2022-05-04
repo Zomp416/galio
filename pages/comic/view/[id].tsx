@@ -3,8 +3,6 @@ import Head from "next/head";
 import ViewComic from "../../../components/comic/view";
 import Navbar from "../../../components/navbar";
 import { AuthProvider } from "../../../context/authcontext";
-import { ImageProvider } from "../../../context/imagecontext";
-//import { getImage } from "../../../util/zilean";
 import { getUserFromSession } from "../../../util/zileanUser";
 import { getComic } from "../../../util/zileanComic";
 
@@ -22,10 +20,8 @@ const ViewComicPage: NextPage<Props> = props => {
                 <title>{props.comic.title}</title>
             </Head>
             <AuthProvider user={props.user}>
-                <ImageProvider image={props.comicImage}>
-                    <Navbar domain="comics" />
-                    <ViewComic comic={props.comic} comicAuthor={props.comicAuthor} />
-                </ImageProvider>
+                <Navbar domain="comics" />
+                <ViewComic comic={props.comic} comicAuthor={props.comicAuthor} />
             </AuthProvider>
         </>
     );
@@ -43,7 +39,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
                     comic: comic.data,
                     user: result.data || null,
                     comicAuthor: comic.data?.author || null,
-                    comicImage: comic.data?.renderedImage || null,
                 },
             };
         }

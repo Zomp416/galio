@@ -18,11 +18,7 @@ import { unsubscribe, subscribe } from "../../../util/zileanUser";
 
 import * as Styled from "./styles";
 
-const ViewStory: React.FC<{ story?: any; storyAuthor?: any; coverArt?: any }> = ({
-    story,
-    storyAuthor,
-    coverArt,
-}) => {
+const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyAuthor }) => {
     const [comment, setComment] = useState<string>("");
     const [rating, setRating] = useState<number | null>(3.5);
     const [tags] = useState<string[]>(story.tags);
@@ -63,9 +59,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any; coverArt?: any }> = 
         <>
             <Styled.ViewStoryContainer>
                 <Styled.RowContainer>
-                    {coverArt === null ? (
-                        <></>
-                    ) : (
+                    {story.coverart ? (
                         <Box
                             component="img"
                             sx={{
@@ -73,8 +67,10 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any; coverArt?: any }> = 
                                 width: 70,
                                 paddingRight: "10px",
                             }}
-                            src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + coverArt}
+                            src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + story.coverart}
                         />
+                    ) : (
+                        <></>
                     )}
                     <Styled.ColumnContainer>
                         <Typography variant="h4" width={"100%"} sx={{ paddingTop: "10px" }}>
