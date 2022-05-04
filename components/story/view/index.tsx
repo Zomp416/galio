@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Box,
     Divider,
@@ -18,35 +18,35 @@ import { unsubscribe, subscribe } from "../../../util/zileanUser";
 
 import * as Styled from "./styles";
 
-const ViewStory: React.FC<{ story?: any; storyAuthor?: any; coverArt?: any }> = ({
-    story,
-    storyAuthor,
-    coverArt,
-}) => {
+const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyAuthor }) => {
     const [comment, setComment] = useState<string>("");
     const [rating, setRating] = useState<number | null>(3.5);
     const [tags] = useState<string[]>(story.tags);
     const { user } = useAuthContext();
 
-    let initialSubscribe = false;
-    if (user != null) {
-        if (storyAuthor.username === user!.username) {
-            for (let i = 0; i < user?.subscriptions?.length!; i++) {
-                if (user?.subscriptions![i] === storyAuthor._id) {
-                    initialSubscribe = true;
+    const [subscribed, setSubscribed] = useState<boolean>(false);
+    const [subscribers, setSubscribers] = useState<number>(storyAuthor.subscriberCount);
+
+    useEffect(() => {
+        async function getSubscribedToUser() {
+            if (user != null) {
+                for (let i = 0; i < user?.subscriptions?.length!; i++) {
+                    if (user?.subscriptions![i] === storyAuthor._id) {
+                        setSubscribed(true);
+                    }
                 }
             }
         }
-    }
-    const [subscribed, setSubscribed] = useState<boolean>(initialSubscribe);
+        getSubscribedToUser();
+    }, [storyAuthor._id, user, user?.subscriptions]);
 
-    // TODO subscribe doesnt update subscriber count
     const handleSubscribe = async (event: React.FormEvent, user2id: any) => {
         event.preventDefault();
         const userid = { subscription: user2id };
         const data = await subscribe(userid);
         if (!data.error) {
             setSubscribed(true);
+            setSubscribers(subscribers + 1);
         }
     };
 
@@ -56,6 +56,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any; coverArt?: any }> = 
         const data = await unsubscribe(userid);
         if (!data.error) {
             setSubscribed(false);
+            setSubscribers(subscribers - 1);
         }
     };
 
@@ -63,9 +64,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any; coverArt?: any }> = 
         <>
             <Styled.ViewStoryContainer>
                 <Styled.RowContainer>
-                    {coverArt === null ? (
-                        <></>
-                    ) : (
+                    {story.coverart ? (
                         <Box
                             component="img"
                             sx={{
@@ -73,8 +72,10 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any; coverArt?: any }> = 
                                 width: 70,
                                 paddingRight: "10px",
                             }}
-                            src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + coverArt}
+                            src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + story.coverart}
                         />
+                    ) : (
+                        <></>
                     )}
                     <Styled.ColumnContainer>
                         <Typography variant="h4" width={"100%"} sx={{ paddingTop: "10px" }}>
@@ -111,7 +112,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any; coverArt?: any }> = 
                                             {storyAuthor.username}
                                         </Typography>
                                     </div>
-                                    {storyAuthor.subscriberCount + " Subscribers"}
+                                    {subscribers + " Subscribers"}
                                 </Styled.ColumnContainer>
                             </Styled.AuthorContainer>
                             <Styled.SSContainer>
@@ -124,7 +125,6 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any; coverArt?: any }> = 
                                     subscribed ? (
                                         <Styled.SSButton
                                             variant="contained"
-                                            color="primary"
                                             style={{ backgroundColor: "red" }}
                                             onClick={e => {
                                                 handleUnsubscribe(e, storyAuthor._id.toString());

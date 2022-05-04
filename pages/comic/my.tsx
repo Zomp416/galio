@@ -36,11 +36,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
         for (var i = 0; i < comics!.length; i++) {
             const result2 = await getComic(comics![i]);
             if (result2.data) {
-                // TODO: display proper URL; using getImage takes too long?!? optimize code so it doesnt idk
-                const splashURL =
-                    "https://zomp-media.s3.us-east-1.amazonaws.com/" +
-                    "assets/a8abb9ed-c384-408a-924e-d947df860a82.png";
-                result2.data.splashURL = splashURL;
                 if (result2.data.publishedAt) {
                     published.push(result2.data);
                 } else {
@@ -48,21 +43,19 @@ export const getServerSideProps: GetServerSideProps = async context => {
                 }
             }
         }
-    } else {
-        // No data means that the backend was not able to find a user from the session cookie.
         return {
-            redirect: {
-                destination: "/",
-                permanent: false,
+            props: {
+                user: result.data || null,
+                published: published,
+                unpublished: unpublished,
             },
         };
     }
-
+    // No data means that the backend was not able to find a user from the session cookie.
     return {
-        props: {
-            user: result.data || null,
-            published: published,
-            unpublished: unpublished,
+        redirect: {
+            destination: "/",
+            permanent: false,
         },
     };
 };

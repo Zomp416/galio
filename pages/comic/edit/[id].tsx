@@ -30,27 +30,30 @@ const EditComicPage: NextPage<Props> = props => {
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-    const result = await getUserFromSession(context.req.headers.cookie || "");
-    const comicRes = await getEditComic(
-        context.req.headers.cookie || "",
-        (context.params?.id as string) || "yikes"
-    );
+    //The _id will always be 24 characters long by MongoDB
+    if (context.params!.id!.toString().length == 24) {
+        const result = await getUserFromSession(context.req.headers.cookie || "");
+        const comicRes = await getEditComic(
+            context.req.headers.cookie || "",
+            (context.params?.id as string) || "yikes"
+        );
 
-    let comic = comicRes.data;
-    if (!comicRes.error) {
-        comic = comicRes.data;
-    }
+        let comic = comicRes.data;
+        if (!comicRes.error) {
+            comic = comicRes.data;
+        }
 
-    //Prevents editing of published
-    if (comic?.publishedAt == null) {
-        //Confirms proper author
-        if (comic?.author == result.data?._id) {
-            return {
-                props: {
-                    comic,
-                    user: result.data || null,
-                },
-            };
+        //Prevents editing of published
+        if (comic?.publishedAt == null) {
+            //Confirms proper author
+            if (comic?.author == result.data?._id) {
+                return {
+                    props: {
+                        comic,
+                        user: result.data || null,
+                    },
+                };
+            }
         }
     }
     return {

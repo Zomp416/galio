@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-//TODO remove that^^ with no warning
 import React, { useState } from "react";
 import {
     Button,

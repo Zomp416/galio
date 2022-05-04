@@ -42,21 +42,19 @@ export const getServerSideProps: GetServerSideProps = async context => {
                 }
             }
         }
-    } else {
-        // No data means that the backend was not able to find a user from the session cookie.
         return {
-            redirect: {
-                destination: "/",
-                permanent: false,
+            props: {
+                user: result.data || null,
+                published: published,
+                unpublished: unpublished,
             },
         };
     }
-
+    // No data means that the backend was not able to find a user from the session cookie.
     return {
-        props: {
-            user: result.data || null,
-            published: published,
-            unpublished: unpublished,
+        redirect: {
+            destination: "/",
+            permanent: false,
         },
     };
 };

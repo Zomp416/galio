@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Typography, CardContent } from "@mui/material";
 import * as Styled from "./styles";
-import { getImage } from "../../../../util/zilean";
 import { getStory } from "../../../../util/zileanStory";
 
 interface Story {
@@ -18,32 +17,20 @@ const StoryCard: React.FC<{ story?: any; user?: any }> = ({ story, user }) => {
     useEffect(() => {
         async function getDisplayedComic() {
             const data = await getStory(story);
-            if (data.error) alert(data.error);
-            else setStory(data.data);
-
-            if (displayedStory?.publishedAt) {
-                //TODO coverart doesnt show like in mystories
-                if (data.data?.coverArt) {
-                    const profile = await getImage(data.data?.coverArt);
-                    if (profile.error) alert(profile.error);
-                    else setCoverArt(profile.data?.coverArt.imageURL);
-                }
-            }
+            setStory(data.data);
+            setCoverArt(data.data?.coverart);
         }
         getDisplayedComic();
     }, [displayedStory?.publishedAt, story]);
 
     return (
         <>
-            {displayedStory?.publishedAt ? (
-                <Styled.ResultCard>
-                    <Styled.CardThumbnailContainer>
-                        {/* TODO make everything clickable */}
-                        <Link href={`/story/view/` + displayedStory?._id}>
-                            <a>
-                                {coverArt === "" ? (
-                                    <Styled.CardNoThumbnail></Styled.CardNoThumbnail>
-                                ) : (
+            <Link href={`/story/view/` + displayedStory?._id}>
+                <a>
+                    {displayedStory?.publishedAt ? (
+                        <Styled.ResultCard>
+                            <Styled.CardThumbnailContainer>
+                                {coverArt ? (
                                     <Styled.CardThumbnail
                                         src={
                                             coverArt
@@ -52,25 +39,31 @@ const StoryCard: React.FC<{ story?: any; user?: any }> = ({ story, user }) => {
                                                 : ""
                                         }
                                     />
+                                ) : (
+                                    <Styled.CardNoThumbnail></Styled.CardNoThumbnail>
                                 )}
-                            </a>
-                        </Link>
-                    </Styled.CardThumbnailContainer>
-                    <CardContent>
-                        <Typography variant="h5" component="div" fontWeight="bold">
-                            {displayedStory?.title}
-                        </Typography>
-                        <Typography variant="body1" color="text.secondary" fontWeight="bold">
-                            {user.username}
-                        </Typography>
-                        <Typography variant="body1" color="text.secondary">
-                            {displayedStory?.views + " views"}
-                        </Typography>
-                    </CardContent>
-                </Styled.ResultCard>
-            ) : (
-                <></>
-            )}{" "}
+                            </Styled.CardThumbnailContainer>
+                            <CardContent>
+                                <Typography variant="h5" component="div" fontWeight="bold">
+                                    {displayedStory?.title}
+                                </Typography>
+                                <Typography
+                                    variant="body1"
+                                    color="text.secondary"
+                                    fontWeight="bold"
+                                >
+                                    {user.username}
+                                </Typography>
+                                <Typography variant="body1" color="text.secondary">
+                                    {displayedStory?.views + " views"}
+                                </Typography>
+                            </CardContent>
+                        </Styled.ResultCard>
+                    ) : (
+                        <></>
+                    )}{" "}
+                </a>
+            </Link>
         </>
     );
 };

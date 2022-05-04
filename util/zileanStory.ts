@@ -31,7 +31,7 @@ export const getStory = async (id: string): Promise<ZileanResponse> => {
         },
         credentials: "include",
     });
-    return await result.json();
+    return result.json();
 };
 
 export const deleteStory = async (id: string): Promise<ZileanResponse> => {

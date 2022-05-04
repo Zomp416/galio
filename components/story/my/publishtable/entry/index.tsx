@@ -14,7 +14,7 @@ import * as Styled from "./styles";
 interface Props {
     _id: string;
     title: string;
-    splashURL: string;
+    coverart: string;
     publishedAt: Date;
     rating: number;
     index: number;
@@ -33,7 +33,6 @@ const PublishTable: React.FC<Props> = props => {
         event.preventDefault();
         const data = await unpublishStory(props._id);
         if (!data.error) {
-            //TODO swap to edit table or unpublished comic
             router.push({ pathname: "/story/my/" });
         }
     };
@@ -51,7 +50,13 @@ const PublishTable: React.FC<Props> = props => {
         <>
             <TableRow onClick={onSelect}>
                 <TableCell style={{ width: "1px" }}>
-                    <Styled.Image src={props.splashURL} />
+                    {props.coverart ? (
+                        <Styled.Image
+                            src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + props.coverart}
+                        />
+                    ) : (
+                        <Styled.BlankImage></Styled.BlankImage>
+                    )}
                 </TableCell>
                 <TableCell>{props.title}</TableCell>
                 <TableCell style={{ width: "1px", whiteSpace: "nowrap" }}>

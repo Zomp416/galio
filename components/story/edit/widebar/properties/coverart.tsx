@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable no-unused-vars */
-//TODO remove warnings for this page
 import { List, ListItem, Input, Button } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useStoryContext } from "../../../../../context/storycontext";
@@ -30,7 +29,7 @@ const CoverArtProperties: React.FC = () => {
         form.append("name", finalImage!.name.split(".")[0]);
         const { data, error } = await createImage(form);
         if (error) alert(error);
-        newdo("editStory", { coverart: data._id });
+        newdo("editStory", { coverart: data.imageURL });
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

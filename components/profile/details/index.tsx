@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Typography, Button } from "@mui/material";
 import * as Styled from "./styles";
@@ -7,26 +7,29 @@ import { unsubscribe, subscribe } from "../../../util/zileanUser";
 
 const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile }) => {
     const { user } = useAuthContext();
-    const finalUser = user2;
     const router = useRouter();
 
-    let initialSubscribe = false;
-    if (finalUser.username === user2.username) {
-        for (let i = 0; i < user?.subscriptions?.length!; i++) {
-            if (user?.subscriptions![i] === user2._id) {
-                initialSubscribe = true;
+    const [subscribed, setSubscribed] = useState<boolean>(false);
+    const [subscribers, setSubscribers] = useState<number>(user2.subscriberCount);
+
+    useEffect(() => {
+        async function getSubscribedToUser() {
+            for (let i = 0; i < user?.subscriptions?.length!; i++) {
+                if (user?.subscriptions![i] === user2._id) {
+                    setSubscribed(true);
+                }
             }
         }
-    }
-    const [subscribed, setSubscribed] = useState<boolean>(initialSubscribe);
+        getSubscribedToUser();
+    }, [user?.subscriptions, user2._id]);
 
     const handleSubscribe = async (event: React.FormEvent, user2id: any) => {
         event.preventDefault();
         const userid = { subscription: user2id };
         const data = await subscribe(userid);
         if (!data.error) {
-            router.push({ pathname: "/user/" + finalUser.username });
             setSubscribed(true);
+            setSubscribers(subscribers + 1);
         }
     };
 
@@ -35,8 +38,8 @@ const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile
         const userid = { subscription: user2id };
         const data = await unsubscribe(userid);
         if (!data.error) {
-            router.push({ pathname: "/user/" + finalUser.username });
             setSubscribed(false);
+            setSubscribers(subscribers - 1);
         }
     };
 
@@ -58,7 +61,7 @@ const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile
                         color: "black",
                     }}
                 >
-                    {finalUser?.username!}
+                    {user2?.username!}
                 </Typography>
                 <Typography
                     variant="h4"
@@ -68,43 +71,46 @@ const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile
                         marginBottom: "10px",
                     }}
                 >
-                    {finalUser?.subscriberCount!} subscribers
+                    {subscribers} subscribers
                 </Typography>
-                {user?.username! !== user2.username! ? (
-                    subscribed ? (
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            style={{ width: "60%", backgroundColor: "red" }}
-                            onClick={e => {
-                                handleUnsubscribe(e, user2._id.toString());
-                            }}
-                        >
-                            Unsubscribe
-                        </Button>
+                {user ? (
+                    user?.username! !== user2.username! ? (
+                        subscribed ? (
+                            <Button
+                                variant="contained"
+                                style={{ width: "60%", backgroundColor: "red" }}
+                                onClick={e => {
+                                    handleUnsubscribe(e, user2._id.toString());
+                                }}
+                            >
+                                Unsubscribe
+                            </Button>
+                        ) : (
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                style={{ width: "60%" }}
+                                onClick={e => {
+                                    handleSubscribe(e, user2._id.toString());
+                                }}
+                            >
+                                Subscribe
+                            </Button>
+                        )
                     ) : (
                         <Button
                             variant="contained"
                             color="primary"
-                            style={{ width: "60%" }}
-                            onClick={e => {
-                                handleSubscribe(e, user2._id.toString());
+                            onClick={() => {
+                                router.push("/edit-account");
                             }}
+                            style={{ width: "60%" }}
                         >
-                            Subscribe
+                            Edit Profile
                         </Button>
                     )
                 ) : (
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                            router.push("/edit-account");
-                        }}
-                        style={{ width: "60%" }}
-                    >
-                        Edit Profile
-                    </Button>
+                    <></>
                 )}
             </Styled.TextContainer>
             <Styled.AboutContainer>
@@ -125,7 +131,7 @@ const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile
                         color: "black",
                     }}
                 >
-                    {finalUser?.about!}
+                    {user2?.about!}
                 </Typography>
             </Styled.AboutContainer>
         </Styled.DetailsContainer>

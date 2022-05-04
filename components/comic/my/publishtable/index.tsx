@@ -6,7 +6,7 @@ import Entry from "./entry";
 interface Comic {
     _id: string;
     title: string;
-    splashURL: string;
+    renderedImage: string;
     publishedAt: Date;
     rating: number;
 }
