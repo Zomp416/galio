@@ -26,11 +26,9 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
 
     let initialSubscribe = false;
     if (user != null) {
-        if (storyAuthor.username === user!.username) {
-            for (let i = 0; i < user?.subscriptions?.length!; i++) {
-                if (user?.subscriptions![i] === storyAuthor._id) {
-                    initialSubscribe = true;
-                }
+        for (let i = 0; i < user?.subscriptions?.length!; i++) {
+            if (user?.subscriptions![i] === storyAuthor._id) {
+                initialSubscribe = true;
             }
         }
     }
@@ -106,10 +104,10 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                                             href={"/user/" + storyAuthor.username}
                                             color="black"
                                         >
-                                            {subscribers}
+                                            {storyAuthor.username}
                                         </Typography>
                                     </div>
-                                    {storyAuthor.subscriberCount + " Subscribers"}
+                                    {subscribers + " Subscribers"}
                                 </Styled.ColumnContainer>
                             </Styled.AuthorContainer>
                             <Styled.SSContainer>
@@ -122,7 +120,6 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                                     subscribed ? (
                                         <Styled.SSButton
                                             variant="contained"
-                                            color="primary"
                                             style={{ backgroundColor: "red" }}
                                             onClick={e => {
                                                 handleUnsubscribe(e, storyAuthor._id.toString());

@@ -74,7 +74,6 @@ const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile
                     subscribed ? (
                         <Button
                             variant="contained"
-                            color="primary"
                             style={{ width: "60%", backgroundColor: "red" }}
                             onClick={e => {
                                 handleUnsubscribe(e, user2._id.toString());

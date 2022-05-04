@@ -105,7 +105,6 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
                             subscribed ? (
                                 <Styled.SSButton
                                     variant="contained"
-                                    color="primary"
                                     style={{ backgroundColor: "red" }}
                                     onClick={e => {
                                         handleUnsubscribe(e, comicAuthor._id.toString());
