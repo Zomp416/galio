@@ -4,7 +4,7 @@ import ViewComic from "../../../components/comic/view";
 import Navbar from "../../../components/navbar";
 import { AuthProvider } from "../../../context/authcontext";
 import { getUserFromSession } from "../../../util/zileanUser";
-import { getComic } from "../../../util/zileanComic";
+import { viewComic } from "../../../util/zileanComic";
 
 interface Props {
     user: any;
@@ -28,7 +28,7 @@ const ViewComicPage: NextPage<Props> = props => {
 
 export const getServerSideProps: GetServerSideProps = async context => {
     const user = await getUserFromSession(context.req.headers.cookie || "");
-    const comic = await getComic(context.params!.id!.toString());
+    const comic = await viewComic(context.params!.id!.toString());
 
     if (comic.data) {
         return {

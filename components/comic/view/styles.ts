@@ -93,7 +93,7 @@ export const SSContainer = styled.div`
 `;
 
 export const RatingsContainer = styled.div`
-    width: 45%;
+    width: 50%;
     display: flex;
     flex-direction: column;
     align-items: right;

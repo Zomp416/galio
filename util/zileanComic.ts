@@ -121,3 +121,22 @@ export const unpublishComic = async (id: string): Promise<ZileanResponse> => {
         return data;
     }
 };
+
+export const rateComic = async (comicID: string, rating: number): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/comic/rate/${comicID}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ rating }),
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data) {
+        return {
+            error: "Error rating comic.",
+        };
+    } else {
+        return data;
+    }
+};

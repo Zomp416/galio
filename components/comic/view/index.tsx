@@ -14,50 +14,77 @@ import {
 import ShareIcon from "@mui/icons-material/Share";
 import * as Styled from "./styles";
 import { useAuthContext } from "../../../context/authcontext";
-import { unsubscribe, subscribe } from "../../../util/zileanUser";
+import { updateUserSubscription } from "../../../util/zileanUser";
+import { rateComic } from "../../../util/zileanComic";
 import { IMAGE_URI } from "../../../util/config";
 
+// TODO change to zomp "Z" logo
 const default_image = "assets/a8abb9ed-c384-408a-924e-d947df860a82.png";
 
-const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicAuthor }) => {
+interface Props {
+    comic: Record<any, any>;
+    comicAuthor: Record<any, any>;
+}
+
+const ViewComic: React.FC<Props> = props => {
+    // TODO maybe change the comic/author/comment state hooks into context...
+    // using props as an initial state value is a React anti-pattern, but it's easier to implement :p
+    const [comic, setComic] = useState<Record<any, any>>(props.comic);
+    const [comicAuthor, setComicAuthor] = useState<Record<any, any>>(props.comicAuthor);
+    const [commentList, setCommentList] = useState<{ author: Record<any, any>; text: string }[]>(
+        comic.comments || []
+    );
     const [comment, setComment] = useState<string>("");
-    const [tags] = useState<string[]>(comic.tags);
-    const [rating, setRating] = useState<number | null>(4.5);
+    const [rating, setRating] = useState<number>(-1);
     const { user } = useAuthContext();
 
-    const [subscribed, setSubscribed] = useState<boolean>(false);
-    const [subscribers, setSubscribers] = useState<number>(comicAuthor.subscriberCount);
-
+    // Find user rating -- not a scalable solution, but it works
     useEffect(() => {
-        async function getSubscribedToUser() {
-            if (user != null) {
-                for (let i = 0; i < user?.subscriptions?.length!; i++) {
-                    if (user?.subscriptions![i] === comicAuthor._id) {
-                        setSubscribed(true);
-                    }
-                }
+        if (!user) return;
+        for (let i = 0; i < user.comicRatings.length; i++) {
+            if (user.comicRatings[i].id === comic._id) {
+                setRating(user.comicRatings[i].rating);
+                break;
             }
         }
-        getSubscribedToUser();
-    }, [comicAuthor._id, user, user?.subscriptions]);
+    }, [user, comic._id]);
 
-    const handleSubscribe = async (event: React.FormEvent, user2id: any) => {
+    const handleSubscribe = async (event: React.FormEvent) => {
         event.preventDefault();
-        const userid = { subscription: user2id };
-        const data = await subscribe(userid);
+        const data = await updateUserSubscription({ authorID: comicAuthor._id, type: "add" });
         if (!data.error) {
-            setSubscribed(true);
-            setSubscribers(subscribers + 1);
+            setComicAuthor({ ...comicAuthor, subscriberCount: comicAuthor.subscriberCount + 1 });
+            // TODO UPDATE LOCAL CONTEXT OF USER
         }
     };
 
-    const handleUnsubscribe = async (event: React.FormEvent, user2id: any) => {
+    const handleUnsubscribe = async (event: React.FormEvent) => {
         event.preventDefault();
-        const userid = { subscription: user2id };
-        const data = await unsubscribe(userid);
+        const data = await updateUserSubscription({ authorID: comicAuthor._id, type: "remove" });
         if (!data.error) {
-            setSubscribed(false);
-            setSubscribers(subscribers - 1);
+            setComicAuthor({ ...comicAuthor, subscriberCount: comicAuthor.subscriberCount - 1 });
+            // TODO UPDATE LOCAL CONTEXT OF USER
+        }
+    };
+
+    const handleAddComment = () => {
+        if (comment && user) {
+            // TODO CALL BACKEND
+            setCommentList([{ author: user, text: comment }, ...commentList]);
+            setComment("");
+        }
+    };
+
+    const handleUpdateRating = async (value: number) => {
+        const res = await rateComic(comic._id, value);
+        if (!res.error && res.data) {
+            const { ratingTotal, ratingCount } = res.data;
+            setComic({
+                ...comic,
+                ratingTotal,
+                ratingCount,
+            });
+            setRating(value);
         }
     };
 
@@ -69,7 +96,7 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
                 </Typography>
                 <Styled.TVContainer>
                     <Styled.TagsContainer>
-                        {tags.map((val, index) => (
+                        {comic.tags.map((val: string, index: number) => (
                             <Styled.Tag
                                 key={`${index}-tag`}
                                 variant="contained"
@@ -99,21 +126,19 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
                                     {comicAuthor.username}
                                 </Typography>
                             </Link>
-                            <Typography variant="h6">{subscribers + " Subscribers"}</Typography>
+                            <Typography variant="h6">
+                                {comicAuthor.subscriberCount + " Subscribers"}
+                            </Typography>
                         </div>
                     </Styled.AuthorContainer>
                     <Styled.SSContainer>
-                        <Styled.SSButton variant="contained" color="primary" size="large">
-                            Share
-                            <ShareIcon />
-                        </Styled.SSButton>
                         {user !== null && user?.username! !== comicAuthor.username! ? (
-                            subscribed ? (
+                            user?.subscriptions.includes(comicAuthor._id) ? (
                                 <Styled.SSButton
                                     variant="contained"
                                     style={{ backgroundColor: "red" }}
                                     onClick={e => {
-                                        handleUnsubscribe(e, comicAuthor._id.toString());
+                                        handleUnsubscribe(e);
                                     }}
                                 >
                                     Unsubscribe
@@ -123,7 +148,7 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
                                     variant="contained"
                                     color="primary"
                                     onClick={e => {
-                                        handleSubscribe(e, comicAuthor._id.toString());
+                                        handleSubscribe(e);
                                     }}
                                 >
                                     Subscribe
@@ -132,6 +157,10 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
                         ) : (
                             <></>
                         )}
+                        <Styled.SSButton variant="contained" color="primary" size="large">
+                            Share
+                            <ShareIcon />
+                        </Styled.SSButton>
                     </Styled.SSContainer>
                 </Styled.ASSContainer>
                 <Styled.ColumnContainer>
@@ -141,7 +170,7 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
                     <Typography variant="h4">Ratings</Typography>
                     <Styled.RatingsContainer>
                         <Styled.Rating>
-                            <Typography variant="h6">Average</Typography>
+                            <Typography variant="h6">Average Rating</Typography>
                             <div style={{ display: "flex", justifyContent: "right" }}>
                                 <Rating
                                     name="average-rating"
@@ -167,7 +196,7 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
                                     value={rating}
                                     precision={0.5}
                                     onChange={(e, value) => {
-                                        setRating(value);
+                                        handleUpdateRating(value || 0);
                                     }}
                                     sx={{
                                         "& .MuiRating-iconFilled": {
@@ -175,7 +204,9 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
                                         },
                                     }}
                                 />
-                                <Typography variant="h6">({rating || 0})</Typography>
+                                <Typography variant="h6">
+                                    ({rating === -1 ? "None" : rating})
+                                </Typography>
                             </div>
                         </Styled.Rating>
                     </Styled.RatingsContainer>
@@ -184,15 +215,21 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
                     <Divider />
                 </Styled.ColumnContainer>
                 <Styled.ASSContainer>
-                    <Typography variant="h4">Comments (1)</Typography>
-                    <Styled.SSButton
-                        variant="contained"
-                        color="primary"
-                        size="large"
-                        disabled={!comment}
-                    >
-                        Add Comment
-                    </Styled.SSButton>
+                    <Typography variant="h4">Comments ({commentList.length})</Typography>
+                    {user ? (
+                        <Styled.SSButton
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            disabled={!comment}
+                            onClick={handleAddComment}
+                        >
+                            Add Comment
+                        </Styled.SSButton>
+                    ) : (
+                        // TODO STYLE THIS
+                        <Link href="/login">Login to Comment</Link>
+                    )}
                 </Styled.ASSContainer>
                 <TextField
                     id="add-comment"
@@ -203,24 +240,31 @@ const ViewComic: React.FC<{ comic?: any; comicAuthor?: any }> = ({ comic, comicA
                     onChange={e => {
                         setComment(e.target.value);
                     }}
+                    disabled={!user}
                     sx={{ width: "100%", margin: "10px 0" }}
                 />
                 <List sx={{ width: "100%" }}>
-                    <ListItem alignItems="flex-start" sx={{ padding: "8px 0" }}>
-                        <ListItemAvatar>
-                            <Avatar />
-                        </ListItemAvatar>
-                        <ListItemText
-                            primary={
-                                <Link href="/user/Joe Schmo" passHref>
-                                    <Typography variant="body1" component="a" color="black">
-                                        Joe Schmo
-                                    </Typography>
-                                </Link>
-                            }
-                            secondary="Ayo! This was a good one."
-                        />
-                    </ListItem>
+                    {commentList.map((val, index) => (
+                        <ListItem
+                            alignItems="flex-start"
+                            sx={{ padding: "8px 0" }}
+                            key={`comment-${index}`}
+                        >
+                            <ListItemAvatar>
+                                <Avatar src={`${IMAGE_URI}${val.author.profilePicture}`}></Avatar>
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary={
+                                    <Link href={`/user/${val.author.username}`} passHref>
+                                        <Typography variant="body1" component="a" color="black">
+                                            {val.author.username || "Zomp User"}
+                                        </Typography>
+                                    </Link>
+                                }
+                                secondary={val.text || ""}
+                            />
+                        </ListItem>
+                    ))}
                 </List>
             </Styled.ViewComicContainer>
         </>

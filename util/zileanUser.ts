@@ -143,37 +143,22 @@ export const deleteAccount = async (): Promise<ZileanResponse> => {
     return data;
 };
 
-export const subscribe = async (subscribe: { subscription: string }): Promise<ZileanResponse> => {
+export const updateUserSubscription = async (payload: {
+    authorID: string;
+    type: "add" | "remove";
+}): Promise<ZileanResponse> => {
     const result = await fetch(`${zileanOrigin}/account/subscribe`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(subscribe),
+        body: JSON.stringify(payload),
         credentials: "include",
     });
     const data = await result.json();
-    if (!data || result.status !== 200) {
+    if (!data) {
         return {
             error: "Error Subscribing.",
-        };
-    }
-    return data;
-};
-
-export const unsubscribe = async (subscribe: { subscription: string }): Promise<ZileanResponse> => {
-    const result = await fetch(`${zileanOrigin}/account/unsubscribe`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(subscribe),
-        credentials: "include",
-    });
-    const data = await result.json();
-    if (!data || result.status !== 200) {
-        return {
-            error: "Error Unsubscribing.",
         };
     }
     return data;
