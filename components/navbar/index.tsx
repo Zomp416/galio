@@ -7,6 +7,7 @@ import { useAuthContext } from "../../context/authcontext";
 import { logout } from "../../util/zileanUser";
 import { createComic } from "../../util/zileanComic";
 import { createStory } from "../../util/zileanStory";
+import { IMAGE_URI } from "../../util/config";
 
 interface NavbarProps {
     domain: string;
@@ -165,7 +166,7 @@ const Navbar: React.FC<NavbarProps> = props => {
                     </IconButton>
                     <Box>
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                            <Avatar />
+                            <Avatar src={`${IMAGE_URI}${user?.profilePicture || ""}`} />
                         </IconButton>
                         <Menu
                             sx={{ mt: "40px" }}

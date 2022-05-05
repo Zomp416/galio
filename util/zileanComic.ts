@@ -140,3 +140,22 @@ export const rateComic = async (comicID: string, rating: number): Promise<Zilean
         return data;
     }
 };
+
+export const commentComic = async (comicID: string, text: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/comic/comment/${comicID}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text }),
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data) {
+        return {
+            error: "Error commenting on comic.",
+        };
+    } else {
+        return data;
+    }
+};
