@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { Typography, Button } from "@mui/material";
 import * as Styled from "./styles";
 import { useAuthContext } from "../../../context/authcontext";
-import { unsubscribe, subscribe } from "../../../util/zileanUser";
+import { updateUserSubscription } from "../../../util/zileanUser";
 
 const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile }) => {
     const { user } = useAuthContext();
@@ -25,8 +25,7 @@ const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile
 
     const handleSubscribe = async (event: React.FormEvent, user2id: any) => {
         event.preventDefault();
-        const userid = { subscription: user2id };
-        const data = await subscribe(userid);
+        const data = await updateUserSubscription({ authorID: user2id, type: "add" });
         if (!data.error) {
             setSubscribed(true);
             setSubscribers(subscribers + 1);
@@ -35,8 +34,7 @@ const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile
 
     const handleUnsubscribe = async (event: React.FormEvent, user2id: any) => {
         event.preventDefault();
-        const userid = { subscription: user2id };
-        const data = await unsubscribe(userid);
+        const data = await updateUserSubscription({ authorID: user2id, type: "remove" });
         if (!data.error) {
             setSubscribed(false);
             setSubscribers(subscribers - 1);
