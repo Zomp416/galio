@@ -15,7 +15,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import * as Styled from "./styles";
 import { useAuthContext } from "../../../context/authcontext";
 import { updateUserSubscription } from "../../../util/zileanUser";
-import { rateComic } from "../../../util/zileanComic";
+import { rateComic, commentComic } from "../../../util/zileanComic";
 import { IMAGE_URI } from "../../../util/config";
 
 // TODO change to zomp "Z" logo
@@ -37,24 +37,29 @@ const ViewComic: React.FC<Props> = props => {
     const [comment, setComment] = useState<string>("");
     const [rating, setRating] = useState<number>(-1);
     const { user } = useAuthContext();
+    // Yep!
+    const [userTemp, setUserTemp] = useState(user);
 
     // Find user rating -- not a scalable solution, but it works
     useEffect(() => {
-        if (!user) return;
-        for (let i = 0; i < user.comicRatings.length; i++) {
-            if (user.comicRatings[i].id === comic._id) {
-                setRating(user.comicRatings[i].rating);
+        if (!userTemp) return;
+        for (let i = 0; i < userTemp.comicRatings.length; i++) {
+            if (userTemp.comicRatings[i].id === comic._id) {
+                setRating(userTemp.comicRatings[i].rating);
                 break;
             }
         }
-    }, [user, comic._id]);
+    }, [userTemp, comic._id]);
 
     const handleSubscribe = async (event: React.FormEvent) => {
         event.preventDefault();
         const data = await updateUserSubscription({ authorID: comicAuthor._id, type: "add" });
         if (!data.error) {
             setComicAuthor({ ...comicAuthor, subscriberCount: comicAuthor.subscriberCount + 1 });
-            // TODO UPDATE LOCAL CONTEXT OF USER
+            setUserTemp({
+                ...userTemp!,
+                subscriptions: [...userTemp!.subscriptions, comicAuthor._id],
+            });
         }
     };
 
@@ -63,15 +68,20 @@ const ViewComic: React.FC<Props> = props => {
         const data = await updateUserSubscription({ authorID: comicAuthor._id, type: "remove" });
         if (!data.error) {
             setComicAuthor({ ...comicAuthor, subscriberCount: comicAuthor.subscriberCount - 1 });
-            // TODO UPDATE LOCAL CONTEXT OF USER
+            setUserTemp({
+                ...userTemp!,
+                subscriptions: userTemp!.subscriptions.filter(val => val !== comicAuthor._id),
+            });
         }
     };
 
-    const handleAddComment = () => {
-        if (comment && user) {
-            // TODO CALL BACKEND
-            setCommentList([{ author: user, text: comment }, ...commentList]);
-            setComment("");
+    const handleAddComment = async () => {
+        if (comment && userTemp) {
+            const data = await commentComic(comic._id, comment);
+            if (!data.error) {
+                setCommentList([{ author: userTemp, text: comment }, ...commentList]);
+                setComment("");
+            }
         }
     };
 
@@ -132,8 +142,8 @@ const ViewComic: React.FC<Props> = props => {
                         </div>
                     </Styled.AuthorContainer>
                     <Styled.SSContainer>
-                        {user !== null && user?.username! !== comicAuthor.username! ? (
-                            user?.subscriptions.includes(comicAuthor._id) ? (
+                        {userTemp && userTemp?.username! !== comicAuthor.username! ? (
+                            userTemp?.subscriptions.includes(comicAuthor._id) ? (
                                 <Styled.SSButton
                                     variant="contained"
                                     style={{ backgroundColor: "red" }}
@@ -216,7 +226,7 @@ const ViewComic: React.FC<Props> = props => {
                 </Styled.ColumnContainer>
                 <Styled.ASSContainer>
                     <Typography variant="h4">Comments ({commentList.length})</Typography>
-                    {user ? (
+                    {userTemp ? (
                         <Styled.SSButton
                             variant="contained"
                             color="primary"
@@ -240,7 +250,7 @@ const ViewComic: React.FC<Props> = props => {
                     onChange={e => {
                         setComment(e.target.value);
                     }}
-                    disabled={!user}
+                    disabled={!userTemp}
                     sx={{ width: "100%", margin: "10px 0" }}
                 />
                 <List sx={{ width: "100%" }}>
