@@ -3,6 +3,7 @@ import Head from "next/head";
 import ViewComic from "../../../components/comic/view";
 import Navbar from "../../../components/navbar";
 import { AuthProvider } from "../../../context/authcontext";
+import { ToastProvider } from "../../../context/toastcontext";
 import { getUserFromSession } from "../../../util/zileanUser";
 import { viewComic } from "../../../util/zileanComic";
 
@@ -18,10 +19,12 @@ const ViewComicPage: NextPage<Props> = props => {
             <Head>
                 <title>{props.comic.title || "Unnamed Comic"}</title>
             </Head>
-            <AuthProvider user={props.user}>
-                <Navbar domain="comics" />
-                <ViewComic comic={props.comic} comicAuthor={props.comicAuthor} />
-            </AuthProvider>
+            <ToastProvider>
+                <AuthProvider user={props.user}>
+                    <Navbar domain="comics" />
+                    <ViewComic comic={props.comic} comicAuthor={props.comicAuthor} />
+                </AuthProvider>
+            </ToastProvider>
         </>
     );
 };
