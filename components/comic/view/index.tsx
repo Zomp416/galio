@@ -14,6 +14,7 @@ import {
 import ShareIcon from "@mui/icons-material/Share";
 import * as Styled from "./styles";
 import { useAuthContext } from "../../../context/authcontext";
+import { useToastContext } from "../../../context/toastcontext";
 import { updateUserSubscription } from "../../../util/zileanUser";
 import { rateComic, commentComic } from "../../../util/zileanComic";
 import { IMAGE_URI } from "../../../util/config";
@@ -39,6 +40,7 @@ const ViewComic: React.FC<Props> = props => {
     const { user } = useAuthContext();
     // Yep!
     const [userTemp, setUserTemp] = useState(user);
+    const { addToast } = useToastContext();
 
     // Find user rating -- not a scalable solution, but it works
     useEffect(() => {
@@ -60,6 +62,9 @@ const ViewComic: React.FC<Props> = props => {
                 ...userTemp!,
                 subscriptions: [...userTemp!.subscriptions, comicAuthor._id],
             });
+            addToast("success", `Subscribed to ${comicAuthor.username}`);
+        } else {
+            addToast("error", "Unable to subscribe");
         }
     };
 
@@ -72,6 +77,9 @@ const ViewComic: React.FC<Props> = props => {
                 ...userTemp!,
                 subscriptions: userTemp!.subscriptions.filter(val => val !== comicAuthor._id),
             });
+            addToast("success", `Unsubscribed from ${comicAuthor.username}`);
+        } else {
+            addToast("error", "Unable to unsubscribe");
         }
     };
 
@@ -81,7 +89,10 @@ const ViewComic: React.FC<Props> = props => {
             if (!data.error) {
                 setCommentList([{ author: userTemp, text: comment }, ...commentList]);
                 setComment("");
+                addToast("success", `Added Comment`);
             }
+        } else {
+            addToast("error", "Unable to add comment");
         }
     };
 
@@ -95,6 +106,9 @@ const ViewComic: React.FC<Props> = props => {
                 ratingCount,
             });
             setRating(value);
+            addToast("success", `Updated Rating`);
+        } else {
+            addToast("error", "Unable to update rating");
         }
     };
 
