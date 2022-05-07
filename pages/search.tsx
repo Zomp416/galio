@@ -4,12 +4,11 @@ import Navbar from "../components/navbar";
 import Search from "../components/search";
 import { AuthProvider } from "../context/authcontext";
 import { getUserFromSession } from "../util/zileanUser";
+import { SearchProvider } from "../context/searchcontext";
 
 interface Props {
     user: any;
 }
-
-//TODO: change url of page to be /search/[params], so we can pass searchBy result in navbar
 
 const SearchPage: NextPage<Props> = props => {
     return (
@@ -17,11 +16,12 @@ const SearchPage: NextPage<Props> = props => {
             <Head>
                 <title>Zomp Search</title>
             </Head>
-
-            <AuthProvider user={props.user}>
-                <Navbar domain="search" />
-                <Search />
-            </AuthProvider>
+            <SearchProvider>
+                <AuthProvider user={props.user}>
+                    <Navbar domain="search" />
+                    <Search />
+                </AuthProvider>
+            </SearchProvider>
         </>
     );
 };
