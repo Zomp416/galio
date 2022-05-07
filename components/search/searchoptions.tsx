@@ -80,11 +80,11 @@ const SearchOptions: React.FC = () => {
                             marginLeft: "20px",
                         }}
                     >
-                        <MenuItem value={"Today"}>Today</MenuItem>
-                        <MenuItem value={"Week"}>This Week</MenuItem>
-                        <MenuItem value={"Month"}>This Month</MenuItem>
-                        <MenuItem value={"Year"}>This Year</MenuItem>
-                        <MenuItem value={"All"}>All Time</MenuItem>
+                        <MenuItem value={"day"}>Today</MenuItem>
+                        <MenuItem value={"week"}>This Week</MenuItem>
+                        <MenuItem value={"month"}>This Month</MenuItem>
+                        <MenuItem value={"year"}>This Year</MenuItem>
+                        <MenuItem value={"all"}>All Time</MenuItem>
                     </Select>
                 </Row>
             </SpacedRow>

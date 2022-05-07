@@ -20,8 +20,8 @@ const Search: React.FC = () => {
             <CardsContainer>
                 {results.map(res => (
                     <ResultCard
-                        _id="id"
-                        key="id"
+                        _id={res._id}
+                        key={res._id}
                         title={res.title}
                         author={res.author.username}
                         splashURL={
@@ -33,7 +33,7 @@ const Search: React.FC = () => {
                                 ? res.profilePicture
                                 : ""
                         }
-                        rating={res.rating}
+                        rating={res.ratingTotal / res.ratingCount}
                         views={res.views}
                     />
                 ))}

@@ -38,11 +38,15 @@ export const getEditComic = async (cookie: string, id: string): Promise<ZileanRe
 
 export const searchComic = async (params: {
     value?: string;
+    time?: string;
+    sort?: string;
     page?: number;
     limit?: number;
 }): Promise<ZileanResponse> => {
     let query = `${zileanOrigin}/comic/search?`;
     if (params.value) query += `value=${params.value}&`;
+    if (params.time) query += `time=${params.time}&`;
+    if (params.sort) query += `sort=${params.sort}&`;
     if (params.page) query += `page=${params.page}&`;
     if (params.limit) query += `limit=${params.limit}&`;
 

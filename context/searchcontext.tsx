@@ -48,7 +48,7 @@ export const SearchProvider: React.FC = ({ children }) => {
     const [newTag, setNewTag] = useState<string>("");
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [category, setCategory] = useState<string>("comic");
-    const [time, setTime] = useState<string>("Today");
+    const [time, setTime] = useState<string>("day");
     const [sort, setSort] = useState<string>("alpha");
     const [page, setPage] = useState(0);
     const [results, setResults] = useState<any[]>([]);
