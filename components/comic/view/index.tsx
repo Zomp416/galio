@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
     Divider,
+    IconButton,
     TextField,
     Typography,
     Rating,
@@ -12,11 +13,12 @@ import {
     Avatar,
 } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
+import DeleteIcon from "@mui/icons-material/Delete";
 import * as Styled from "./styles";
 import { useAuthContext } from "../../../context/authcontext";
 import { useToastContext } from "../../../context/toastcontext";
 import { updateUserSubscription } from "../../../util/zileanUser";
-import { rateComic, commentComic } from "../../../util/zileanComic";
+import { rateComic, commentComic, deleteCommentComic } from "../../../util/zileanComic";
 import { IMAGE_URI } from "../../../util/config";
 
 // TODO change to zomp "Z" logo
@@ -32,9 +34,9 @@ const ViewComic: React.FC<Props> = props => {
     // using props as an initial state value is a React anti-pattern, but it's easier to implement :p
     const [comic, setComic] = useState<Record<any, any>>(props.comic);
     const [comicAuthor, setComicAuthor] = useState<Record<any, any>>(props.comicAuthor);
-    const [commentList, setCommentList] = useState<{ author: Record<any, any>; text: string }[]>(
-        comic.comments || []
-    );
+    const [commentList, setCommentList] = useState<
+        { author: Record<any, any>; text: string; createdAt?: Date }[]
+    >(comic.comments || []);
     const [comment, setComment] = useState<string>("");
     const [rating, setRating] = useState<number>(-1);
     const { user } = useAuthContext();
@@ -87,12 +89,30 @@ const ViewComic: React.FC<Props> = props => {
         if (comment && userTemp) {
             const data = await commentComic(comic._id, comment);
             if (!data.error) {
-                setCommentList([{ author: userTemp, text: comment }, ...commentList]);
+                setCommentList(data.data.comments || []);
                 setComment("");
                 addToast("success", `Added Comment`);
+            } else {
+                addToast("error", "Unable to add comment");
             }
         } else {
             addToast("error", "Unable to add comment");
+        }
+    };
+
+    const handleDeleteComment = async (index: number) => {
+        const commentToDelete = commentList[index];
+        if (userTemp && commentToDelete.createdAt) {
+            const data = await deleteCommentComic(comic._id, new Date(commentToDelete.createdAt));
+            if (!data.error) {
+                setCommentList(data.data.comments || []);
+                setComment("");
+                addToast("success", `Deleted Comment`);
+            } else {
+                addToast("error", "Unable to delete comment");
+            }
+        } else {
+            addToast("error", "Unable to delete comment");
         }
     };
 
@@ -273,17 +293,39 @@ const ViewComic: React.FC<Props> = props => {
                             alignItems="flex-start"
                             sx={{ padding: "8px 0" }}
                             key={`comment-${index}`}
+                            secondaryAction={
+                                <>
+                                    {userTemp?._id === val.author._id && (
+                                        <IconButton
+                                            edge="end"
+                                            onClick={() => {
+                                                handleDeleteComment(index);
+                                            }}
+                                        >
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    )}
+                                </>
+                            }
                         >
                             <ListItemAvatar>
                                 <Avatar src={`${IMAGE_URI}${val.author.profilePicture}`}></Avatar>
                             </ListItemAvatar>
                             <ListItemText
                                 primary={
-                                    <Link href={`/user/${val.author.username}`} passHref>
+                                    <>
+                                        <Link href={`/user/${val.author.username}`} passHref>
+                                            <Typography variant="body1" component="a" color="black">
+                                                {val.author.username || "Zomp User"}
+                                            </Typography>
+                                        </Link>
+                                        &nbsp;&nbsp;
                                         <Typography variant="body1" component="a" color="black">
-                                            {val.author.username || "Zomp User"}
+                                            {val.createdAt
+                                                ? new Date(val.createdAt).toLocaleDateString()
+                                                : ""}
                                         </Typography>
-                                    </Link>
+                                    </>
                                 }
                                 secondary={val.text || ""}
                             />

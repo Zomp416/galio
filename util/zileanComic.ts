@@ -177,3 +177,25 @@ export const commentComic = async (comicID: string, text: string): Promise<Zilea
         return data;
     }
 };
+
+export const deleteCommentComic = async (
+    comicID: string,
+    commentTime: Date
+): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/comic/comment/${comicID}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ createdAt: commentTime.getTime() }),
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data) {
+        return {
+            error: "Error commenting on comic.",
+        };
+    } else {
+        return data;
+    }
+};
