@@ -1,7 +1,8 @@
 import React from "react";
 import Link from "next/link";
-
 import { Card, CardMedia, CardContent, Typography, Rating } from "@mui/material";
+
+import { IMAGE_URI } from "../../util/config";
 
 interface Props {
     _id: string;
@@ -20,6 +21,7 @@ const ResultCard: React.FC<Props> = props => {
                 textAlign: "center",
                 boxShadow: "none",
                 borderRadius: "0",
+                width: "200px",
             }}
         >
             <Link href={`/comic/view/${props._id}`}>
@@ -28,7 +30,7 @@ const ResultCard: React.FC<Props> = props => {
                         component="img"
                         height="200px"
                         width="200px"
-                        image={props.splashURL}
+                        image={IMAGE_URI + props.splashURL}
                         style={{ backgroundColor: "grey" }}
                     />
                 </a>

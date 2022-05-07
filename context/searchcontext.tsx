@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 
 interface ISearchContext {
+    queryText: string;
     tags: string[];
     newTag: string;
     modalOpen: boolean;
@@ -9,6 +10,7 @@ interface ISearchContext {
     sort: string;
     page: number;
     results: any[];
+    setQueryText: (__: string) => void;
     setTags: (__: string[]) => void;
     setNewTag: (__: string) => void;
     setModalOpen: (__: boolean) => void;
@@ -20,6 +22,7 @@ interface ISearchContext {
 }
 
 const SearchContext = createContext<ISearchContext>({
+    queryText: "",
     tags: [],
     newTag: "",
     modalOpen: false,
@@ -28,6 +31,7 @@ const SearchContext = createContext<ISearchContext>({
     sort: "alpha",
     page: 0,
     results: [],
+    setQueryText: (__: string) => {},
     setTags: (__: string[]) => {},
     setNewTag: (__: string) => {},
     setModalOpen: (__: boolean) => {},
@@ -39,10 +43,11 @@ const SearchContext = createContext<ISearchContext>({
 });
 
 export const SearchProvider: React.FC = ({ children }) => {
+    const [queryText, setQueryText] = useState<string>("");
     const [tags, setTags] = useState<string[]>([]);
     const [newTag, setNewTag] = useState<string>("");
     const [modalOpen, setModalOpen] = useState<boolean>(false);
-    const [category, setCategory] = useState<string>("Comics");
+    const [category, setCategory] = useState<string>("comic");
     const [time, setTime] = useState<string>("Today");
     const [sort, setSort] = useState<string>("alpha");
     const [page, setPage] = useState(0);
@@ -50,6 +55,7 @@ export const SearchProvider: React.FC = ({ children }) => {
     return (
         <SearchContext.Provider
             value={{
+                queryText,
                 tags,
                 newTag,
                 modalOpen,
@@ -58,6 +64,7 @@ export const SearchProvider: React.FC = ({ children }) => {
                 sort,
                 page,
                 results,
+                setQueryText,
                 setTags,
                 setNewTag,
                 setModalOpen,

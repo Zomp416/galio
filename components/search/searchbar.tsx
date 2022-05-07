@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { useRouter } from "next/router";
 import styled from "@emotion/styled";
 
@@ -8,16 +8,27 @@ import { searchComic } from "../../util/zileanComic";
 import { useSearchContext } from "../../context/searchcontext";
 
 const SearchBar: React.FC = () => {
-    const { page, setResults } = useSearchContext();
+    const { page, setResults, queryText, setQueryText } = useSearchContext();
 
     const router = useRouter();
 
-    const doDebouncedSearch = debounce(async query => {
-        console.log("triggered search ", query);
-        const { data, error } = await searchComic({ value: query, page: page, limit: 4 });
-        if (error) alert(error);
-        if (data) setResults(data);
-    }, 800);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const doDebouncedSearch = useCallback(
+        debounce(async (query: { value?: string; page?: number; limit?: number }) => {
+            const { data, error } = await searchComic(query);
+            if (error) alert(error);
+            if (data) setResults(data);
+        }, 400),
+        []
+    );
+
+    useEffect(() => {
+        if (typeof router.query.q === "string") setQueryText(router.query.q);
+    }, [router, setQueryText]);
+
+    useEffect(() => {
+        doDebouncedSearch({ value: queryText, page, limit: 4 });
+    }, [queryText, page, doDebouncedSearch]);
 
     return (
         <Root>
@@ -46,7 +57,7 @@ const SearchBar: React.FC = () => {
                         paddingLeft: "10px",
                     },
                 }}
-                onInput={e => doDebouncedSearch((e.target as HTMLTextAreaElement).value)}
+                onInput={e => setQueryText((e.target as HTMLTextAreaElement).value)}
             ></InputBase>
         </Root>
     );

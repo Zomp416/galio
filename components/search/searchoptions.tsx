@@ -42,9 +42,9 @@ const SearchOptions: React.FC = () => {
                         fontWeight: "bold",
                     }}
                 >
-                    <MenuItem value={"Comics"}>Comics</MenuItem>
-                    <MenuItem value={"Stories"}>Stories</MenuItem>
-                    <MenuItem value={"Users"}>Users</MenuItem>
+                    <MenuItem value={"comic"}>Comics</MenuItem>
+                    <MenuItem value={"story"}>Stories</MenuItem>
+                    <MenuItem value={"user"}>Users</MenuItem>
                 </Select>
                 <Row>
                     <Select
