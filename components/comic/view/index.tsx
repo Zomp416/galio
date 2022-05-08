@@ -201,7 +201,15 @@ const ViewComic: React.FC<Props> = props => {
                         ) : (
                             <></>
                         )}
-                        <Styled.SSButton variant="contained" color="primary" size="large">
+                        <Styled.SSButton
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            onClick={() => {
+                                navigator.clipboard.writeText(window.location.href);
+                                addToast("success", "Successfully Copied URL");
+                            }}
+                        >
                             Share
                             <ShareIcon />
                         </Styled.SSButton>

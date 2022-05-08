@@ -128,6 +128,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                                     size="large"
                                     onClick={() => {
                                         navigator.clipboard.writeText(window.location.href);
+                                        addToast("success", "Successfully Copied URL");
                                     }}
                                 >
                                     Share
