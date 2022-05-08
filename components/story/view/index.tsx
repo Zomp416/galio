@@ -13,8 +13,9 @@ import {
 } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 import Chapter from "./chapter";
+import { useToastContext } from "../../../context/toastcontext";
 import { useAuthContext } from "../../../context/authcontext";
-import { unsubscribe, subscribe } from "../../../util/zileanUser";
+import { updateUserSubscription } from "../../../util/zileanUser";
 
 import * as Styled from "./styles";
 
@@ -23,6 +24,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
     const [rating, setRating] = useState<number | null>(3.5);
     const [tags] = useState<string[]>(story.tags);
     const { user } = useAuthContext();
+    const { addToast } = useToastContext();
 
     const [subscribed, setSubscribed] = useState<boolean>(false);
     const [subscribers, setSubscribers] = useState<number>(storyAuthor.subscriberCount);
@@ -40,23 +42,27 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
         getSubscribedToUser();
     }, [storyAuthor._id, user, user?.subscriptions]);
 
-    const handleSubscribe = async (event: React.FormEvent, user2id: any) => {
+    const handleSubscribe = async (event: React.FormEvent) => {
         event.preventDefault();
-        const userid = { subscription: user2id };
-        const data = await subscribe(userid);
+        const data = await updateUserSubscription({ authorID: storyAuthor._id, type: "add" });
         if (!data.error) {
             setSubscribed(true);
             setSubscribers(subscribers + 1);
+            addToast("success", `Subscribed to ${storyAuthor.username}`);
+        } else {
+            addToast("error", "Unable to subscribe");
         }
     };
 
-    const handleUnsubscribe = async (event: React.FormEvent, user2id: any) => {
+    const handleUnsubscribe = async (event: React.FormEvent) => {
         event.preventDefault();
-        const userid = { subscription: user2id };
-        const data = await unsubscribe(userid);
+        const data = await updateUserSubscription({ authorID: storyAuthor._id, type: "remove" });
         if (!data.error) {
             setSubscribed(false);
             setSubscribers(subscribers - 1);
+            addToast("success", `Unsubscribed from ${storyAuthor.username}`);
+        } else {
+            addToast("error", "Unable to unsubscribe");
         }
     };
 
@@ -116,8 +122,14 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                                 </Styled.ColumnContainer>
                             </Styled.AuthorContainer>
                             <Styled.SSContainer>
-                                {/* TODO do share */}
-                                <Styled.SSButton variant="contained" color="primary" size="large">
+                                <Styled.SSButton
+                                    variant="contained"
+                                    color="primary"
+                                    size="large"
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(window.location.href);
+                                    }}
+                                >
                                     Share
                                     <ShareIcon />
                                 </Styled.SSButton>
@@ -126,9 +138,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                                         <Styled.SSButton
                                             variant="contained"
                                             style={{ backgroundColor: "red" }}
-                                            onClick={e => {
-                                                handleUnsubscribe(e, storyAuthor._id.toString());
-                                            }}
+                                            onClick={handleUnsubscribe}
                                         >
                                             Unsubscribe
                                         </Styled.SSButton>
@@ -136,9 +146,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                                         <Styled.SSButton
                                             variant="contained"
                                             color="primary"
-                                            onClick={e => {
-                                                handleSubscribe(e, storyAuthor._id.toString());
-                                            }}
+                                            onClick={handleSubscribe}
                                         >
                                             Subscribe
                                         </Styled.SSButton>

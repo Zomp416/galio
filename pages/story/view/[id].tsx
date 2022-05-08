@@ -3,6 +3,7 @@ import Head from "next/head";
 import ViewStory from "../../../components/story/view";
 import Navbar from "../../../components/navbar";
 import { AuthProvider } from "../../../context/authcontext";
+import { ToastProvider } from "../../../context/toastcontext";
 import { getUserFromSession, getUserFromID } from "../../../util/zileanUser";
 import { getStory } from "../../../util/zileanStory";
 
@@ -19,10 +20,12 @@ const LoginPage: NextPage<Props> = props => {
             <Head>
                 <title>Story Title</title>
             </Head>
-            <AuthProvider user={props.user}>
-                <Navbar domain="stories" />
-                <ViewStory story={props.story} storyAuthor={props.storyAuthor} />
-            </AuthProvider>
+            <ToastProvider>
+                <AuthProvider user={props.user}>
+                    <Navbar domain="stories" />
+                    <ViewStory story={props.story} storyAuthor={props.storyAuthor} />
+                </AuthProvider>
+            </ToastProvider>
         </>
     );
 };

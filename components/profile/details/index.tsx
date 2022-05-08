@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Typography, Button } from "@mui/material";
 import * as Styled from "./styles";
+import { useToastContext } from "../../../context/toastcontext";
 import { useAuthContext } from "../../../context/authcontext";
 import { updateUserSubscription } from "../../../util/zileanUser";
 
 const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile }) => {
     const { user } = useAuthContext();
     const router = useRouter();
+    const { addToast } = useToastContext();
 
     const [subscribed, setSubscribed] = useState<boolean>(false);
     const [subscribers, setSubscribers] = useState<number>(user2.subscriberCount);
@@ -29,6 +31,9 @@ const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile
         if (!data.error) {
             setSubscribed(true);
             setSubscribers(subscribers + 1);
+            addToast("success", `Subscribed to ${user2.username}`);
+        } else {
+            addToast("error", "Unable to subscribe");
         }
     };
 
@@ -38,6 +43,9 @@ const Hero: React.FC<{ user2?: any; userProfile?: any }> = ({ user2, userProfile
         if (!data.error) {
             setSubscribed(false);
             setSubscribers(subscribers - 1);
+            addToast("success", `Unsubscribed from ${user2.username}`);
+        } else {
+            addToast("error", "Unable to unsubscribe");
         }
     };
 
