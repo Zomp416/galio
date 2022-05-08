@@ -3,6 +3,7 @@ import Head from "next/head";
 import MyStories from "../../components/story/my";
 import Navbar from "../../components/navbar";
 import { AuthProvider } from "../../context/authcontext";
+import { ToastProvider } from "../../context/toastcontext";
 import { getUserFromSession } from "../../util/zileanUser";
 import { getStory } from "../../util/zileanStory";
 
@@ -18,10 +19,12 @@ const MyStoriesPage: NextPage<Props> = props => {
             <Head>
                 <title>My Stories</title>
             </Head>
-            <AuthProvider user={props.user}>
-                <Navbar domain="stories" />
-                <MyStories published={props.published} unpublished={props.unpublished} />
-            </AuthProvider>
+            <ToastProvider>
+                <AuthProvider user={props.user}>
+                    <Navbar domain="stories" />
+                    <MyStories published={props.published} unpublished={props.unpublished} />
+                </AuthProvider>
+            </ToastProvider>
         </>
     );
 };

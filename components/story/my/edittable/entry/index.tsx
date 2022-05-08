@@ -6,6 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Tooltip from "@mui/material/Tooltip";
+import { useToastContext } from "../../../../../context/toastcontext";
 import { publishStory, deleteStory } from "../../../../../util/zileanStory";
 
 import { useSelectionContext } from "../..";
@@ -21,6 +22,7 @@ interface Story {
 
 const EditTable: React.FC<Story> = props => {
     const { selection, setSelection } = useSelectionContext();
+    const { addToast } = useToastContext();
     const router = useRouter();
 
     const onSelect = () => {
@@ -33,15 +35,16 @@ const EditTable: React.FC<Story> = props => {
         const data = await publishStory(props._id);
         if (!data.error) {
             router.push({ pathname: "/story/my/" });
+            addToast("success", `Published ${props.title}`);
         }
     };
 
     const handleDelete = async (event: React.FormEvent) => {
         event.preventDefault();
-        //TODO implement popup to confirm deletion
         const data = await deleteStory(props._id);
         if (!data.error) {
             router.push({ pathname: "/story/my/" });
+            addToast("success", `Deleted ${props.title}`);
         }
     };
 

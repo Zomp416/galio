@@ -18,7 +18,7 @@ interface IEditContext {
     setTool?: React.Dispatch<React.SetStateAction<string>>;
     selection: number;
     setSelection?: React.Dispatch<React.SetStateAction<number>>;
-    saveComic?: () => Promise<void>;
+    saveComic?: (file: File) => Promise<void>;
     publishComic?: (file: File) => Promise<void>;
 }
 
@@ -31,10 +31,16 @@ const EditComic: React.FC = () => {
     const [open, setOpen] = useState<boolean>(false);
     const { comic, layers, clearHistory } = useComicContext();
 
-    const saveComic = async () => {
+    const saveComic = async (file: File) => {
         if (!comic || !layers) return;
+        let form = new FormData();
+        form.append("image", file);
+        form.append("directory", "assets");
+        form.append("name", file.name.split(".")[0]);
+        const image = await createImage(form);
 
         const updatedComic = { ...comic, layers };
+        updatedComic.renderedImage = image.data.imageURL;
         const res = await saveComicZilean(updatedComic);
         if (!res.error && res.data) {
             showSaveToast();

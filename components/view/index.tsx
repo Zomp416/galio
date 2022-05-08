@@ -17,6 +17,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import * as Styled from "./styles";
 import { IMAGE_URI } from "../../util/config";
 import { IUser } from "../../context/authcontext";
+import { useToastContext } from "../../context/toastcontext";
 
 interface Props {
     comments: { author: Record<any, any>; text: string; createdAt?: Date }[];
@@ -45,6 +46,7 @@ const ViewZomp: React.FC<Props> = props => {
         handleDeleteComment,
     } = props;
     const [comment, setComment] = useState<string>("");
+    const { addToast } = useToastContext();
 
     return (
         <>
@@ -88,7 +90,15 @@ const ViewZomp: React.FC<Props> = props => {
                     ) : (
                         <></>
                     )}
-                    <Styled.SSButton variant="contained" color="primary" size="large">
+                    <Styled.SSButton
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        onClick={() => {
+                            navigator.clipboard.writeText(window.location.href);
+                            addToast("success", "Successfully Copied URL");
+                        }}
+                    >
                         Share
                         <ShareIcon />
                     </Styled.SSButton>

@@ -3,6 +3,7 @@ import Head from "next/head";
 import Navbar from "../../components/navbar";
 import Profile from "../../components/profile";
 import { AuthProvider } from "../../context/authcontext";
+import { ToastProvider } from "../../context/toastcontext";
 import { getUserFromSession, getUserFromUsername } from "../../util/zileanUser";
 
 interface Props {
@@ -18,14 +19,16 @@ const ProfilePage: NextPage<Props> = props => {
             <Head>
                 <title>User Profile</title>
             </Head>
-            <AuthProvider user={props.user}>
-                <Navbar domain="user" />
-                <Profile
-                    user2={props.user2}
-                    userSubs={props.userSubs}
-                    userProfile={props.userProfile}
-                />
-            </AuthProvider>
+            <ToastProvider>
+                <AuthProvider user={props.user}>
+                    <Navbar domain="user" />
+                    <Profile
+                        user2={props.user2}
+                        userSubs={props.userSubs}
+                        userProfile={props.userProfile}
+                    />
+                </AuthProvider>
+            </ToastProvider>
         </>
     );
 };

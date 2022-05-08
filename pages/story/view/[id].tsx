@@ -21,7 +21,7 @@ const ViewComicPage: NextPage<Props> = props => {
             </Head>
             <ToastProvider>
                 <AuthProvider user={props.user}>
-                    <Navbar domain="comics" />
+                    <Navbar domain="stories" />
                     <ViewStory story={props.story} storyAuthor={props.storyAuthor} />
                 </AuthProvider>
             </ToastProvider>
