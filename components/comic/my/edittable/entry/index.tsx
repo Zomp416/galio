@@ -6,6 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Tooltip from "@mui/material/Tooltip";
+import { useToastContext } from "../../../../../context/toastcontext";
 import { publishComic, deleteComic } from "../../../../../util/zileanComic";
 
 import { useSelectionContext } from "../..";
@@ -21,6 +22,7 @@ interface Comic {
 
 const EditTable: React.FC<Comic> = props => {
     const { selection, setSelection } = useSelectionContext();
+    const { addToast } = useToastContext();
     const router = useRouter();
 
     const onSelect = () => {
@@ -28,21 +30,21 @@ const EditTable: React.FC<Comic> = props => {
         else setSelection!(props.index);
     };
 
-    //TODO update publish so it sends the image as well
     const handlePublish = async (event: React.FormEvent) => {
         event.preventDefault();
         const data = await publishComic(props._id);
         if (!data.error) {
             router.push({ pathname: "/comic/my/" });
+            addToast("success", `Published ${props.title}`);
         }
     };
 
     const handleDelete = async (event: React.FormEvent) => {
         event.preventDefault();
-        //TODO implement popup to confirm deletion
         const data = await deleteComic(props._id);
         if (!data.error) {
             router.push({ pathname: "/comic/my/" });
+            addToast("success", `Deleted ${props.title}`);
         }
     };
 

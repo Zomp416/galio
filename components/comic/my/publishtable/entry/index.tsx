@@ -6,6 +6,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import UnpublishedIcon from "@mui/icons-material/Unpublished";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Tooltip from "@mui/material/Tooltip";
+import { useToastContext } from "../../../../../context/toastcontext";
 import { unpublishComic, deleteComic } from "../../../../../util/zileanComic";
 
 import { useSelectionContext } from "../..";
@@ -22,6 +23,7 @@ interface Props {
 
 const PublishTable: React.FC<Props> = props => {
     const { selection, setSelection } = useSelectionContext();
+    const { addToast } = useToastContext();
     const router = useRouter();
 
     const onSelect = () => {
@@ -34,15 +36,16 @@ const PublishTable: React.FC<Props> = props => {
         const data = await unpublishComic(props._id);
         if (!data.error) {
             router.push({ pathname: "/comic/my/" });
+            addToast("success", `Unpublished ${props.title}`);
         }
     };
 
     const handleDelete = async (event: React.FormEvent) => {
         event.preventDefault();
-        //TODO implement popup to confirm deletion
         const data = await deleteComic(props._id);
         if (!data.error) {
             router.push({ pathname: "/comic/my/" });
+            addToast("success", `Deleted ${props.title}`);
         }
     };
 

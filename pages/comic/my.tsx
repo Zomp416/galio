@@ -3,7 +3,7 @@ import Head from "next/head";
 import MyComics from "../../components/comic/my";
 import Navbar from "../../components/navbar";
 import { AuthProvider } from "../../context/authcontext";
-//import { getImage } from "../../util/zilean";
+import { ToastProvider } from "../../context/toastcontext";
 import { getUserFromSession } from "../../util/zileanUser";
 import { getComic } from "../../util/zileanComic";
 
@@ -18,11 +18,13 @@ const MyComicsPage: NextPage<Props> = props => {
         <>
             <Head>
                 <title>My Comics</title>
-            </Head>
-            <AuthProvider user={props.user}>
-                <Navbar domain="comics" />
-                <MyComics published={props.published} unpublished={props.unpublished} />
-            </AuthProvider>
+            </Head>{" "}
+            <ToastProvider>
+                <AuthProvider user={props.user}>
+                    <Navbar domain="comics" />
+                    <MyComics published={props.published} unpublished={props.unpublished} />
+                </AuthProvider>{" "}
+            </ToastProvider>
         </>
     );
 };
