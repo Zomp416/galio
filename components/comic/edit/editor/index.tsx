@@ -65,7 +65,7 @@ const Editor: React.FC = () => {
             else if (e.key === "s") {
                 e.preventDefault();
                 if (canSave) {
-                    saveComic!();
+                    handleSaveClick!();
                 }
                 console.log("SAVE");
             } else if (e.key === "ArrowUp") {
@@ -134,6 +134,14 @@ const Editor: React.FC = () => {
         const rendered = await domtoimage.toBlob(editor);
         const f = new File([rendered], "filename");
         publishComic!(f);
+    };
+
+    const handleSaveClick = async () => {
+        const editor = document.getElementById("canvas");
+        if (!editor) return;
+        const rendered = await domtoimage.toBlob(editor);
+        const f = new File([rendered], "filename");
+        saveComic!(f);
     };
 
     const generateBase = (layer: Record<any, any>, index: number) => {
@@ -241,7 +249,7 @@ const Editor: React.FC = () => {
                         color="inherit"
                         sx={{ mr: 2 }}
                         disabled={!canSave}
-                        onClick={saveComic}
+                        onClick={handleSaveClick}
                     >
                         <SaveIcon /> {canSave && "*"}
                     </IconButton>
