@@ -22,11 +22,11 @@ interface Props {
     comments: { author: Record<any, any>; text: string; createdAt?: Date }[];
     userRating: number;
     rating: number;
-    author: IUser;
+    author: Record<any, any>;
     user?: IUser;
     handleSubscribe: (e: React.FormEvent) => Promise<void>;
     handleUnsubscribe: (e: React.FormEvent) => Promise<void>;
-    handleAddComment: () => Promise<void>;
+    handleAddComment: (text: string) => Promise<void>;
     handleDeleteComment: (index: number) => Promise<void>;
     handleUpdateRating: (value: number) => Promise<void>;
 }
@@ -105,7 +105,7 @@ const ViewZomp: React.FC<Props> = props => {
                         <div style={{ display: "flex", justifyContent: "right" }}>
                             <Rating
                                 name="average-rating"
-                                value={rating}
+                                value={parseInt((Math.round(rating * 100) / 100).toFixed(1))}
                                 precision={0.1}
                                 readOnly
                                 sx={{
@@ -114,7 +114,9 @@ const ViewZomp: React.FC<Props> = props => {
                                     },
                                 }}
                             />
-                            <Typography variant="h6">({rating})</Typography>
+                            <Typography variant="h6">
+                                ({(Math.round(rating * 100) / 100).toFixed(1)})
+                            </Typography>
                         </div>
                     </Styled.Rating>
                     <Styled.Rating>
@@ -134,7 +136,7 @@ const ViewZomp: React.FC<Props> = props => {
                                 }}
                             />
                             <Typography variant="h6">
-                                ({rating === -1 ? "None" : rating})
+                                ({userRating === -1 ? "None" : userRating})
                             </Typography>
                         </div>
                     </Styled.Rating>
@@ -151,7 +153,10 @@ const ViewZomp: React.FC<Props> = props => {
                         color="primary"
                         size="large"
                         disabled={!comment}
-                        onClick={handleAddComment}
+                        onClick={() => {
+                            handleAddComment(comment);
+                            setComment("");
+                        }}
                     >
                         Add Comment
                     </Styled.SSButton>

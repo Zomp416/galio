@@ -1,62 +1,116 @@
 import React, { useEffect, useState } from "react";
-import {
-    Box,
-    Divider,
-    TextField,
-    Typography,
-    Rating,
-    List,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    Avatar,
-} from "@mui/material";
-import ShareIcon from "@mui/icons-material/Share";
+import { Box, Typography } from "@mui/material";
 import Chapter from "./chapter";
 import { useAuthContext } from "../../../context/authcontext";
-import { unsubscribe, subscribe } from "../../../util/zileanUser";
-
+import { useToastContext } from "../../../context/toastcontext";
+import { updateUserSubscription } from "../../../util/zileanUser";
+import { rateStory, commentStory, deleteCommentStory } from "../../../util/zileanStory";
+import ViewZomp from "../../view";
 import * as Styled from "./styles";
 
-const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyAuthor }) => {
-    const [comment, setComment] = useState<string>("");
-    const [rating, setRating] = useState<number | null>(3.5);
-    const [tags] = useState<string[]>(story.tags);
+interface Props {
+    story: Record<any, any>;
+    storyAuthor: Record<any, any>;
+}
+
+const ViewStory: React.FC<Props> = props => {
+    // TODO maybe change the story/author/comment state hooks into context...
+    // using props as an initial state value is a React anti-pattern, but it's easier to implement :p
+    const [story, setStory] = useState<Record<any, any>>(props.story);
+    const [storyAuthor, setStoryAuthor] = useState<Record<any, any>>(props.storyAuthor);
+    const [commentList, setCommentList] = useState<
+        { author: Record<any, any>; text: string; createdAt?: Date }[]
+    >(story.comments || []);
+    const [userRating, setUserRating] = useState<number>(-1);
     const { user } = useAuthContext();
+    // Yep!
+    const [userTemp, setUserTemp] = useState(user);
+    const { addToast } = useToastContext();
 
-    const [subscribed, setSubscribed] = useState<boolean>(false);
-    const [subscribers, setSubscribers] = useState<number>(storyAuthor.subscriberCount);
-
+    // Find user rating -- not a scalable solution, but it works
     useEffect(() => {
-        async function getSubscribedToUser() {
-            if (user != null) {
-                for (let i = 0; i < user?.subscriptions?.length!; i++) {
-                    if (user?.subscriptions![i] === storyAuthor._id) {
-                        setSubscribed(true);
-                    }
-                }
+        if (!userTemp) return;
+        for (let i = 0; i < userTemp.storyRatings.length; i++) {
+            if (userTemp.storyRatings[i].id === story._id) {
+                setUserRating(userTemp.storyRatings[i].rating);
+                break;
             }
         }
-        getSubscribedToUser();
-    }, [storyAuthor._id, user, user?.subscriptions]);
+    }, [userTemp, story._id]);
 
-    const handleSubscribe = async (event: React.FormEvent, user2id: any) => {
+    const handleSubscribe = async (event: React.FormEvent) => {
         event.preventDefault();
-        const userid = { subscription: user2id };
-        const data = await subscribe(userid);
+        const data = await updateUserSubscription({ authorID: storyAuthor._id, type: "add" });
         if (!data.error) {
-            setSubscribed(true);
-            setSubscribers(subscribers + 1);
+            setStoryAuthor({ ...storyAuthor, subscriberCount: storyAuthor.subscriberCount + 1 });
+            setUserTemp({
+                ...userTemp!,
+                subscriptions: [...userTemp!.subscriptions, storyAuthor._id],
+            });
+            addToast("success", `Subscribed to ${storyAuthor.username}`);
+        } else {
+            addToast("error", "Unable to subscribe");
         }
     };
 
-    const handleUnsubscribe = async (event: React.FormEvent, user2id: any) => {
+    const handleUnsubscribe = async (event: React.FormEvent) => {
         event.preventDefault();
-        const userid = { subscription: user2id };
-        const data = await unsubscribe(userid);
+        const data = await updateUserSubscription({ authorID: storyAuthor._id, type: "remove" });
         if (!data.error) {
-            setSubscribed(false);
-            setSubscribers(subscribers - 1);
+            setStoryAuthor({ ...storyAuthor, subscriberCount: storyAuthor.subscriberCount - 1 });
+            setUserTemp({
+                ...userTemp!,
+                subscriptions: userTemp!.subscriptions.filter(val => val !== storyAuthor._id),
+            });
+            addToast("success", `Unsubscribed from ${storyAuthor.username}`);
+        } else {
+            addToast("error", "Unable to unsubscribe");
+        }
+    };
+
+    const handleAddComment = async (text: string) => {
+        if (text && userTemp) {
+            const data = await commentStory(story._id, text);
+            if (!data.error) {
+                setCommentList(data.data.comments || []);
+                addToast("success", `Added Comment`);
+            } else {
+                addToast("error", "Unable to add comment");
+            }
+        } else {
+            addToast("error", "Unable to add comment");
+        }
+    };
+
+    const handleDeleteComment = async (index: number) => {
+        const commentToDelete = commentList[index];
+        if (userTemp && commentToDelete.createdAt) {
+            const data = await deleteCommentStory(story._id, new Date(commentToDelete.createdAt));
+            if (!data.error) {
+                setCommentList(data.data.comments || []);
+                addToast("success", `Deleted Comment`);
+            } else {
+                addToast("error", "Unable to delete comment");
+            }
+        } else {
+            addToast("error", "Unable to delete comment");
+        }
+    };
+
+    const handleUpdateRating = async (value: number) => {
+        const res = await rateStory(story._id, value);
+        if (!res.error && res.data) {
+            const { ratingTotal, ratingCount, rating } = res.data;
+            setStory({
+                ...story,
+                ratingTotal,
+                ratingCount,
+                rating,
+            });
+            setUserRating(value);
+            addToast("success", `Updated Rating`);
+        } else {
+            addToast("error", "Unable to update rating");
         }
     };
 
@@ -83,7 +137,7 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                         </Typography>
                         <Styled.TVContainer>
                             <Styled.TagsContainer>
-                                {tags.map((val, index) => (
+                                {story.tags.map((val: string, index: number) => (
                                     <Styled.Tag
                                         key={`${index}-tag`}
                                         variant="contained"
@@ -97,146 +151,20 @@ const ViewStory: React.FC<{ story?: any; storyAuthor?: any }> = ({ story, storyA
                             </Styled.TagsContainer>
                         </Styled.TVContainer>
                     </Styled.ColumnContainer>
-                    <Styled.ViewContainer>
-                        <Styled.ASSContainer>
-                            <Styled.AuthorContainer>
-                                <Styled.Avatar></Styled.Avatar>
-                                <Styled.ColumnContainer>
-                                    <div>
-                                        <Typography
-                                            variant="h5"
-                                            component="a"
-                                            href={"/user/" + storyAuthor.username}
-                                            color="black"
-                                        >
-                                            {storyAuthor.username}
-                                        </Typography>
-                                    </div>
-                                    {subscribers + " Subscribers"}
-                                </Styled.ColumnContainer>
-                            </Styled.AuthorContainer>
-                            <Styled.SSContainer>
-                                {/* TODO do share */}
-                                <Styled.SSButton variant="contained" color="primary" size="large">
-                                    Share
-                                    <ShareIcon />
-                                </Styled.SSButton>
-                                {user !== null && user?.username! !== storyAuthor.username! ? (
-                                    subscribed ? (
-                                        <Styled.SSButton
-                                            variant="contained"
-                                            style={{ backgroundColor: "red" }}
-                                            onClick={e => {
-                                                handleUnsubscribe(e, storyAuthor._id.toString());
-                                            }}
-                                        >
-                                            Unsubscribe
-                                        </Styled.SSButton>
-                                    ) : (
-                                        <Styled.SSButton
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={e => {
-                                                handleSubscribe(e, storyAuthor._id.toString());
-                                            }}
-                                        >
-                                            Subscribe
-                                        </Styled.SSButton>
-                                    )
-                                ) : (
-                                    <></>
-                                )}
-                            </Styled.SSContainer>
-                        </Styled.ASSContainer>
-                    </Styled.ViewContainer>
                 </Styled.RowContainer>
                 <Chapter story={story.story}></Chapter>
-                <Styled.ASSContainer>
-                    <Typography variant="h4">Ratings</Typography>
-                    <Styled.RatingsContainer>
-                        <Styled.Rating>
-                            <Typography variant="h6">Average</Typography>
-                            <div style={{ display: "flex", justifyContent: "right" }}>
-                                <Rating
-                                    name="average-rating"
-                                    value={2.8}
-                                    precision={0.1}
-                                    readOnly
-                                    sx={{
-                                        "& .MuiRating-iconFilled": {
-                                            color: "#39a78e",
-                                        },
-                                    }}
-                                />
-                                <Typography variant="h6">(2.8)</Typography>
-                            </div>
-                        </Styled.Rating>
-                        <Styled.Rating>
-                            <Typography variant="h6">Your Rating</Typography>
-                            <div style={{ display: "flex", justifyContent: "right" }}>
-                                <Rating
-                                    name="your-rating"
-                                    value={rating}
-                                    precision={0.5}
-                                    onChange={(e, value) => {
-                                        setRating(value);
-                                    }}
-                                    sx={{
-                                        "& .MuiRating-iconFilled": {
-                                            color: "#39a78e",
-                                        },
-                                    }}
-                                />
-                                <Typography variant="h6">({rating || 0})</Typography>
-                            </div>
-                        </Styled.Rating>
-                    </Styled.RatingsContainer>
-                </Styled.ASSContainer>
-                <Styled.ColumnContainer>
-                    <Divider />
-                </Styled.ColumnContainer>
-                <Styled.ASSContainer>
-                    <Typography variant="h4">Comments (1)</Typography>
-                    <Styled.SSButton
-                        variant="contained"
-                        color="primary"
-                        size="large"
-                        disabled={!comment}
-                    >
-                        Add Comment
-                    </Styled.SSButton>
-                </Styled.ASSContainer>
-                <TextField
-                    id="add-comment"
-                    label="Add A Comment"
-                    multiline
-                    maxRows={4}
-                    value={comment}
-                    onChange={e => {
-                        setComment(e.target.value);
-                    }}
-                    sx={{ width: "100%", margin: "10px 0" }}
+                <ViewZomp
+                    comments={commentList}
+                    user={userTemp}
+                    author={storyAuthor}
+                    userRating={userRating}
+                    rating={story.rating || 0}
+                    handleSubscribe={handleSubscribe}
+                    handleUnsubscribe={handleUnsubscribe}
+                    handleUpdateRating={handleUpdateRating}
+                    handleAddComment={handleAddComment}
+                    handleDeleteComment={handleDeleteComment}
                 />
-                <List sx={{ width: "100%" }}>
-                    <ListItem alignItems="flex-start" sx={{ padding: "8px 0" }}>
-                        <ListItemAvatar>
-                            <Avatar />
-                        </ListItemAvatar>
-                        <ListItemText
-                            primary={
-                                <Typography
-                                    variant="body1"
-                                    component="a"
-                                    href="/user/Joe Schmo"
-                                    color="black"
-                                >
-                                    Joe Schmo
-                                </Typography>
-                            }
-                            secondary="Ayo! This was a good one."
-                        />
-                    </ListItem>
-                </List>
             </Styled.ViewStoryContainer>
         </>
     );
