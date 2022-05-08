@@ -115,7 +115,7 @@ const ViewZomp: React.FC<Props> = props => {
                         <div style={{ display: "flex", justifyContent: "right" }}>
                             <Rating
                                 name="average-rating"
-                                value={parseInt((Math.round(rating * 100) / 100).toFixed(1))}
+                                value={rating}
                                 precision={0.1}
                                 readOnly
                                 sx={{
