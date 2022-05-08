@@ -43,11 +43,6 @@ const Chapter: React.FC<{ story?: any }> = ({ story }) => {
                 )}
             </Styled.ButtonsContainer>
             <ReactQuill value={story[chapter].text} readOnly={true} modules={{ toolbar: false }} />
-            <Divider
-                sx={{
-                    marginTop: "15px",
-                }}
-            />
         </Styled.Story>
     );
 };

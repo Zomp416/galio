@@ -3,56 +3,52 @@ import Head from "next/head";
 import ViewStory from "../../../components/story/view";
 import Navbar from "../../../components/navbar";
 import { AuthProvider } from "../../../context/authcontext";
-import { getUserFromSession, getUserFromID } from "../../../util/zileanUser";
-import { getStory } from "../../../util/zileanStory";
+import { ToastProvider } from "../../../context/toastcontext";
+import { getUserFromSession } from "../../../util/zileanUser";
+import { viewStory } from "../../../util/zileanStory";
 
 interface Props {
     user: any;
     story: any;
     storyAuthor: any;
-    coverArt: any;
 }
 
-const LoginPage: NextPage<Props> = props => {
+const ViewComicPage: NextPage<Props> = props => {
     return (
         <>
             <Head>
-                <title>Story Title</title>
+                <title>{props.story.title || "Unnamed Story"}</title>
             </Head>
-            <AuthProvider user={props.user}>
-                <Navbar domain="stories" />
-                <ViewStory story={props.story} storyAuthor={props.storyAuthor} />
-            </AuthProvider>
+            <ToastProvider>
+                <AuthProvider user={props.user}>
+                    <Navbar domain="comics" />
+                    <ViewStory story={props.story} storyAuthor={props.storyAuthor} />
+                </AuthProvider>
+            </ToastProvider>
         </>
     );
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-    //The _id will always be 24 characters long by MongoDB
-    if (context.params!.id!.toString().length == 24) {
-        const story = await getStory(context.params!.id!.toString());
-        //Validate that the story is real
-        if (story.data) {
-            const result = await getUserFromSession(context.req.headers.cookie || "");
-            const author = await getUserFromID(story.data?.author);
-            //Check if the story is published
-            if (story.data?.publishedAt) {
-                return {
-                    props: {
-                        story: story.data || null,
-                        user: result.data || null,
-                        storyAuthor: author.data || null,
-                    },
-                };
-            }
-        }
+    const user = await getUserFromSession(context.req.headers.cookie || "");
+    const story = await viewStory(context.params!.id!.toString());
+
+    if (story.data) {
+        return {
+            props: {
+                story: story.data,
+                user: user.data || null,
+                storyAuthor: story.data.author || null,
+            },
+        };
+    } else {
+        return {
+            redirect: {
+                destination: "/404",
+                permanent: false,
+            },
+        };
     }
-    return {
-        redirect: {
-            destination: "/",
-            permanent: false,
-        },
-    };
 };
 
-export default LoginPage;
+export default ViewComicPage;

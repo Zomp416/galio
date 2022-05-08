@@ -6,6 +6,13 @@ interface ZileanResponse {
     error?: string;
 }
 
+export const viewStory = async (id: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/story/view/${id}`, {
+        method: "GET",
+    });
+    return await result.json();
+};
+
 export const createStory = async (): Promise<ZileanResponse> => {
     const res = await fetch(`${zileanOrigin}/story`, {
         method: "POST",
@@ -94,6 +101,66 @@ export const unpublishStory = async (id: string): Promise<ZileanResponse> => {
     if (!data || result.status !== 200) {
         return {
             error: "Error unpublishing story.",
+        };
+    } else {
+        return data;
+    }
+};
+
+export const rateStory = async (storyID: string, rating: number): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/story/rate/${storyID}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ rating }),
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data) {
+        return {
+            error: "Error rating story.",
+        };
+    } else {
+        return data;
+    }
+};
+
+export const commentStory = async (storyID: string, text: string): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/story/comment/${storyID}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text }),
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data) {
+        return {
+            error: "Error commenting on story.",
+        };
+    } else {
+        return data;
+    }
+};
+
+export const deleteCommentStory = async (
+    storyID: string,
+    commentTime: Date
+): Promise<ZileanResponse> => {
+    const result = await fetch(`${zileanOrigin}/story/comment/${storyID}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ createdAt: commentTime.getTime() }),
+        credentials: "include",
+    });
+    const data = await result.json();
+    if (!data) {
+        return {
+            error: "Error commenting on story.",
         };
     } else {
         return data;

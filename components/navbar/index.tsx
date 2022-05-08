@@ -186,7 +186,7 @@ const Navbar: React.FC<NavbarProps> = props => {
                 }}
             >
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar />
+                    <Avatar src={`${IMAGE_URI}${user?.profilePicture || ""}`} />
                 </IconButton>
                 <Menu
                     sx={{ mt: "40px" }}
