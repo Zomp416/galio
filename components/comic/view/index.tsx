@@ -21,8 +21,7 @@ import { updateUserSubscription } from "../../../util/zileanUser";
 import { rateComic, commentComic, deleteCommentComic } from "../../../util/zileanComic";
 import { IMAGE_URI } from "../../../util/config";
 
-// TODO change to zomp "Z" logo
-const default_image = "assets/a8abb9ed-c384-408a-924e-d947df860a82.png";
+const default_image = "/zdark.svg";
 
 interface Props {
     comic: Record<any, any>;
@@ -157,7 +156,9 @@ const ViewComic: React.FC<Props> = props => {
                     </Styled.ViewContainer>
                 </Styled.TVContainer>
                 <Styled.ComicImage
-                    src={`${IMAGE_URI}${comic?.renderedImage || default_image}`}
+                    src={
+                        comic?.renderedImage ? `${IMAGE_URI}${comic?.renderedImage}` : default_image
+                    }
                 ></Styled.ComicImage>
                 <Styled.ASSContainer>
                     <Styled.AuthorContainer>
