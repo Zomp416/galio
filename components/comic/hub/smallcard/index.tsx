@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Link from "next/link";
-
 import { Fade, Typography, Rating, Stack, Container } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 

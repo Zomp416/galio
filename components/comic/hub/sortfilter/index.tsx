@@ -1,25 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 import { MenuItem, Typography, ToggleButtonGroup } from "@mui/material";
+import { useHubContext } from "../../../../context/hubcontext";
 
 import * as Styled from "./styles";
 
 const Sortfilter: React.FC = () => {
-    const [filter, setFilter] = useState("day");
-    const [sort, setSort] = useState("trending");
-
-    const onSetFilter = (e: any) => {
-        setFilter(e.target.value);
-    };
-
-    const onSetSort = (e: any, val: string) => {
-        setSort(val);
-    };
+    const { time, sort, setTime, setSort } = useHubContext();
 
     return (
         <Styled.SortFilter className="gridoptions">
-            <ToggleButtonGroup color="primary" value={sort} exclusive onChange={onSetSort}>
+            <ToggleButtonGroup
+                color="primary"
+                value={sort}
+                exclusive
+                onChange={(__, val: string) => {
+                    setSort(val);
+                    if (val === "time" || val === "trending") setTime("all");
+                }}
+            >
                 <Styled.ToggleButton value="trending">Trending</Styled.ToggleButton>
-                <Styled.ToggleButton value="new">New</Styled.ToggleButton>
+                <Styled.ToggleButton value="time">New</Styled.ToggleButton>
                 <Styled.ToggleButton value="views">Most viewed</Styled.ToggleButton>
                 <Styled.ToggleButton value="rating">Highest Rated</Styled.ToggleButton>
             </ToggleButtonGroup>
@@ -33,8 +33,8 @@ const Sortfilter: React.FC = () => {
                     <Styled.Select
                         variant="standard"
                         disableUnderline
-                        value={filter}
-                        onChange={onSetFilter}
+                        value={time}
+                        onChange={(e: any) => setTime(e.target.value)}
                     >
                         <MenuItem value="day">today</MenuItem>
                         <MenuItem value="week">this week</MenuItem>

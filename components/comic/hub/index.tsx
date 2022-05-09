@@ -1,62 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Carousel from "react-material-ui-carousel";
 
 import SortFilter from "./sortfilter";
 import BigCard from "./bigcard";
 import SmallCard from "./smallcard";
 import * as Styled from "./styles";
-
-// TODO: remove later
-const comics = [
-    {
-        _id: "a1",
-        title: "Taquitos",
-        author: "Cesare Lucido",
-        description:
-            "A taquito, tacos dorados, rolled taco, or flauta is a Mexican food dish that typically \
-        consists of a small rolled-up tortilla that contains filling, including beef, cheese or chicken.",
-        splashURL:
-            "https://gimmedelicious.com/wp-content/uploads/2019/11/chicken-taquitos-feature-1.jpg",
-        published: true,
-        rating: 3.4,
-        views: 567,
-    },
-    {
-        _id: "a2",
-        title: "Crewmate",
-        author: "amogus",
-        description:
-            "Among Us is a 2018 online multiplayer social deduction game developed and published by \
-        American game studio Innersloth. The game was inspired by the party game Mafia and the science \
-        fiction horror film The Thing. The game allows for cross-platform play, first being released on \
-        iOS and Android devices in June 2018 and on Windows later that year in November.",
-        splashURL:
-            "https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/crewmate-indra-tirto.jpg",
-        published: false,
-        rating: 4.3,
-        views: 210,
-    },
-    {
-        _id: "a3",
-        title: "League of Legends",
-        author: "powder",
-        description:
-            "League of Legends (LoL), commonly referred to as League, is a 2009 multiplayer online battle \
-            arena video game developed and published by Riot Games.",
-        splashURL:
-            "https://static.wikia.nocookie.net/leagueoflegends/images/3/34/Featherknight_PenguSkin.jpg",
-        published: false,
-        rating: 4.8,
-        views: 101,
-    },
-];
-
-let featured = [comics[1]];
-let others = [comics[1]];
-for (let i = 0; i < 4; i++) featured.push(comics[i % 3]);
-for (let i = 0; i < 11; i++) others.push(comics[i % 3]);
+import { useHubContext } from "../../../context/hubcontext";
+import { searchComic } from "../../../util/zileanComic";
+import { IMAGE_URI } from "../../../util/config";
 
 const Hub: React.FC = () => {
+    const { time, sort, featured, others, setOthers, setFeatured } = useHubContext();
+
+    useEffect(() => {
+        searchComic({ time, sort, page: 0, limit: 15 }).then(res => {
+            if (res.error) alert(res.error);
+            else setOthers(res.data.results);
+        });
+    }, [time, sort, setOthers]);
+
+    useEffect(() => {
+        searchComic({ time: "day", sort: "views", page: 0, limit: 5 }).then(res => {
+            if (res.error) alert(res.error);
+            else setFeatured(res.data.results);
+        });
+    }, [setFeatured]);
+
     return (
         <Styled.MyComicsOuter className="outer">
             <Styled.MyComicsInner className="inner">
@@ -68,14 +37,31 @@ const Hub: React.FC = () => {
                         height={400}
                     >
                         {featured.map((comic, i) => (
-                            <BigCard key={i} {...comic} />
+                            <BigCard
+                                key={i}
+                                _id={comic._id}
+                                title={comic.title}
+                                description={comic.description}
+                                author={comic.author.username}
+                                splashURL={IMAGE_URI + comic.renderedImage}
+                                rating={comic.rating}
+                                views={comic.views}
+                            />
                         ))}
                     </Carousel>
                 </Styled.CarouselWrapper>
                 <SortFilter />
                 <Styled.Grid className="comicgrid">
                     {others.map((comic, i) => (
-                        <SmallCard key={i} {...comic} />
+                        <SmallCard
+                            key={i}
+                            _id={comic._id}
+                            title={comic.title}
+                            author={comic.author.username}
+                            splashURL={IMAGE_URI + comic.renderedImage}
+                            rating={comic.rating}
+                            views={comic.views}
+                        />
                     ))}
                 </Styled.Grid>
             </Styled.MyComicsInner>

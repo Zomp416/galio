@@ -4,6 +4,7 @@ export const Card = styled.div`
     position: relative;
     height: 0;
     padding-bottom: 100%;
+    background-color: gray;
 `;
 
 export const CardHover = styled.div`
