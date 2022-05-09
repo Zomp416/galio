@@ -1,6 +1,6 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
-import Hub from "../../components/comic/hub";
+import Hub from "../../components/hub";
 import Navbar from "../../components/navbar";
 import { AuthProvider } from "../../context/authcontext";
 import { getUserFromSession } from "../../util/zileanUser";

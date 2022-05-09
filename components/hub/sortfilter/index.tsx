@@ -1,6 +1,6 @@
 import React from "react";
 import { MenuItem, Typography, ToggleButtonGroup } from "@mui/material";
-import { useHubContext } from "../../../../context/hubcontext";
+import { useHubContext } from "../../../context/hubcontext";
 
 import * as Styled from "./styles";
 
