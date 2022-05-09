@@ -24,6 +24,7 @@ const SearchBar: React.FC = () => {
                 page?: number;
                 limit?: number;
             }) => {
+                if (category === "user") query.time = undefined;
                 const { data, error } =
                     category === "comic"
                         ? await searchComic(query)

@@ -13,6 +13,7 @@ interface Props {
     splashURL: string;
     rating: number;
     views: number;
+    subscribers: number;
 }
 
 const ResultCard: React.FC<Props> = props => {
@@ -76,7 +77,9 @@ const ResultCard: React.FC<Props> = props => {
                         {props.views} Views
                     </Typography>
                 ) : (
-                    <></>
+                    <Typography variant="body1" color="text.secondary">
+                        {props.subscribers} Subscribers
+                    </Typography>
                 )}
             </CardContent>
         </Card>

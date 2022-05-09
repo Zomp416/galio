@@ -41,6 +41,7 @@ const Search: React.FC = () => {
                         }
                         rating={res.ratingTotal / res.ratingCount}
                         views={res.views}
+                        subscribers={res.subscriberCount}
                     />
                 ))}
             </CardsContainer>

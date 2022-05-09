@@ -62,30 +62,40 @@ const SearchOptions: React.FC = () => {
                         }}
                     >
                         <MenuItem value={"alpha"}>A-Z</MenuItem>
-                        <MenuItem value={"views"}>Most Viewed</MenuItem>
-                        <MenuItem value={"rating"}>Highest Rated</MenuItem>
+                        {category !== "user" ? (
+                            <>
+                                <MenuItem value={"views"}>Most Viewed</MenuItem>
+                                <MenuItem value={"rating"}>Highest Rated</MenuItem>
+                            </>
+                        ) : (
+                            <MenuItem value={"subscribers"}>Most Subscribed</MenuItem>
+                        )}
                     </Select>
-                    <Select
-                        labelId="time-label"
-                        id="time"
-                        value={time}
-                        onChange={e => {
-                            setTime(e.target.value);
-                        }}
-                        label="Time"
-                        variant="standard"
-                        sx={{
-                            fontSize: "2rem",
-                            fontWeight: "bold",
-                            marginLeft: "20px",
-                        }}
-                    >
-                        <MenuItem value={"day"}>Today</MenuItem>
-                        <MenuItem value={"week"}>This Week</MenuItem>
-                        <MenuItem value={"month"}>This Month</MenuItem>
-                        <MenuItem value={"year"}>This Year</MenuItem>
-                        <MenuItem value={"all"}>All Time</MenuItem>
-                    </Select>
+                    {category !== "user" ? (
+                        <Select
+                            labelId="time-label"
+                            id="time"
+                            value={time}
+                            onChange={e => {
+                                setTime(e.target.value);
+                            }}
+                            label="Time"
+                            variant="standard"
+                            sx={{
+                                fontSize: "2rem",
+                                fontWeight: "bold",
+                                marginLeft: "20px",
+                            }}
+                        >
+                            <MenuItem value={"day"}>Today</MenuItem>
+                            <MenuItem value={"week"}>This Week</MenuItem>
+                            <MenuItem value={"month"}>This Month</MenuItem>
+                            <MenuItem value={"year"}>This Year</MenuItem>
+                            <MenuItem value={"all"}>All Time</MenuItem>
+                        </Select>
+                    ) : (
+                        <></>
+                    )}
                 </Row>
             </SpacedRow>
         </>
