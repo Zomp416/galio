@@ -10,6 +10,7 @@ interface ISearchContext {
     sort: string;
     page: number;
     results: any[];
+    total: number;
     setQueryText: (__: string) => void;
     setTags: (__: string[]) => void;
     setNewTag: (__: string) => void;
@@ -19,6 +20,7 @@ interface ISearchContext {
     setSort: (__: string) => void;
     setPage: (__: number) => void;
     setResults: (__: any[]) => void;
+    setTotal: (__: number) => void;
 }
 
 const SearchContext = createContext<ISearchContext>({
@@ -31,6 +33,7 @@ const SearchContext = createContext<ISearchContext>({
     sort: "alpha",
     page: 0,
     results: [],
+    total: 0,
     setQueryText: (__: string) => {},
     setTags: (__: string[]) => {},
     setNewTag: (__: string) => {},
@@ -40,6 +43,7 @@ const SearchContext = createContext<ISearchContext>({
     setSort: (__: string) => {},
     setPage: (__: number) => {},
     setResults: (__: any[]) => {},
+    setTotal: (__: number) => {},
 });
 
 export const SearchProvider: React.FC = ({ children }) => {
@@ -52,6 +56,7 @@ export const SearchProvider: React.FC = ({ children }) => {
     const [sort, setSort] = useState<string>("alpha");
     const [page, setPage] = useState(0);
     const [results, setResults] = useState<any[]>([]);
+    const [total, setTotal] = useState(0);
     return (
         <SearchContext.Provider
             value={{
@@ -64,6 +69,7 @@ export const SearchProvider: React.FC = ({ children }) => {
                 sort,
                 page,
                 results,
+                total,
                 setQueryText,
                 setTags,
                 setNewTag,
@@ -73,6 +79,7 @@ export const SearchProvider: React.FC = ({ children }) => {
                 setSort,
                 setPage,
                 setResults,
+                setTotal,
             }}
         >
             {children}

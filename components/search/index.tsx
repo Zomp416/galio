@@ -9,7 +9,7 @@ import SearchBar from "./searchbar";
 import { useSearchContext } from "../../context/searchcontext";
 
 const Search: React.FC = () => {
-    const { results, category } = useSearchContext();
+    const { results, category, total, setPage } = useSearchContext();
 
     return (
         <SearchContainer>
@@ -45,9 +45,12 @@ const Search: React.FC = () => {
                     />
                 ))}
             </CardsContainer>
-            <Pagination />
+            <Pagination
+                count={Math.ceil(total / 4)}
+                onChange={(__: any, val: number) => setPage(val - 1)}
+            />
             <Typography variant="h6" component="div" sx={{ marginTop: "10px" }}>
-                4-4 Results
+                {`${total} total results`}
             </Typography>
         </SearchContainer>
     );

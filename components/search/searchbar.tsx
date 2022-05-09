@@ -10,7 +10,8 @@ import { searchUser } from "../../util/zileanUser";
 import { useSearchContext } from "../../context/searchcontext";
 
 const SearchBar: React.FC = () => {
-    const { category, queryText, time, sort, page, setQueryText, setResults } = useSearchContext();
+    const { category, queryText, time, sort, page, setQueryText, setResults, setTotal } =
+        useSearchContext();
 
     const router = useRouter();
 
@@ -33,7 +34,10 @@ const SearchBar: React.FC = () => {
                         : await searchUser(query);
 
                 if (error) alert(error);
-                if (data) setResults(data);
+                if (data) {
+                    setResults(data.results);
+                    setTotal(data.count);
+                }
             },
             400
         ),
