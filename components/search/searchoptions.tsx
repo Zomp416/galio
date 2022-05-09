@@ -61,15 +61,26 @@ const SearchOptions: React.FC = () => {
                             fontWeight: "bold",
                         }}
                     >
-                        <MenuItem value={"alpha"}>A-Z</MenuItem>
-                        {category !== "user" ? (
-                            <>
-                                <MenuItem value={"views"}>Most Viewed</MenuItem>
-                                <MenuItem value={"rating"}>Highest Rated</MenuItem>
-                            </>
-                        ) : (
-                            <MenuItem value={"subscribers"}>Most Subscribed</MenuItem>
-                        )}
+                        {category !== "user"
+                            ? [
+                                  <MenuItem key="1" value={"alpha"}>
+                                      A-Z
+                                  </MenuItem>,
+                                  <MenuItem key="2" value={"views"}>
+                                      Most Viewed
+                                  </MenuItem>,
+                                  <MenuItem key="3" value={"rating"}>
+                                      Highest Rated
+                                  </MenuItem>,
+                              ]
+                            : [
+                                  <MenuItem key="1" value={"alpha"}>
+                                      A-Z
+                                  </MenuItem>,
+                                  <MenuItem key="2" value={"subscribers"}>
+                                      Most Subscribed
+                                  </MenuItem>,
+                              ]}
                     </Select>
                     {category !== "user" ? (
                         <Select

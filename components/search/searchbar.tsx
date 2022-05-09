@@ -43,7 +43,7 @@ const SearchBar: React.FC = () => {
                     setTotal(data.count);
                 }
             },
-            400
+            200
         ),
         [category]
     );
