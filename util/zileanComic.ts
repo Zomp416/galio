@@ -47,7 +47,7 @@ export const searchComic = async (params: {
     if (params.value) query += `value=${params.value}&`;
     if (params.time) query += `time=${params.time}&`;
     if (params.sort) query += `sort=${params.sort}&`;
-    if (params.page) query += `page=${params.page}&`;
+    if (params.page || params.page === 0) query += `page=${params.page}&`;
     if (params.limit) query += `limit=${params.limit}&`;
 
     const result = await fetch(query);

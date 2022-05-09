@@ -41,6 +41,22 @@ export const getStory = async (id: string): Promise<ZileanResponse> => {
     return result.json();
 };
 
+export const searchStory = async (params: {
+    value?: string;
+    sort?: string;
+    page?: number;
+    limit?: number;
+}): Promise<ZileanResponse> => {
+    let query = `${zileanOrigin}/story/search?`;
+    if (params.value) query += `value=${params.value}&`;
+    if (params.sort) query += `sort=${params.sort}&`;
+    if (params.page || params.page === 0) query += `page=${params.page}&`;
+    if (params.limit) query += `limit=${params.limit}&`;
+
+    const result = await fetch(query);
+    return await result.json();
+};
+
 export const deleteStory = async (id: string): Promise<ZileanResponse> => {
     const result = await fetch(`${zileanOrigin}/story/` + id, {
         method: "DELETE",

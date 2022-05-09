@@ -22,8 +22,14 @@ const Search: React.FC = () => {
                     <ResultCard
                         _id={res._id}
                         key={res._id}
-                        title={res.title}
-                        author={res.author.username}
+                        type={category}
+                        title={category === "user" ? res.username : res.title}
+                        link={
+                            category === "user"
+                                ? `user/${res.username}`
+                                : `/${category}/view/${res._id}`
+                        }
+                        author={category === "user" ? "" : res.author.username}
                         splashURL={
                             category === "comic"
                                 ? res.renderedImage

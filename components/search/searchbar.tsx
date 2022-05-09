@@ -5,10 +5,12 @@ import styled from "@emotion/styled";
 import { Typography, InputBase } from "@mui/material";
 import debounce from "lodash.debounce";
 import { searchComic } from "../../util/zileanComic";
+import { searchStory } from "../../util/zileanStory";
+import { searchUser } from "../../util/zileanUser";
 import { useSearchContext } from "../../context/searchcontext";
 
 const SearchBar: React.FC = () => {
-    const { queryText, time, sort, page, setQueryText, setResults } = useSearchContext();
+    const { category, queryText, time, sort, page, setQueryText, setResults } = useSearchContext();
 
     const router = useRouter();
 
@@ -22,13 +24,19 @@ const SearchBar: React.FC = () => {
                 page?: number;
                 limit?: number;
             }) => {
-                const { data, error } = await searchComic(query);
+                const { data, error } =
+                    category === "comic"
+                        ? await searchComic(query)
+                        : category === "story"
+                        ? await searchStory(query)
+                        : await searchUser(query);
+
                 if (error) alert(error);
                 if (data) setResults(data);
             },
             400
         ),
-        []
+        [category]
     );
 
     useEffect(() => {
