@@ -13,6 +13,7 @@ export const Splash = styled.div`
     flex-shrink: 0;
     width: 400px;
     max-width: 50%;
+    background-color: gray;
 `;
 
 export const Details = styled.div`

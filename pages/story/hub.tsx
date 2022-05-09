@@ -1,9 +1,10 @@
 import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
-import Hub from "../../components/story/hub";
+import Hub from "../../components/hub";
 import Navbar from "../../components/navbar";
 import { AuthProvider } from "../../context/authcontext";
 import { getUserFromSession } from "../../util/zileanUser";
+import { HubProvider } from "../../context/hubcontext";
 
 interface Props {
     user: any;
@@ -15,10 +16,12 @@ const HubPage: NextPage<Props> = props => {
             <Head>
                 <title>Community Hub</title>
             </Head>
-            <AuthProvider user={props.user}>
-                <Navbar domain="stories" />
-                <Hub />
-            </AuthProvider>
+            <HubProvider category="story">
+                <AuthProvider user={props.user}>
+                    <Navbar domain="stories" />
+                    <Hub />
+                </AuthProvider>
+            </HubProvider>
         </>
     );
 };

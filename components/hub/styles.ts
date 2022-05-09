@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-export const MyStoriesOuter = styled.div`
+export const HubOuter = styled.div`
     width: 100%;
     height: 100%;
     display: flex;
@@ -9,7 +9,7 @@ export const MyStoriesOuter = styled.div`
     margin-top: 50px;
 `;
 
-export const MyStoriesInner = styled.div`
+export const HubInner = styled.div`
     width: 100%;
     max-width: calc(80vh + 200px);
     padding-top: 5vh;

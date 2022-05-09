@@ -5,10 +5,13 @@ import styled from "@emotion/styled";
 import { Typography, InputBase } from "@mui/material";
 import debounce from "lodash.debounce";
 import { searchComic } from "../../util/zileanComic";
+import { searchStory } from "../../util/zileanStory";
+import { searchUser } from "../../util/zileanUser";
 import { useSearchContext } from "../../context/searchcontext";
 
 const SearchBar: React.FC = () => {
-    const { queryText, time, sort, page, setQueryText, setResults } = useSearchContext();
+    const { category, queryText, time, sort, tags, page, setQueryText, setResults, setTotal } =
+        useSearchContext();
 
     const router = useRouter();
 
@@ -18,17 +21,31 @@ const SearchBar: React.FC = () => {
             async (query: {
                 value?: string;
                 time?: string;
+                tags?: string[];
                 sort?: string;
                 page?: number;
                 limit?: number;
             }) => {
-                const { data, error } = await searchComic(query);
+                if (category === "user") {
+                    query.time = undefined;
+                    query.tags = undefined;
+                }
+                const { data, error } =
+                    category === "comic"
+                        ? await searchComic(query)
+                        : category === "story"
+                        ? await searchStory(query)
+                        : await searchUser(query);
+
                 if (error) alert(error);
-                if (data) setResults(data);
+                if (data) {
+                    setResults(data.results);
+                    setTotal(data.count);
+                }
             },
-            400
+            200
         ),
-        []
+        [category]
     );
 
     useEffect(() => {
@@ -36,8 +53,8 @@ const SearchBar: React.FC = () => {
     }, [router, setQueryText]);
 
     useEffect(() => {
-        doDebouncedSearch({ value: queryText, time, sort, page, limit: 4 });
-    }, [queryText, time, sort, page, doDebouncedSearch]);
+        doDebouncedSearch({ value: queryText, time, tags, sort, page, limit: 4 });
+    }, [queryText, time, tags, sort, page, doDebouncedSearch]);
 
     return (
         <Root>

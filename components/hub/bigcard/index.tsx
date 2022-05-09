@@ -7,6 +7,7 @@ import * as Styled from "./styles";
 
 interface Props {
     _id: string;
+    category: string;
     title: string;
     author: string;
     description: string;
@@ -18,7 +19,7 @@ const BigCard: React.FC<Props> = props => {
     return (
         <Styled.Card className="detailedcard">
             <Styled.Splash className="splash">
-                <Link href={`/comic/view/${props._id}`}>
+                <Link href={`/${props.category}/view/${props._id}`}>
                     <a>
                         <>
                             <Styled.Image src={props.splashURL} />

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Link from "next/link";
-
 import { Fade, Typography, Rating, Stack, Container } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
@@ -8,6 +7,7 @@ import * as Styled from "./styles";
 
 interface Props {
     _id: string;
+    category: string;
     title: string;
     author: string;
     splashURL: string;
@@ -25,7 +25,7 @@ const SmallCard: React.FC<Props> = props => {
             onMouseLeave={() => setHovered(false)}
         >
             <Styled.Image src={props.splashURL} />
-            <Link href={`/story/view/${props._id}`}>
+            <Link href={`/${props.category}/view/${props._id}`}>
                 <a style={{ color: "inherit" }}>
                     <Fade in={hovered}>
                         <Styled.CardHover>

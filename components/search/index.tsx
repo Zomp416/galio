@@ -9,7 +9,7 @@ import SearchBar from "./searchbar";
 import { useSearchContext } from "../../context/searchcontext";
 
 const Search: React.FC = () => {
-    const { results, category } = useSearchContext();
+    const { results, category, total, setPage } = useSearchContext();
 
     return (
         <SearchContainer>
@@ -22,8 +22,14 @@ const Search: React.FC = () => {
                     <ResultCard
                         _id={res._id}
                         key={res._id}
-                        title={res.title}
-                        author={res.author.username}
+                        type={category}
+                        title={category === "user" ? res.username : res.title}
+                        link={
+                            category === "user"
+                                ? `user/${res.username}`
+                                : `/${category}/view/${res._id}`
+                        }
+                        author={category === "user" ? "" : res.author.username}
                         splashURL={
                             category === "comic"
                                 ? res.renderedImage
@@ -35,12 +41,16 @@ const Search: React.FC = () => {
                         }
                         rating={res.ratingTotal / res.ratingCount}
                         views={res.views}
+                        subscribers={res.subscriberCount}
                     />
                 ))}
             </CardsContainer>
-            <Pagination />
+            <Pagination
+                count={Math.ceil(total / 4)}
+                onChange={(__: any, val: number) => setPage(val - 1)}
+            />
             <Typography variant="h6" component="div" sx={{ marginTop: "10px" }}>
-                4-4 Results
+                {`${total} total results`}
             </Typography>
         </SearchContainer>
     );
