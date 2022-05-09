@@ -43,12 +43,16 @@ export const getStory = async (id: string): Promise<ZileanResponse> => {
 
 export const searchStory = async (params: {
     value?: string;
+    time?: string;
+    tags?: string[];
     sort?: string;
     page?: number;
     limit?: number;
 }): Promise<ZileanResponse> => {
     let query = `${zileanOrigin}/story/search?`;
     if (params.value) query += `value=${params.value}&`;
+    if (params.time) query += `time=${params.time}&`;
+    if (params.tags) query += `tags=${params.tags}&`;
     if (params.sort) query += `sort=${params.sort}&`;
     if (params.page || params.page === 0) query += `page=${params.page}&`;
     if (params.limit) query += `limit=${params.limit}&`;

@@ -10,7 +10,7 @@ import { searchUser } from "../../util/zileanUser";
 import { useSearchContext } from "../../context/searchcontext";
 
 const SearchBar: React.FC = () => {
-    const { category, queryText, time, sort, page, setQueryText, setResults, setTotal } =
+    const { category, queryText, time, sort, tags, page, setQueryText, setResults, setTotal } =
         useSearchContext();
 
     const router = useRouter();
@@ -21,11 +21,15 @@ const SearchBar: React.FC = () => {
             async (query: {
                 value?: string;
                 time?: string;
+                tags?: string[];
                 sort?: string;
                 page?: number;
                 limit?: number;
             }) => {
-                if (category === "user") query.time = undefined;
+                if (category === "user") {
+                    query.time = undefined;
+                    query.tags = undefined;
+                }
                 const { data, error } =
                     category === "comic"
                         ? await searchComic(query)
@@ -49,8 +53,8 @@ const SearchBar: React.FC = () => {
     }, [router, setQueryText]);
 
     useEffect(() => {
-        doDebouncedSearch({ value: queryText, time, sort, page, limit: 4 });
-    }, [queryText, time, sort, page, doDebouncedSearch]);
+        doDebouncedSearch({ value: queryText, time, tags, sort, page, limit: 4 });
+    }, [queryText, time, tags, sort, page, doDebouncedSearch]);
 
     return (
         <Root>
