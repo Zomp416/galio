@@ -2,6 +2,7 @@ import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import EditComic from "../../../components/comic/edit";
 import Navbar from "../../../components/navbar";
+import { ToastProvider } from "../../../context/toastcontext";
 import { AuthProvider } from "../../../context/authcontext";
 import { ComicProvider } from "../../../context/comiccontext";
 import { IComic } from "../../../context/comiccontext/model";
@@ -19,12 +20,14 @@ const EditComicPage: NextPage<Props> = props => {
             <Head>
                 <title>Comic Title</title>
             </Head>
-            <AuthProvider user={props.user}>
-                <ComicProvider init_comic={props.comic}>
-                    <Navbar domain="comics" />
-                    <EditComic />
-                </ComicProvider>
-            </AuthProvider>
+            <ToastProvider>
+                <AuthProvider user={props.user}>
+                    <ComicProvider init_comic={props.comic}>
+                        <Navbar domain="comics" />
+                        <EditComic />
+                    </ComicProvider>
+                </AuthProvider>
+            </ToastProvider>
         </>
     );
 };

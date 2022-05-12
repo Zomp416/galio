@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 import React, { createContext, useContext, useState } from "react";
 import { useRouter } from "next/router";
-import { Snackbar, Alert, Typography } from "@mui/material";
 import Toolbar from "./toolbar";
 import Widebar from "./widebar";
 import Editor from "./editor";
 import { useComicContext } from "../../../context/comiccontext";
+import { useToastContext } from "../../../context/toastcontext";
 import * as Styled from "./styles";
 import {
     saveComic as saveComicZilean,
@@ -28,8 +28,8 @@ const EditComic: React.FC = () => {
     const router = useRouter();
     const [tool, setTool] = useState("");
     const [selection, setSelection] = useState(-1);
-    const [open, setOpen] = useState<boolean>(false);
     const { comic, layers, clearHistory } = useComicContext();
+    const { addToast } = useToastContext();
 
     const saveComic = async (file: File) => {
         if (!comic || !layers) return;
@@ -43,10 +43,11 @@ const EditComic: React.FC = () => {
         updatedComic.renderedImage = image.data.imageURL;
         const res = await saveComicZilean(updatedComic);
         if (!res.error && res.data) {
-            showSaveToast();
+            addToast("success", "Successfully Saved!");
             if (clearHistory) clearHistory();
             return;
         } else {
+            addToast("error", "Unable to Save Comic.");
             console.log(res);
         }
     };
@@ -64,18 +65,6 @@ const EditComic: React.FC = () => {
         }
     };
 
-    const showSaveToast = () => {
-        setOpen(true);
-    };
-
-    const handleCloseToast = (event?: React.SyntheticEvent | Event, reason?: string) => {
-        if (reason === "clickaway") {
-            return;
-        }
-
-        setOpen(false);
-    };
-
     return (
         <EditContext.Provider
             value={{ tool, setTool, selection, setSelection, saveComic, publishComic }}
@@ -87,20 +76,6 @@ const EditComic: React.FC = () => {
                     <Editor />
                 </Styled.EditorInner>
             </Styled.EditorOuter>
-            <Snackbar
-                open={open}
-                autoHideDuration={6000}
-                onClose={handleCloseToast}
-                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            >
-                <Alert
-                    onClose={handleCloseToast}
-                    severity="success"
-                    sx={{ width: "100%", backgroundColor: "green", color: "white" }}
-                >
-                    <Typography fontWeight="bold">Successfully Saved!</Typography>
-                </Alert>
-            </Snackbar>
         </EditContext.Provider>
     );
 };
