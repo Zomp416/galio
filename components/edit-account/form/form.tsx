@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import * as Styled from "./styles";
 import { TextField, Typography, Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 import { useEditContext } from "..";
+import ChangePasswordForm from "../change-password/form";
 
 const Form: React.FC = () => {
-    const { formValues, setFormValues, handleDelete } = useEditContext();
+    const { formValues, setFormValues, handleDelete, modalPasswordOpen, setModalPasswordOpen } =
+        useEditContext();
     const [error, setError] = useState(false);
-    const [modalPasswordOpen, setModalPasswordOpen] = useState<boolean>(false);
     const [modalDeleteOpen, setModalDeleteOpen] = useState<boolean>(false);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,6 +20,7 @@ const Form: React.FC = () => {
 
     return (
         <>
+            {modalPasswordOpen ? <ChangePasswordForm></ChangePasswordForm> : <></>}
             <Dialog
                 open={modalDeleteOpen}
                 onClose={() => {
@@ -97,27 +99,6 @@ const Form: React.FC = () => {
                 error={error}
                 style={{ width: 600, marginBottom: 40 }}
             />
-            {/* <Styled.PasswordContainer>
-                <Typography
-                    variant="h4"
-                    sx={{
-                        fontSize: "17px",
-                        color: "gray",
-                        marginRight: "20px",
-                    }}
-                >
-                    Password:
-                </Typography>
-                <Button
-                    variant="contained"
-                    component="span"
-                    onClick={() => {
-                        setModalPasswordOpen(true);
-                    }}
-                >
-                    Change Password
-                </Button>
-            </Styled.PasswordContainer> */}
             <TextField
                 id="about"
                 name="about"
@@ -138,14 +119,26 @@ const Form: React.FC = () => {
                     </Typography>
                 )}{" "}
             </div>
-            <Styled.DeleteAccountButton
-                variant="contained"
-                onClick={() => {
-                    setModalDeleteOpen(true);
-                }}
-            >
-                Delete Account
-            </Styled.DeleteAccountButton>
+            <Styled.ButtonsContainer>
+                <Styled.DeleteAccountButton
+                    variant="contained"
+                    onClick={() => {
+                        setModalDeleteOpen(true);
+                    }}
+                >
+                    Delete Account
+                </Styled.DeleteAccountButton>
+                <Button
+                    variant="contained"
+                    component="span"
+                    style={{ width: "15%" }}
+                    onClick={() => {
+                        setModalPasswordOpen!(true);
+                    }}
+                >
+                    Change Password
+                </Button>
+            </Styled.ButtonsContainer>
         </>
     );
 };

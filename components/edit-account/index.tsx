@@ -23,10 +23,13 @@ interface IEditContext {
     >;
     handleSubmit?: (event: React.FormEvent) => Promise<void>;
     handleDelete?: (event: React.FormEvent) => Promise<void>;
+    modalPasswordOpen: boolean;
+    setModalPasswordOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const EditContext = createContext<IEditContext>({
     formValues: { username: "", email: "", about: "", profilePicture: "" },
+    modalPasswordOpen: false,
 });
 
 const EditAccount: React.FC = () => {
@@ -35,14 +38,11 @@ const EditAccount: React.FC = () => {
     const defaultValues = {
         email: user?.email!,
         username: user?.username!,
-        // oldpassword: "",
-        // newpassword: "",
-        // confirmpassword: "",
         about: user?.about!,
-        // password: user?.password!,
         profilePicture: user?.profilePicture!,
     };
     const [formValues, setFormValues] = useState(defaultValues);
+    const [modalPasswordOpen, setModalPasswordOpen] = useState(false);
     const [error, setError] = useState(false);
 
     const handleSubmit = async (event: React.FormEvent) => {
@@ -70,7 +70,16 @@ const EditAccount: React.FC = () => {
     //Modal-Change Password (all the password related stuff)
     return (
         <Styled.EditAccountContainer>
-            <EditContext.Provider value={{ formValues, setFormValues, handleSubmit, handleDelete }}>
+            <EditContext.Provider
+                value={{
+                    formValues,
+                    setFormValues,
+                    handleSubmit,
+                    handleDelete,
+                    modalPasswordOpen,
+                    setModalPasswordOpen,
+                }}
+            >
                 <Header></Header>
                 <Form></Form>
             </EditContext.Provider>

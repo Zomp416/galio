@@ -3,56 +3,49 @@ import { useRouter } from "next/router";
 import * as Styled from "./styles";
 import { TextField, Typography, Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 import { useAuthContext } from "../../../context/authcontext";
-import { useImageContext } from "../../../context/imagecontext";
-import { deleteAccount } from "../../../util/zileanUser";
+import { useEditContext } from "..";
+import { changePassword } from "../../../util/zileanUser";
 
 const ChangePasswordForm: React.FC = () => {
     const router = useRouter();
     const { user } = useAuthContext();
-    const { image } = useImageContext();
-
     const defaultValues = {
-        email: user?.email!,
-        username: user?.username!,
         oldpassword: "",
         newpassword: "",
         confirmpassword: "",
-        about: user?.about!,
         password: user?.password!,
-        profilePicture: image?.imageURL,
     };
     const [formValues, setFormValues] = useState(defaultValues);
     const [error, setError] = useState(false);
-    const [imagePreview, setImagePreview] = useState("");
-    const [finalImage, setFinalImage] = useState<File>();
-    const [modalPasswordOpen, setModalPasswordOpen] = useState<boolean>(false);
-    const [modalDeleteOpen, setModalDeleteOpen] = useState<boolean>(false);
+    const { modalPasswordOpen, setModalPasswordOpen } = useEditContext();
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        if (name === "profilePicture" && event.target.files!.length !== 0) {
-            setImagePreview(URL.createObjectURL(event.target.files![0]));
-            setFinalImage(event.target.files![0]);
-        } else {
-            setFormValues({
-                ...formValues,
-                [name]: value,
-            });
-        }
+        setFormValues({
+            ...formValues,
+            [name]: value,
+        });
     };
-    
+
+    const handleSubmit = async (event: React.FormEvent) => {
+        if (
+            formValues.oldpassword !== "" &&
+            formValues.newpassword !== "" &&
+            formValues.confirmpassword !== ""
+        ) {
+            if (formValues.newpassword === formValues.confirmpassword) {
+                const data = await changePassword({ user: formValues });
+                if (data.error) {
+                    setError(true);
+                } else setModalPasswordOpen!(false);
+            } else setError(true);
+        } else setError(true);
+    };
+
     return (
         <>
             <Dialog
                 open={modalPasswordOpen}
-                onClose={(_, reason) => {
-                    setModalPasswordOpen(false);
-                    if (reason === "backdropClick") {
-                        formValues.oldpassword = "";
-                        formValues.newpassword = "";
-                        formValues.confirmpassword = "";
-                    }
-                }}
                 fullWidth
                 PaperProps={{
                     style: {
@@ -111,16 +104,10 @@ const ChangePasswordForm: React.FC = () => {
                         style={{ width: 500, marginBottom: 30, marginLeft: 20 }}
                     />
                     <DialogActions>
+                        <Button onClick={handleSubmit}>Done</Button>
                         <Button
                             onClick={() => {
-                                setModalPasswordOpen(false);
-                            }}
-                        >
-                            Done
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                setModalPasswordOpen(false);
+                                setModalPasswordOpen!(false);
                                 formValues.oldpassword = "";
                                 formValues.newpassword = "";
                                 formValues.confirmpassword = "";

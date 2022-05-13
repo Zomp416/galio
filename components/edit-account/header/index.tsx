@@ -1,16 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import * as Styled from "./styles";
-import {
-    TextField,
-    Typography,
-    Dialog,
-    DialogTitle,
-    DialogActions,
-    Button,
-    Divider,
-    Input,
-} from "@mui/material";
+import { Typography, Button, Divider, Input } from "@mui/material";
 import { useAuthContext } from "../../../context/authcontext";
 import { useImageContext } from "../../../context/imagecontext";
 import { update } from "../../../util/zileanUser";
@@ -25,6 +16,7 @@ const Header: React.FC = () => {
     const [error, setError] = useState(false);
 
     const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        event.preventDefault();
         const { name, value } = event.target;
         if (name === "profilePicture" && event.target.files!.length !== 0) {
             let formData = new FormData();
