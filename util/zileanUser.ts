@@ -122,11 +122,7 @@ export const update = async (user: {
     user: {
         email: string;
         username: string;
-        oldpassword: string;
-        newpassword: string;
-        confirmpassword: string;
         about: string;
-        password: string;
     };
 }): Promise<ZileanResponse> => {
     const res = await fetch(`${zileanOrigin}/account`, {
