@@ -22,33 +22,27 @@ const Header: React.FC = () => {
     const { user } = useAuthContext();
     const { image } = useImageContext();
     const { formValues, setFormValues, handleSubmit } = useEditContext();
-
-    // const defaultValues = {
-    //     email: user?.email!,
-    //     username: user?.username!,
-    //     oldpassword: "",
-    //     newpassword: "",
-    //     confirmpassword: "",
-    //     about: user?.about!,
-    //     password: user?.password!,
-    //     profilePicture: image?.imageURL,
-    // };
-    // const [formValues, setFormValues] = useState(defaultValues);
     const [error, setError] = useState(false);
-    const [imagePreview, setImagePreview] = useState("");
-    const [finalImage, setFinalImage] = useState<File>();
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        // const { name, value } = event.target;
-        // if (name === "profilePicture" && event.target.files!.length !== 0) {
-        //     setImagePreview(URL.createObjectURL(event.target.files![0]));
-        //     setFinalImage(event.target.files![0]);
-        // } else {
-        //     setFormValues({
-        //         ...formValues,
-        //         [name]: value,
-        //     });
-        // }
+    const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        if (name === "profilePicture" && event.target.files!.length !== 0) {
+            let formData = new FormData();
+            formData.append("image", event.target.files![0]);
+            formData.append("directory", "avatars");
+            formData.append("name", event.target.files![0].name.split(".")[0]);
+            const { data } = await createImage(formData);
+            if (!data.error) {
+                formValues.profilePicture = data.imageURL;
+                const res = await update({ user: formValues });
+                if (res.error) {
+                    setError(true);
+                } else {
+                    //There is a secondish delay before profile picture updates
+                    router.push("/edit-account");
+                }
+            }
+        }
     };
 
     return (
@@ -78,16 +72,14 @@ const Header: React.FC = () => {
                 </Styled.SaveButton>
             </Styled.ButtonsContainer>
             <Styled.ProfilePictureContainer>
-                {finalImage === undefined ? (
-                    image === null ? (
-                        <Styled.AddNewImage></Styled.AddNewImage>
-                    ) : (
-                        <Styled.Image
-                            src={"https://zomp-media.s3.us-east-1.amazonaws.com/" + image}
-                        ></Styled.Image>
-                    )
+                {user?.profilePicture === undefined ? (
+                    <Styled.AddNewImage></Styled.AddNewImage>
                 ) : (
-                    <Styled.Image src={imagePreview}></Styled.Image>
+                    <Styled.Image
+                        src={
+                            "https://zomp-media.s3.us-east-1.amazonaws.com/" + user?.profilePicture
+                        }
+                    ></Styled.Image>
                 )}
                 <label htmlFor="contained-button-file">
                     <Input

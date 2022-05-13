@@ -11,16 +11,22 @@ interface IEditContext {
         username: string;
         email: string;
         about: string;
+        profilePicture: string;
     };
     setFormValues?: React.Dispatch<
-        React.SetStateAction<{ username: string; email: string; about: string }>
+        React.SetStateAction<{
+            username: string;
+            email: string;
+            about: string;
+            profilePicture: string;
+        }>
     >;
-    handleSubmit?: () => Promise<void>;
-    handleDelete?: () => Promise<void>;
+    handleSubmit?: (event: React.FormEvent) => Promise<void>;
+    handleDelete?: (event: React.FormEvent) => Promise<void>;
 }
 
 const EditContext = createContext<IEditContext>({
-    formValues: { username: "", email: "", about: "" },
+    formValues: { username: "", email: "", about: "", profilePicture: "" },
 });
 
 const EditAccount: React.FC = () => {
@@ -34,24 +40,13 @@ const EditAccount: React.FC = () => {
         // confirmpassword: "",
         about: user?.about!,
         // password: user?.password!,
-        // profilePicture: user?.profilePicture!,
+        profilePicture: user?.profilePicture!,
     };
     const [formValues, setFormValues] = useState(defaultValues);
     const [error, setError] = useState(false);
-    // const [imagePreview, setImagePreview] = useState("");
-    // const [finalImage, setFinalImage] = useState<File>();
-    // const [modalPasswordOpen, setModalPasswordOpen] = useState<boolean>(false);
-    // const [modalDeleteOpen, setModalDeleteOpen] = useState<boolean>(false);
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        setFormValues({
-            ...formValues,
-            [name]: value,
-        });
-    };
-
-    const handleSubmit = async () => {
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
         const data = await update({ user: formValues });
         if (data.error) {
             setError(true);
@@ -60,7 +55,8 @@ const EditAccount: React.FC = () => {
         }
     };
 
-    const handleDelete = async () => {
+    const handleDelete = async (event: React.FormEvent) => {
+        event.preventDefault();
         const data = await deleteAccount();
         if (data.error) {
             setError(true);

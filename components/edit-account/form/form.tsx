@@ -1,9 +1,6 @@
 import React, { useState } from "react";
-import { useRouter } from "next/router";
 import * as Styled from "./styles";
 import { TextField, Typography, Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
-import { useAuthContext } from "../../../context/authcontext";
-import { useImageContext } from "../../../context/imagecontext";
 import { useEditContext } from "..";
 
 const Form: React.FC = () => {
