@@ -65,7 +65,10 @@ const EditAccount: React.FC = () => {
         const data = await deleteAccount();
         if (data.error) {
             setError(true);
+            addToast("error", "Error in Deleting Account");
         } else {
+            //Shows for a second before routing
+            addToast("success", "Deleted Account");
             router.push("/");
         }
     };
