@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import * as Styled from "./form/styles";
 import Form from "./form/form";
 import { useAuthContext } from "../../context/authcontext";
+import { useToastContext } from "../../context/toastcontext";
 import Header from "./header";
 import { deleteAccount, update } from "../../util/zileanUser";
 
@@ -35,6 +36,7 @@ const EditContext = createContext<IEditContext>({
 const EditAccount: React.FC = () => {
     const router = useRouter();
     const { user } = useAuthContext();
+    const { addToast } = useToastContext();
     const defaultValues = {
         email: user?.email!,
         username: user?.username!,
@@ -50,7 +52,9 @@ const EditAccount: React.FC = () => {
         const data = await update({ user: formValues });
         if (data.error) {
             setError(true);
+            addToast("error", "Error in Updating Account Info");
         } else {
+            addToast("success", "Updated Account Info");
             router.back();
         }
     };
@@ -65,9 +69,6 @@ const EditAccount: React.FC = () => {
         }
     };
 
-    //Header- Profile Picture, Save, Cancel
-    //Form- All the other stuff (Username, Email, About)
-    //Modal-Change Password (all the password related stuff)
     return (
         <Styled.EditAccountContainer>
             <EditContext.Provider

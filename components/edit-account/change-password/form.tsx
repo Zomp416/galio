@@ -3,12 +3,14 @@ import { useRouter } from "next/router";
 import * as Styled from "./styles";
 import { TextField, Typography, Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 import { useAuthContext } from "../../../context/authcontext";
+import { useToastContext } from "../../../context/toastcontext";
 import { useEditContext } from "..";
 import { changePassword } from "../../../util/zileanUser";
 
 const ChangePasswordForm: React.FC = () => {
     const router = useRouter();
     const { user } = useAuthContext();
+    const { addToast } = useToastContext();
     const defaultValues = {
         oldpassword: "",
         newpassword: "",
@@ -37,9 +39,19 @@ const ChangePasswordForm: React.FC = () => {
                 const data = await changePassword({ user: formValues });
                 if (data.error) {
                     setError(true);
-                } else setModalPasswordOpen!(false);
-            } else setError(true);
-        } else setError(true);
+                    addToast("error", "Old Password is incorrect");
+                } else {
+                    addToast("success", "Updated Password");
+                    setModalPasswordOpen!(false);
+                }
+            } else {
+                setError(true);
+                addToast("error", " Passwords do not match");
+            }
+        } else {
+            setError(true);
+            addToast("error", "All fields are required");
+        }
     };
 
     return (
