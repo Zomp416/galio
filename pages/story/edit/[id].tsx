@@ -7,6 +7,7 @@ import { StoryProvider } from "../../../context/storycontext";
 import { IStory } from "../../../context/storycontext/model";
 import { getUserFromSession } from "../../../util/zileanUser";
 import { getStory } from "../../../util/zileanStory";
+import { ToastProvider } from "../../../context/toastcontext";
 
 interface Props {
     user: any;
@@ -19,12 +20,14 @@ const LoginPage: NextPage<Props> = props => {
             <Head>
                 <title>Story Title</title>
             </Head>
-            <AuthProvider user={props.user}>
-                <StoryProvider storyText={props.story}>
-                    <Navbar domain="stories" />
-                    <EditStory />
-                </StoryProvider>
-            </AuthProvider>
+            <ToastProvider>
+                <AuthProvider user={props.user}>
+                    <StoryProvider storyText={props.story}>
+                        <Navbar domain="stories" />
+                        <EditStory />
+                    </StoryProvider>
+                </AuthProvider>
+            </ToastProvider>
         </>
     );
 };

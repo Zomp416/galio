@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import * as Styled from "./styles";
 import { Typography, Button, Divider, Input } from "@mui/material";
 import { useAuthContext } from "../../../context/authcontext";
-import { useImageContext } from "../../../context/imagecontext";
 import { useToastContext } from "../../../context/toastcontext";
 import { update } from "../../../util/zileanUser";
 import { createImage } from "../../../util/zilean";
@@ -12,9 +11,8 @@ import { useEditContext } from "..";
 const Header: React.FC = () => {
     const router = useRouter();
     const { user } = useAuthContext();
-    const { image } = useImageContext();
     const { addToast } = useToastContext();
-    const { formValues, setFormValues, handleSubmit } = useEditContext();
+    const { formValues, handleSubmit } = useEditContext();
     const [error, setError] = useState(false);
 
     const handleInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
