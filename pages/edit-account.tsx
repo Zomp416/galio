@@ -4,6 +4,7 @@ import Navbar from "../components/navbar";
 import EditAccount from "../components/edit-account";
 import { AuthProvider } from "../context/authcontext";
 import { ImageProvider } from "../context/imagecontext";
+import { ToastProvider } from "../context/toastcontext";
 import { getUserFromSession, getUserProfilePicture } from "../util/zileanUser";
 
 interface Props {
@@ -17,12 +18,14 @@ const EditAccountPage: NextPage<Props> = props => {
             <Head>
                 <title>Edit Account</title>
             </Head>
-            <AuthProvider user={props.user}>
-                <ImageProvider image={props.profilePicture}>
-                    <Navbar domain="user" />
-                    <EditAccount />
-                </ImageProvider>
-            </AuthProvider>
+            <ToastProvider>
+                <AuthProvider user={props.user}>
+                    <ImageProvider image={props.profilePicture}>
+                        <Navbar domain="user" />
+                        <EditAccount />
+                    </ImageProvider>
+                </AuthProvider>
+            </ToastProvider>
         </>
     );
 };

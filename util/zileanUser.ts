@@ -122,14 +122,34 @@ export const update = async (user: {
     user: {
         email: string;
         username: string;
-        oldpassword: string;
-        newpassword: string;
-        confirmpassword: string;
         about: string;
-        password: string;
     };
 }): Promise<ZileanResponse> => {
     const res = await fetch(`${zileanOrigin}/account`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+        credentials: "include",
+    });
+    const data = await res.json();
+    if (!data || res.status !== 200) {
+        return {
+            error: "Error updating user.",
+        };
+    } else {
+        return data;
+    }
+};
+
+export const changePassword = async (user: {
+    user: {
+        oldpassword: string;
+        newpassword: string;
+    };
+}): Promise<ZileanResponse> => {
+    const res = await fetch(`${zileanOrigin}/account/change-password`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
