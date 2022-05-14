@@ -54,8 +54,8 @@ const EditAccount: React.FC = () => {
             setError(true);
             addToast("error", "Error in Updating Account Info");
         } else {
-            addToast("success", "Updated Account Info");
             router.back();
+            addToast("success", "Updated Account Info");
         }
     };
 
