@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Divider, Select, MenuItem, Pagination, Stack, Tab, Tabs } from "@mui/material";
+import { Divider, Pagination, Stack, Tab, Tabs } from "@mui/material";
 import * as Styled from "./styles";
 import ComicCard from "./comiccard";
 import StoryCard from "./storycard";
@@ -7,17 +7,17 @@ import ProfileCard from "./profilecard";
 
 const Hero: React.FC<{ user2?: any; userSubs?: any }> = ({ user2, userSubs }) => {
     const [category, setCategory] = useState<string>("comics");
-    const [time, setTime] = useState<string>("Today");
-    const [sort, setSort] = useState<string>("alpha");
+
+    //Kinda extra but quick fix for when stories has more pages than users and you set categories
+    const [comicPage, setComicPage] = useState<number>(1);
+    const [storyPage, setStoryPage] = useState<number>(1);
+    const [userPage, setUserPage] = useState<number>(1);
+    const comicsPerPage = 4;
+    const storiesPerPage = 4;
+    const usersPerPage = 4;
 
     const onSetCategory = (_: any, val: any) => {
         setCategory(val);
-    };
-    const onSetSort = (e: any) => {
-        setSort(e.target.value);
-    };
-    const onSetTime = (e: any) => {
-        setTime(e.target.value);
     };
 
     return (
@@ -27,48 +27,69 @@ const Hero: React.FC<{ user2?: any; userSubs?: any }> = ({ user2, userSubs }) =>
                 <Tab label="Stories" value={"stories"} />
                 <Tab label="Subscriptions" value={"subscriptions"} />
             </Tabs>
-            <Styled.TagSortFilterContainer>
-                <Styled.TagContainer></Styled.TagContainer>``
-                <Styled.SortFilterContainer>
-                    <Select value={sort} onChange={onSetSort} label="Views" variant="standard">
-                        <MenuItem value={"alpha"}>A-Z</MenuItem>
-                        <MenuItem value={"views"}>Most Viewed</MenuItem>
-                        <MenuItem value={"rtaing"}>Highest Rated</MenuItem>
-                    </Select>
-                    <Select value={time} onChange={onSetTime} label="Time" variant="standard">
-                        <MenuItem value={"Today"}>Today</MenuItem>
-                        <MenuItem value={"Week"}>This Week</MenuItem>
-                        <MenuItem value={"Month"}>This Month</MenuItem>
-                        <MenuItem value={"Year"}>This Year</MenuItem>
-                        <MenuItem value={"All"}>All Time</MenuItem>
-                    </Select>
-                </Styled.SortFilterContainer>
-            </Styled.TagSortFilterContainer>
-            <Divider sx={{ width: "100%", marginBottom: "20px" }} />
+            <Divider sx={{ width: "100%", marginBottom: "30px" }} />
 
             {category === "comics" ? (
-                <Stack>
-                    {user2.comics.map(function (comic: any, index: any) {
-                        return <ComicCard key={index} comic={comic} user={user2} />;
-                    })}
-                </Stack>
+                <>
+                    <Stack>
+                        {user2.comics
+                            .filter(
+                                (comic: any, index: any) =>
+                                    index >= comicsPerPage * (comicPage - 1) &&
+                                    index < comicsPerPage * comicPage
+                            )
+                            .map(function (comic: any, index: any) {
+                                return <ComicCard key={index} comic={comic} user={user2} />;
+                            })}
+                    </Stack>
+                    <Styled.Pagination>
+                        <Pagination
+                            count={Math.ceil(user2.comics.length / comicsPerPage)}
+                            onChange={(__: any, val: number) => setComicPage(val)}
+                        />
+                    </Styled.Pagination>
+                </>
             ) : category === "stories" ? (
-                <Stack>
-                    {user2.stories.map(function (story: any, index: any) {
-                        return <StoryCard key={index} story={story} user={user2} />;
-                    })}
-                </Stack>
+                <>
+                    <Stack>
+                        {user2.stories
+                            .filter(
+                                (story: any, index: any) =>
+                                    index >= storiesPerPage * (storyPage - 1) &&
+                                    index < storiesPerPage * storyPage
+                            )
+                            .map(function (story: any, index: any) {
+                                return <StoryCard key={index} story={story} user={user2} />;
+                            })}
+                    </Stack>
+                    <Styled.Pagination>
+                        <Pagination
+                            count={Math.ceil(user2.stories.length / storiesPerPage)}
+                            onChange={(__: any, val: number) => setStoryPage(val)}
+                        />
+                    </Styled.Pagination>
+                </>
             ) : (
-                <Styled.CardsContainer>
-                    {userSubs.map(function (user: any, index: any) {
-                        return <ProfileCard key={index} user2={user} />;
-                    })}
-                </Styled.CardsContainer>
+                <>
+                    <Styled.CardsContainer>
+                        {userSubs
+                            .filter(
+                                (user: any, index: any) =>
+                                    index >= usersPerPage * (userPage - 1) &&
+                                    index < usersPerPage * userPage
+                            )
+                            .map(function (user: any, index: any) {
+                                return <ProfileCard key={index} user2={user} />;
+                            })}
+                    </Styled.CardsContainer>
+                    <Styled.Pagination>
+                        <Pagination
+                            count={Math.ceil(userSubs.length / usersPerPage)}
+                            onChange={(__: any, val: number) => setUserPage(val)}
+                        />
+                    </Styled.Pagination>
+                </>
             )}
-
-            <Styled.Pagination>
-                <Pagination />
-            </Styled.Pagination>
         </Styled.ResultsContainer>
     );
 };
