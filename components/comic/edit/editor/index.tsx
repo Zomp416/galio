@@ -131,7 +131,7 @@ const Editor: React.FC = () => {
     const handlePublishClick = async () => {
         const editor = document.getElementById("canvas");
         if (!editor) return;
-        const rendered = await domtoimage.toBlob(editor);
+        const rendered = await domtoimage.toBlob(editor, { cacheBust: true });
         const f = new File([rendered], "filename");
         publishComic!(f);
     };
@@ -139,7 +139,7 @@ const Editor: React.FC = () => {
     const handleSaveClick = async () => {
         const editor = document.getElementById("canvas");
         if (!editor) return;
-        const rendered = await domtoimage.toBlob(editor);
+        const rendered = await domtoimage.toBlob(editor, { cacheBust: true });
         const f = new File([rendered], "filename");
         saveComic!(f);
     };
