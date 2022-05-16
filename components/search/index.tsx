@@ -29,7 +29,7 @@ const Search: React.FC = () => {
                                 ? `user/${res.username}`
                                 : `/${category}/view/${res._id}`
                         }
-                        author={category === "user" ? "" : res.author.username}
+                        author={category === "user" ? "" : res.author ? res.author.username : ""}
                         splashURL={
                             category === "comic"
                                 ? res.renderedImage
