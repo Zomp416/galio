@@ -6,12 +6,11 @@ import { useEditContext } from "..";
 interface Props {
     layer: Record<any, any>;
     index: number;
-    zoom: number;
 }
 
 const Layer: React.FC<Props> = props => {
-    const { layer, index, zoom } = props;
-    const { selection, setSelection, setTool } = useEditContext();
+    const { layer, index } = props;
+    const { zoom, selection, setSelection, setTool } = useEditContext();
     const { newdo } = useComicContext();
 
     const onRndDragStop: RndDragCallback = (e, data) => {
@@ -34,7 +33,7 @@ const Layer: React.FC<Props> = props => {
         <Rnd
             key={index}
             data-key={index}
-            bounds=".editorSpace"
+            // bounds=".editorSpace"
             className="grabbable"
             resizeHandleClasses={{
                 bottomLeft: "resizer",

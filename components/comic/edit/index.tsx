@@ -14,6 +14,8 @@ import {
 import { createImage } from "../../../util/zilean";
 
 interface IEditContext {
+    zoom: number;
+    setZoom?: React.Dispatch<React.SetStateAction<number>>;
     tool: string;
     setTool?: React.Dispatch<React.SetStateAction<string>>;
     selection: number;
@@ -22,12 +24,13 @@ interface IEditContext {
     publishComic?: (file: File) => Promise<void>;
 }
 
-const EditContext = createContext<IEditContext>({ tool: "", selection: -1 });
+const EditContext = createContext<IEditContext>({ zoom: 1, tool: "", selection: -1 });
 
 const EditComic: React.FC = () => {
     const router = useRouter();
     const [tool, setTool] = useState("");
     const [selection, setSelection] = useState(-1);
+    const [zoom, setZoom] = useState(1);
     const { comic, layers, clearHistory } = useComicContext();
     const { addToast } = useToastContext();
 
@@ -67,7 +70,16 @@ const EditComic: React.FC = () => {
 
     return (
         <EditContext.Provider
-            value={{ tool, setTool, selection, setSelection, saveComic, publishComic }}
+            value={{
+                zoom,
+                setZoom,
+                tool,
+                setTool,
+                selection,
+                setSelection,
+                saveComic,
+                publishComic,
+            }}
         >
             <Styled.EditorOuter>
                 <Styled.EditorInner>

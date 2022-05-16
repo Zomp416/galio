@@ -13,14 +13,12 @@ import { useEditContext } from "..";
 import domtoimage from "dom-to-image";
 
 const Editor: React.FC = () => {
-    //TOOD use setzoom or remove it
-    // eslint-disable-next-line no-unused-vars
-    const [zoom, setZoom] = useState<number>(1);
-    const [contextMenu, setContextMenu] = React.useState<{
+    const [contextMenu, setContextMenu] = useState<{
         mouseX: number;
         mouseY: number;
     } | null>(null);
-    const { selection, setSelection, setTool, saveComic, publishComic } = useEditContext();
+    const { zoom, setZoom, selection, setSelection, setTool, saveComic, publishComic } =
+        useEditContext();
     const { layers, undo, redo, newdo, canUndo, canRedo, canSave } = useComicContext();
 
     useEffect(() => {
@@ -131,6 +129,8 @@ const Editor: React.FC = () => {
     const handlePublishClick = async () => {
         const editor = document.getElementById("canvas");
         if (!editor) return;
+        setSelection!(-1); // quick fix to not render selection UI
+        setZoom!(1); // quick fix to render in correct scale
         const rendered = await domtoimage.toBlob(editor, { cacheBust: true });
         const f = new File([rendered], "filename");
         publishComic!(f);
@@ -139,9 +139,21 @@ const Editor: React.FC = () => {
     const handleSaveClick = async () => {
         const editor = document.getElementById("canvas");
         if (!editor) return;
+        setSelection!(-1); // quick fix to not render selection UI
+        setZoom!(1); // quick fix to render in correct scale
         const rendered = await domtoimage.toBlob(editor, { cacheBust: true });
         const f = new File([rendered], "filename");
         saveComic!(f);
+    };
+
+    const handleZoomIn = () => {
+        setZoom!(zoom + 0.25);
+    };
+
+    const handleZoomOut = () => {
+        if (zoom >= 0.25) {
+            setZoom!(zoom - 0.25);
+        }
     };
 
     const generateBase = (layer: Record<any, any>, index: number) => {
@@ -211,13 +223,7 @@ const Editor: React.FC = () => {
 
     const renderLayer = (layer: Record<any, any>, index: number) => {
         return (
-            <Layer
-                layer={layer}
-                index={index}
-                key={`zomp-layer-${index}`}
-                data-key={index}
-                zoom={zoom}
-            >
+            <Layer layer={layer} index={index} key={`zomp-layer-${index}`} data-key={index}>
                 {generateBase(layer, index)}
             </Layer>
         );
@@ -273,10 +279,22 @@ const Editor: React.FC = () => {
                     >
                         <RedoIcon />
                     </IconButton>
-                    <IconButton size="medium" edge="start" color="inherit" sx={{ mr: 2 }}>
+                    <IconButton
+                        size="medium"
+                        edge="start"
+                        color="inherit"
+                        sx={{ mr: 2 }}
+                        onClick={handleZoomIn}
+                    >
                         <ZoomInIcon />
                     </IconButton>
-                    <IconButton size="medium" edge="start" color="inherit" sx={{ mr: 2 }}>
+                    <IconButton
+                        size="medium"
+                        edge="start"
+                        color="inherit"
+                        sx={{ mr: 2 }}
+                        onClick={handleZoomOut}
+                    >
                         <ZoomOutIcon />
                     </IconButton>
                     <IconButton
@@ -291,106 +309,111 @@ const Editor: React.FC = () => {
                     </IconButton>
                 </Toolbar>
             </div>
-            <Styled.EditContainer
-                className="editorSpace"
-                id="canvas"
-                onMouseDown={e => {
-                    const name = (e.target as HTMLElement).className;
-                    if (name && name.includes("editorSpace")) {
-                        console.log("Selected Index: -1");
-                        e.preventDefault();
-                        setSelection!(-1);
-                        setTool!("");
-                    }
-                }}
-                style={{
-                    transform: `scale(${zoom})`,
-                }}
-            >
-                {layers.map((val, index) => {
-                    if (val.visible) {
-                        return renderLayer(val, index);
-                    }
-                })}
-                <Menu
-                    open={contextMenu !== null}
-                    onClose={handleCloseContext}
-                    anchorReference="anchorPosition"
-                    anchorPosition={
-                        contextMenu !== null
-                            ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
-                            : undefined
-                    }
-                >
-                    <MenuItem
-                        onClick={() => {
-                            if (selection >= 0) {
-                                const newLayer = { ...layers[selection] };
-                                newLayer.x += 15;
-                                newLayer.y += 15;
-                                newdo("addLayer", { layer: newLayer });
-                                handleCloseContext();
-                                setSelection!(selection + 1);
-                            }
-                        }}
-                    >
-                        Duplicate Layer (Ctrl/Cmd + D)
-                    </MenuItem>
-                    <MenuItem
-                        onClick={() => {
-                            if (selection > 0) {
-                                newdo("shiftLayer", { index: selection, dir: "back" });
-                                handleCloseContext();
-                                setSelection!(Math.max(0, selection - 1));
-                            }
-                        }}
-                    >
-                        Send Backwards (Ctrl/Cmd + Down)
-                    </MenuItem>
-                    <MenuItem
-                        onClick={() => {
-                            if (selection > 0) {
-                                newdo("shiftLayer", { index: selection, dir: "bottom" });
-                                handleCloseContext();
-                                setSelection!(0);
-                            }
-                        }}
-                    >
-                        Send to Bottom (Ctrl/Cmd + Shift + Down)
-                    </MenuItem>
-                    <MenuItem
-                        onClick={() => {
-                            if (selection >= 0 && selection < layers.length - 1) {
-                                newdo("shiftLayer", { index: selection, dir: "forward" });
-                                handleCloseContext();
-                                setSelection!(Math.min(selection + 1, layers.length - 1));
-                            }
-                        }}
-                    >
-                        Send Forwards (Ctrl/Cmd + Up)
-                    </MenuItem>
-                    <MenuItem
-                        onClick={() => {
-                            if (selection >= 0 && selection < layers.length - 1) {
-                                console.log(`Shifting Index ${selection}`);
-                                newdo("shiftLayer", { index: selection, dir: "top" });
-                                handleCloseContext();
-                                setSelection!(layers.length - 1);
-                            }
-                        }}
-                    >
-                        Send to Front (Ctrl/Cmd + Shift + Up)
-                    </MenuItem>
-                    <MenuItem
-                        onClick={() => {
-                            newdo("deleteLayer", { index: selection });
-                            handleCloseContext();
+            <Styled.EditContainer>
+                <div
+                    className="editorSpace"
+                    id="canvas"
+                    onMouseDown={e => {
+                        const name = (e.target as HTMLElement).className;
+                        if (name && name.includes("editorSpace")) {
+                            console.log("Selected Index: -1");
+                            e.preventDefault();
                             setSelection!(-1);
-                        }}
+                            setTool!("");
+                        }
+                    }}
+                    style={{
+                        transform: `scale(${zoom})`,
+                        padding: "0px",
+                        minHeight: "100%",
+                        minWidth: "100%",
+                    }}
+                >
+                    {layers.map((val, index) => {
+                        if (val.visible) {
+                            return renderLayer(val, index);
+                        }
+                    })}
+                    <Menu
+                        open={contextMenu !== null}
+                        onClose={handleCloseContext}
+                        anchorReference="anchorPosition"
+                        anchorPosition={
+                            contextMenu !== null
+                                ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
+                                : undefined
+                        }
                     >
-                        Delete Layer (Delete)
-                    </MenuItem>
-                </Menu>
+                        <MenuItem
+                            onClick={() => {
+                                if (selection >= 0) {
+                                    const newLayer = { ...layers[selection] };
+                                    newLayer.x += 15;
+                                    newLayer.y += 15;
+                                    newdo("addLayer", { layer: newLayer });
+                                    handleCloseContext();
+                                    setSelection!(selection + 1);
+                                }
+                            }}
+                        >
+                            Duplicate Layer (Ctrl/Cmd + D)
+                        </MenuItem>
+                        <MenuItem
+                            onClick={() => {
+                                if (selection > 0) {
+                                    newdo("shiftLayer", { index: selection, dir: "back" });
+                                    handleCloseContext();
+                                    setSelection!(Math.max(0, selection - 1));
+                                }
+                            }}
+                        >
+                            Send Backwards (Ctrl/Cmd + Down)
+                        </MenuItem>
+                        <MenuItem
+                            onClick={() => {
+                                if (selection > 0) {
+                                    newdo("shiftLayer", { index: selection, dir: "bottom" });
+                                    handleCloseContext();
+                                    setSelection!(0);
+                                }
+                            }}
+                        >
+                            Send to Bottom (Ctrl/Cmd + Shift + Down)
+                        </MenuItem>
+                        <MenuItem
+                            onClick={() => {
+                                if (selection >= 0 && selection < layers.length - 1) {
+                                    newdo("shiftLayer", { index: selection, dir: "forward" });
+                                    handleCloseContext();
+                                    setSelection!(Math.min(selection + 1, layers.length - 1));
+                                }
+                            }}
+                        >
+                            Send Forwards (Ctrl/Cmd + Up)
+                        </MenuItem>
+                        <MenuItem
+                            onClick={() => {
+                                if (selection >= 0 && selection < layers.length - 1) {
+                                    console.log(`Shifting Index ${selection}`);
+                                    newdo("shiftLayer", { index: selection, dir: "top" });
+                                    handleCloseContext();
+                                    setSelection!(layers.length - 1);
+                                }
+                            }}
+                        >
+                            Send to Front (Ctrl/Cmd + Shift + Up)
+                        </MenuItem>
+                        <MenuItem
+                            onClick={() => {
+                                newdo("deleteLayer", { index: selection });
+                                handleCloseContext();
+                                setSelection!(-1);
+                            }}
+                        >
+                            Delete Layer (Delete)
+                        </MenuItem>
+                    </Menu>
+                </div>
             </Styled.EditContainer>
         </div>
     );
