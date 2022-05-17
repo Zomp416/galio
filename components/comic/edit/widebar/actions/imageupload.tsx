@@ -5,6 +5,7 @@ import { Button, Dialog, Box, TextField, Chip, IconButton } from "@mui/material"
 import UploadIcon from "@mui/icons-material/Upload";
 import AddIcon from "@mui/icons-material/Add";
 import { useComicContext } from "../../../../../context/comiccontext";
+import { useToastContext } from "../../../../../context/toastcontext";
 import { createImage } from "../../../../../util/zilean";
 import { IMAGE_URI } from "../../../../../util/config";
 
@@ -15,6 +16,7 @@ const Modal: React.FC<{ doClose: () => void }> = props => {
     const [newTag, setNewTag] = useState("");
     const [phase, setPhase] = useState(0);
     const { newdo } = useComicContext();
+    const { addToast } = useToastContext();
 
     const doAddTag = (e: any) => {
         e.preventDefault();
@@ -29,7 +31,10 @@ const Modal: React.FC<{ doClose: () => void }> = props => {
         form.append("name", upload!.name.split(".")[0]);
         tags.forEach(tag => form.append("tags", tag));
         const { data, error } = await createImage(form);
-        if (error) alert(error);
+        if (error) {
+            addToast("error", error);
+            return;
+        }
         newdo("addLayer", {
             layer: {
                 type: "image",
