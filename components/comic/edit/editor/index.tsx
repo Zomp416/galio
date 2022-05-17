@@ -29,6 +29,8 @@ const Editor: React.FC = () => {
                 e.preventDefault();
                 e.stopPropagation();
                 newdo("deleteLayer", { index: selection });
+                setSelection!(-1);
+                setTool!("");
                 console.log(`DELETE LAYER ${selection}`);
                 return;
             }
@@ -408,6 +410,7 @@ const Editor: React.FC = () => {
                                 newdo("deleteLayer", { index: selection });
                                 handleCloseContext();
                                 setSelection!(-1);
+                                setTool!("");
                             }}
                         >
                             Delete Layer (Delete)
