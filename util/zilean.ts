@@ -70,10 +70,12 @@ export const createImage = async (image: FormData): Promise<ZileanResponse> => {
     return await result.json();
 };
 
-export const searchImage = async (query: string): Promise<ZileanResponse> => {
-    const result = await fetch(`${zileanOrigin}/image/search?value=${query}`, {
-        method: "GET",
-        credentials: "include",
-    });
+export const searchImage = async (name: string, tags: string[]): Promise<ZileanResponse> => {
+    let params = new URLSearchParams();
+    tags.forEach(t => params.append("tags[]", t));
+    params.append("value", name);
+    params.append("page", "0");
+    params.append("limit", "15");
+    const result = await fetch(`${zileanOrigin}/image/search?${params}`);
     return result.json();
 };
