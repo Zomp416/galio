@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from "react";
-import { Button, Dialog, Box, TextField, Chip, IconButton, Tooltip } from "@mui/material";
+import { Button, Dialog, Box, TextField, Chip, IconButton } from "@mui/material";
 
 import UploadIcon from "@mui/icons-material/Upload";
 import AddIcon from "@mui/icons-material/Add";
@@ -27,6 +27,7 @@ const Modal: React.FC<{ doClose: () => void }> = props => {
         form.append("image", upload!);
         form.append("directory", "assets");
         form.append("name", upload!.name.split(".")[0]);
+        tags.forEach(tag => form.append("tags", tag));
         const { data, error } = await createImage(form);
         if (error) alert(error);
         newdo("addLayer", {
@@ -47,15 +48,12 @@ const Modal: React.FC<{ doClose: () => void }> = props => {
             },
         });
         setUpload(undefined);
-    };
-
-    const onClose = () => {
         props.doClose();
     };
 
     if (phase === 0) {
         return (
-            <Dialog open={true} onClose={onClose}>
+            <Dialog open={true} onClose={() => props.doClose()}>
                 <Box
                     sx={{
                         display: "flex",
@@ -116,7 +114,7 @@ const Modal: React.FC<{ doClose: () => void }> = props => {
         );
     } else {
         return (
-            <Dialog open={true} onClose={onClose}>
+            <Dialog open={true} onClose={() => props.doClose()}>
                 <Box
                     sx={{
                         display: "flex",
@@ -183,14 +181,9 @@ const Modal: React.FC<{ doClose: () => void }> = props => {
 const ImageUploadProperties: React.FC = () => {
     const [modalOpen, setModalOpen] = useState(false);
 
-    const onClickUpload = () => {
-        console.log("upload");
-        setModalOpen(true);
-    };
-
     return (
         <>
-            <Button variant="outlined" onClick={onClickUpload} fullWidth>
+            <Button variant="outlined" onClick={() => setModalOpen(true)} fullWidth>
                 Upload <UploadIcon />
             </Button>
             {modalOpen && <Modal doClose={() => setModalOpen(false)} />}
