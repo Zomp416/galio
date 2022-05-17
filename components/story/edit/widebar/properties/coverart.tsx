@@ -38,7 +38,7 @@ const CoverArtProperties: React.FC = () => {
     return (
         <List>
             <ListItem>
-                {story?.coverart === undefined ? (
+                {story?.coverart === undefined && imagePreview === "" ? (
                     <div
                         style={{
                             width: "230px",
