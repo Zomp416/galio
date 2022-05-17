@@ -38,7 +38,7 @@ const EditComic: React.FC = () => {
         if (!comic || !layers) return;
         let form = new FormData();
         form.append("image", file);
-        form.append("directory", "assets");
+        form.append("directory", "thumbnails");
         form.append("name", file.name.split(".")[0]);
         const image = await createImage(form);
 
@@ -59,7 +59,7 @@ const EditComic: React.FC = () => {
         if (!comic) return;
         let form = new FormData();
         form.append("image", file);
-        form.append("directory", "assets");
+        form.append("directory", "thumbnails");
         form.append("name", file.name.split(".")[0]);
         const res = await createImage(form);
         if (res.data && !res.error) {
